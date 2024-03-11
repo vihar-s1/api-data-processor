@@ -18,7 +18,8 @@ public class TumblrPattern {
     @Override
     public String toString() {
         return "TumblrPattern{" +
-                "expression='" + expression + '\'' +
+                "_id='" + _id + '\'' +
+                ", expression='" + expression + '\'' +
                 '}';
     }
 }
