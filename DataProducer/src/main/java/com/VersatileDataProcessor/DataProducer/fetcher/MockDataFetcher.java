@@ -1,19 +1,20 @@
 package com.VersatileDataProcessor.DataProducer.fetcher;
 
-import com.VersatileDataProcessor.DataProducer.models.KafkaDataObject;
-import org.springframework.context.annotation.Bean;
+import com.VersatileDataProcessor.DataProducer.models.ApiMessages.MockApiMessage;
+import com.VersatileDataProcessor.DataProducer.models.StandardApiMessage;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MockDataFetcher implements DataFetcher{
     @Override
-    public List<KafkaDataObject> fetchData() {
+    public List<StandardApiMessage> fetchData() {
         return Arrays.asList(
-                new KafkaDataObject("a223", "Hello World", 3),
-                new KafkaDataObject("a224", "How is everyone", 4),
-                new KafkaDataObject("a225", "Lets Mock data", 2),
-                new KafkaDataObject("a229", "Bye Workd", 7)
+                new MockApiMessage("a223", "Hello World").toStandardApiMessage(),
+                new MockApiMessage("a223", "Hello World").toStandardApiMessage(),
+                new MockApiMessage("a224", "How is everyone").toStandardApiMessage(),
+                new MockApiMessage("a225", "Lets Mock data").toStandardApiMessage(),
+                new MockApiMessage("a229", "Bye World").toStandardApiMessage()
         );
     }
 }

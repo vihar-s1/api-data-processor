@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer.service;
 
-import com.VersatileDataProcessor.DataProducer.models.KafkaDataObject;
+import com.VersatileDataProcessor.DataProducer.models.StandardApiMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,21 +10,25 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.CompletableFuture;
 
 @Service
-public class KafkaProducerService {
+public class ApiMessageProducerService {
     @Autowired
-    private KafkaTemplate<String, KafkaDataObject> kafkaTemplate;
+    private KafkaTemplate<String, StandardApiMessage> kafkaTemplate;
 
     @Value(value = "${spring.kafka.topic.name}")
     private String kafkaTopicName;
 
-    public void sendMessage(KafkaDataObject message) {
-        CompletableFuture<SendResult<String, KafkaDataObject>> future = kafkaTemplate.send(kafkaTopicName, message.getId(), message);
+    public void sendMessage(StandardApiMessage message) {
+        CompletableFuture<SendResult<String, StandardApiMessage>> future = kafkaTemplate.send(kafkaTopicName, message.getId(), message);
 
         future.whenComplete((result, exception) -> {
             if (exception == null) {
                 System.out.println(
-                        "Sent Message=[" + message + "] with offset=[" + result.getRecordMetadata().offset() + "]"
+                        "Partition=[" + result.getRecordMetadata().partition() +
+                                "] : Offset=[" + result.getRecordMetadata().offset() +
+                                "] : Sent Message=[" + message +
+                                "] : data-class=[" + message.getData().getClass().getName() + "]"
                 );
+
             }
             else {
                 System.out.println(

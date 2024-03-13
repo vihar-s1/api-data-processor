@@ -1,5 +1,6 @@
 package com.VersatileDataProcessor.DataProducer.models;
 
+import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
 import lombok.*;
 
 import java.io.Serializable;
@@ -10,8 +11,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class KafkaDataObject implements Serializable {
+public class StandardApiMessage implements Serializable {
     private String Id;
-    private String mockData;
-    private int mockCount;
+    private ApiMessageInterface data;
 }

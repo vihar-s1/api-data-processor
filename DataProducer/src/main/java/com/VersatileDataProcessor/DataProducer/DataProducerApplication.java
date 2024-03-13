@@ -1,8 +1,8 @@
 package com.VersatileDataProcessor.DataProducer;
 
 import com.VersatileDataProcessor.DataProducer.fetcher.MockDataFetcher;
-import com.VersatileDataProcessor.DataProducer.models.KafkaDataObject;
-import com.VersatileDataProcessor.DataProducer.service.KafkaProducerService;
+import com.VersatileDataProcessor.DataProducer.models.StandardApiMessage;
+import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,17 +21,16 @@ public class DataProducerApplication implements CommandLineRunner {
 	}
 
 	@Autowired
-	private KafkaProducerService producerService;
+	private ApiMessageProducerService producerService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DataProducerApplication.class, args);
 	}
 
-
 	@Override
 	public void run(String... args) {
 		System.out.println("----------Fetching Messages----------");
-		List<KafkaDataObject> data = new MockDataFetcher().fetchData();
+		List<StandardApiMessage> data = new MockDataFetcher().fetchData();
 		System.out.println("----------Messages Fetched----------");
 
 		System.out.println("----------Sending Messages to Kafka----------");
@@ -39,5 +38,5 @@ public class DataProducerApplication implements CommandLineRunner {
 			producerService.sendMessage(kafkaDataObject);
 		});
 		System.out.println("----------Sent Messages to Kafka----------");
-	}
+    }
 }
