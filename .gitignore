@@ -16,3 +16,6 @@ out/
 
 # Environment Files
 .env
+
+# Kafka Data Files for custom server
+kafka
