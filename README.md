@@ -14,13 +14,22 @@ Below given is a brief overview of all loosely coupled applications in the proje
 
 `DataProducer` produces data by fetching it from a particular API. The data is pushed on to a kafka topic in its raw form or with minimal processing.
 
+- The data to be pushed is encapsulated by wrapping it in a class named `KafkaDataObject` class. The class implements _Serializable_ interface and is parsed via **JsonSerializer** to be sent to Kafka topic.
+- The `KafkaProducerConfig.java` contains a mapping of _**KafkaDataObject**_ to its corresponding class in `DataProducer`.
+- The messages are mocked by a `MockDataFetcher` class which runs via the `CommandLineRunner.run` method.
+
 ### RegexManager
 
-`RegexManager` is a REST service to perform CRUD operations on a NoSQL (_MongoDB_) database storing regex patterns. These regex patterns are used to filter and process the data.
+- `RegexManager` is a REST service to perform _CRUD_ operations on a NoSQL (_MongoDB_) database storing regex patterns. These regex patterns are used to filter and process the data.
+- The current implementation consists of a simple _CRD - Create-Read-Delete -_ endpoints for regex patterns corresponding to **_Tumblr Blogs and Posts_**. The _**Rest Controller**_ has been implemented in way that allows easy duplication to create endpoints for data from other APIs as well without disturbing the existing endpoints.
+- `TumblrPattern` class for defining instances of regex expression and mapping to corresponding collection in database, `TumblrPatternRepository` for handling database reads and writes, and `TumblrRegexController` to define corresponding endpoints.
 
 ### DataConsumer
 
-`DataConsumer` takes the raw data from kafka topic and the regex patterns from `RegexManager` to generated processed data. The regex patterns are used to find "interesting" data and label it. The processed data is passed to another kafka topic.
+- `DataConsumer` takes the raw data from kafka topic and the regex patterns from `RegexManager` to generated processed data. The regex patterns are used to find "interesting" data and label it. The processed data is passed to another kafka topic.
+- The data received is mapped to `org.VersatileDataProcessor.DataProducer.models.KafkaDataObject` to allow deserialization of the Kafka message via `JsonDeserializer`. The mappings are present in `KafkaConsumerConfig.java`.
+- A specialized `ConsumerFactory` and `ContainerFactory` are defined dedicated to `KafkaDataObject` class in `KafkaProducerConfig.java`.
+- A dedicated Listener defined in `KafkaConsumerService.java` uses this container-factory to listen for kafka messages containing `KafkaDataObject` instances.
 
 ### ElasticsearchWriter
 
