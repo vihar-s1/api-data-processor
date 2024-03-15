@@ -2,7 +2,7 @@ package com.VersatileDataProcessor.DataConsumer.models;
 
 import java.io.Serializable;
 
-public enum DataSource implements Serializable {
+public enum MessageType implements Serializable {
     TUMBLR,
     REDDIT,
     WEATHER,

@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataConsumer.models.ApiMessages;
 
-import com.VersatileDataProcessor.DataConsumer.models.DataSource;
+import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.VersatileDataProcessor.DataConsumer.models.StandardApiMessage;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -13,5 +13,5 @@ public interface ApiMessageInterface extends Serializable {
 
     public StandardApiMessage toStandardApiMessage();
 
-    public DataSource getDataSource();
+    public MessageType getMessageType();
 }

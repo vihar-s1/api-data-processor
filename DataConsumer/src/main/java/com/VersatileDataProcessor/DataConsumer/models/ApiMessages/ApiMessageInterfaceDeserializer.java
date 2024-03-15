@@ -1,7 +1,7 @@
 package com.VersatileDataProcessor.DataConsumer.models.ApiMessages;
 
 
-import com.VersatileDataProcessor.DataConsumer.models.DataSource;
+import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -18,13 +18,13 @@ public class ApiMessageInterfaceDeserializer extends JsonDeserializer<ApiMessage
         ObjectNode root = mapper.readTree(jsonParser);
 
         // currently only one type is there
-        String dataSource = root.get("dataSource").asText();
+        String messageType = root.get("messageType").asText();
 
-        switch (DataSource.valueOf(dataSource)){
-            case DataSource.MOCK:
+        switch (MessageType.valueOf(messageType)){
+            case MessageType.MOCK:
                 return mapper.readValue(root.toString(), MockApiMessage.class);
             default:
-                throw new IllegalArgumentException("Unknown data source: " + dataSource);
+                throw new IllegalArgumentException("Unknown Message Type: " + messageType);
         }
     }
 }

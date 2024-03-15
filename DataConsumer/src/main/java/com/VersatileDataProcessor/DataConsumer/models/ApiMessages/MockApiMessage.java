@@ -1,5 +1,5 @@
 package com.VersatileDataProcessor.DataConsumer.models.ApiMessages;
-import com.VersatileDataProcessor.DataConsumer.models.DataSource;
+import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.VersatileDataProcessor.DataConsumer.models.StandardApiMessage;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
@@ -13,20 +13,16 @@ import lombok.*;
 public class MockApiMessage implements ApiMessageInterface {
     private String id;
     private String mockData;
-    private  final DataSource dataSource = DataSource.MOCK;
+    @Getter
+    private  final MessageType messageType = MessageType.MOCK;
 
     @Override
     public StandardApiMessage toStandardApiMessage() {
         StandardApiMessage message = new StandardApiMessage();
 
         message.setData(this);
-        message.setId(this.dataSource.name() + "-" + this.id);
+        message.setId(this.messageType.name() + "-" + this.id);
 
         return  message;
-    }
-
-    @Override
-    public DataSource getDataSource() {
-        return dataSource;
     }
 }

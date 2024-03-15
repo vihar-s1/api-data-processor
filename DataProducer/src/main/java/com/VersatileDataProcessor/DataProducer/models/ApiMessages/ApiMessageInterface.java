@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer.models.ApiMessages;
 
-import com.VersatileDataProcessor.DataProducer.models.DataSource;
+import com.VersatileDataProcessor.DataProducer.models.MessageType;
 import com.VersatileDataProcessor.DataProducer.models.StandardApiMessage;
 
 import java.io.Serializable;
@@ -12,5 +12,5 @@ public interface ApiMessageInterface extends Serializable {
 
     public StandardApiMessage toStandardApiMessage();
 
-    public DataSource getDataSource();
+    public MessageType getMessageType();
 }
