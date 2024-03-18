@@ -1,15 +1,26 @@
 package com.VersatileDataProcessor.DataConsumer.services;
 
 import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.MockApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
 
 @Service
 public class ApiMessageConsumerService {
+
+    @Autowired
+    private WebClient.Builder webClientBuilder;
+
     @KafkaListener(
             topics = "${spring.kafka.topic.name}",
             groupId = "${spring.kafka.consumer.group-id}",
@@ -23,5 +34,13 @@ public class ApiMessageConsumerService {
         System.out.println(
                 "Partition=[" + partitionId + "] : Offset=[" + offset + "] : Received Message=[" + dataObject + "]"
         );
+
+        webClientBuilder.build()
+                .post()
+                .uri("http://localhost:8084/api/add")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(Mono.just(dataObject), MockApiMessage.class)
+                .retrieve()
+                .bodyToMono(MyResponseBody.class);
     }
 }
