@@ -1,20 +1,20 @@
 package com.VersatileDataProcessor.DataProducer.fetcher;
 
+import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.DataProducer.models.ApiMessages.MockApiMessage;
-import com.VersatileDataProcessor.DataProducer.models.StandardApiMessage;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MockDataFetcher implements DataFetcher{
     @Override
-    public List<StandardApiMessage> fetchData() {
+    public List<ApiMessageInterface> fetchData() {
         return Arrays.asList(
-                new MockApiMessage("a223", "Hello World").toStandardApiMessage(),
-                new MockApiMessage("a223", "Hello World").toStandardApiMessage(),
-                new MockApiMessage("a224", "How is everyone").toStandardApiMessage(),
-                new MockApiMessage("a225", "Lets Mock data").toStandardApiMessage(),
-                new MockApiMessage("a229", "Bye World").toStandardApiMessage()
+                new MockApiMessage("a000" + Math.random(), "Hello World"),
+                new MockApiMessage("a001" + Math.random(), "Hello World"),
+                new MockApiMessage("a002" + Math.random(), "How is everyone"),
+                new MockApiMessage("a003" + Math.random(), "Lets Mock data"),
+                new MockApiMessage("a004" + Math.random(), "Bye World")
         );
     }
 }

@@ -1,6 +1,7 @@
 package com.VersatileDataProcessor.DataConsumer.services;
 
-import com.VersatileDataProcessor.DataConsumer.models.StandardApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -15,7 +16,7 @@ public class ApiMessageConsumerService {
             containerFactory = "getStandardContainerFactory"
     )
     public void rawDataObjectHandler(
-            @Payload StandardApiMessage dataObject,
+            @Payload ApiMessageInterface dataObject,
             @Header(KafkaHeaders.RECEIVED_PARTITION) int partitionId,
             @Header(KafkaHeaders.OFFSET) int offset
             ) {

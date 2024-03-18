@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataConsumer.config;
 
-import com.VersatileDataProcessor.DataConsumer.models.StandardApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +25,7 @@ public class ApiMessageConsumerConfig {
     private int groupId;
 
     @Bean
-    public ConsumerFactory<String, StandardApiMessage> getConsumerFactory() {
+    public ConsumerFactory<String, ApiMessageInterface> getConsumerFactory() {
         Map<String, Object> configs = new HashMap<>();
 
         configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
@@ -35,13 +35,16 @@ public class ApiMessageConsumerConfig {
 
         // Important: Configure JsonDeserializer to trust all packages
         configs.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-        configs.put(JsonDeserializer.TYPE_MAPPINGS, "StandardApiMessage:com.VersatileDataProcessor.DataConsumer.models.StandardApiMessage");
-        return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(StandardApiMessage.class));
+        configs.put(JsonDeserializer.TYPE_MAPPINGS,
+                "ApiMessageInterface:com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface," +
+                        "MockApiMessage:com.VersatileDataProcessor.DataConsumer.models.ApiMessages.MockApiMessage"
+        );
+        return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(ApiMessageInterface.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, StandardApiMessage> getStandardContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, StandardApiMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, ApiMessageInterface> getStandardContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, ApiMessageInterface> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(getConsumerFactory());
         return factory;
     }

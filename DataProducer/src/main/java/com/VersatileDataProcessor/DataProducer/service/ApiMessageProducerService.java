@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer.service;
 
-import com.VersatileDataProcessor.DataProducer.models.StandardApiMessage;
+import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -12,13 +12,13 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class ApiMessageProducerService {
     @Autowired
-    private KafkaTemplate<String, StandardApiMessage> kafkaTemplate;
+    private KafkaTemplate<String, ApiMessageInterface> kafkaTemplate;
 
     @Value(value = "${spring.kafka.topic.name}")
     private String kafkaTopicName;
 
-    public void sendMessage(StandardApiMessage message) {
-        CompletableFuture<SendResult<String, StandardApiMessage>> future = kafkaTemplate.send(kafkaTopicName, message.getId(), message);
+    public void sendMessage(ApiMessageInterface message) {
+        CompletableFuture<SendResult<String, ApiMessageInterface>> future = kafkaTemplate.send(kafkaTopicName, message.getId(), message);
 
         future.whenComplete((result, exception) -> {
             if (exception == null) {
@@ -26,7 +26,7 @@ public class ApiMessageProducerService {
                         "Partition=[" + result.getRecordMetadata().partition() +
                                 "] : Offset=[" + result.getRecordMetadata().offset() +
                                 "] : Sent Message=[" + message +
-                                "] : data-class=[" + message.getData().getClass().getName() + "]"
+                                "] : data-class=[" + message.getMessageType() + "]"
                 );
 
             }

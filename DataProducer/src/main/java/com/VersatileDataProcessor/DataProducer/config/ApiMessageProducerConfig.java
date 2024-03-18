@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer.config;
 
-import com.VersatileDataProcessor.DataProducer.models.StandardApiMessage;
+import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,20 +20,23 @@ public class ApiMessageProducerConfig {
     private String bootstrapServer;
 
     @Bean
-    public ProducerFactory<String, StandardApiMessage> getProducerFactory(){
+    public ProducerFactory<String, ApiMessageInterface> getProducerFactory(){
         Map<String, Object> configs = new HashMap<>();
 
         configs.put(org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
         configs.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configs.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
-        configs.put(JsonSerializer.TYPE_MAPPINGS, "StandardApiMessage:com.VersatileDataProcessor.DataProducer.models.StandardApiMessage");
+        configs.put(JsonSerializer.TYPE_MAPPINGS,
+                "ApiMessageInterface:com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface," +
+                        "MockApiMessage:com.VersatileDataProcessor.DataProducer.models.ApiMessages.MockApiMessage"
+        );
 
         return new DefaultKafkaProducerFactory<>(configs, new StringSerializer(), new JsonSerializer<>());
     }
 
     @Bean
-    public KafkaTemplate<String, StandardApiMessage> getKafkaTemplate() {
+    public KafkaTemplate<String, ApiMessageInterface> getKafkaTemplate() {
         return new KafkaTemplate<>(getProducerFactory());
     }
 }
