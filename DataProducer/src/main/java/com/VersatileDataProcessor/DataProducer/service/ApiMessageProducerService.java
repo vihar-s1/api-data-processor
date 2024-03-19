@@ -1,6 +1,7 @@
 package com.VersatileDataProcessor.DataProducer.service;
 
 import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Slf4j
 public class ApiMessageProducerService {
     @Autowired
     private KafkaTemplate<String, ApiMessageInterface> kafkaTemplate;
@@ -22,17 +24,15 @@ public class ApiMessageProducerService {
 
         future.whenComplete((result, exception) -> {
             if (exception == null) {
-                System.out.println(
-                        "Partition=[" + result.getRecordMetadata().partition() +
-                                "] : Offset=[" + result.getRecordMetadata().offset() +
-                                "] : Sent Message=[" + message +
-                                "] : data-class=[" + message.getMessageType() + "]"
+                log.info(
+                        "Sent Message to Partition=[" + result.getRecordMetadata().partition()
+                        + "] with Offset=[" + result.getRecordMetadata().offset()
+                        + "] : [" + message + "]"
                 );
-
             }
             else {
-                System.out.println(
-                        "Unable to send message=[" + message + "] due to : " + exception.getCause().toString()
+                log.warn(
+                    "Unable to send message=[" + message + "] due to :" + exception.getCause().toString()
                 );
             }
         });

@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.apache.kafka:kafka-streams:3.6.1'
 	implementation 'org.springframework.kafka:spring-kafka:3.1.2'
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.4'
+	implementation 'org.slf4j:slf4j-api:2.0.12'
 	implementation 'org.reflections:reflections:0.10.2'
 
 	compileOnly 'org.projectlombok:lombok:1.18.30'

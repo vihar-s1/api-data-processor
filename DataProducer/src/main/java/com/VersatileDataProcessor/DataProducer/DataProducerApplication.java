@@ -3,6 +3,7 @@ package com.VersatileDataProcessor.DataProducer;
 import com.VersatileDataProcessor.DataProducer.fetcher.MockDataFetcher;
 import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 
 @SpringBootApplication
+@Slf4j
 public class DataProducerApplication implements CommandLineRunner {
 
 	@Bean
@@ -29,14 +31,12 @@ public class DataProducerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		System.out.println("----------Fetching Messages----------");
-		List<ApiMessageInterface> data = new MockDataFetcher().fetchData();
-		System.out.println("----------Messages Fetched----------");
 
-		System.out.println("----------Sending Messages to Kafka----------");
-		data.forEach(kafkaDataObject -> {
-			producerService.sendMessage(kafkaDataObject);
-		});
-		System.out.println("----------Sent Messages to Kafka----------");
+		List<ApiMessageInterface> data = new MockDataFetcher().fetchData();
+		log.info("Messages Fetched via DataFetcher");
+
+		log.info("Sending Messages to Kafka");
+		data.forEach(kafkaDataObject -> producerService.sendMessage(kafkaDataObject));
+		log.info("Sent Messages to Kafka");
     }
 }

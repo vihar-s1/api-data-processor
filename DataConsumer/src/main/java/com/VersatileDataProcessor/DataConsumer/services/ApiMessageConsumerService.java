@@ -3,6 +3,7 @@ package com.VersatileDataProcessor.DataConsumer.services;
 import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.MockApiMessage;
 import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,6 +17,8 @@ import reactor.core.publisher.Mono;
 
 
 @Service
+
+@Slf4j
 public class ApiMessageConsumerService {
 
     @Autowired
@@ -31,8 +34,9 @@ public class ApiMessageConsumerService {
             @Header(KafkaHeaders.RECEIVED_PARTITION) int partitionId,
             @Header(KafkaHeaders.OFFSET) int offset
             ) {
-        System.out.println(
-                "Partition=[" + partitionId + "] : Offset=[" + offset + "] : Received Message=[" + dataObject + "]"
+
+        log.info(
+                "Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] : [" + dataObject + "]"
         );
 
         webClientBuilder.build()

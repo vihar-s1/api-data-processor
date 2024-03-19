@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux:3.2.3'
 	implementation 'org.apache.kafka:kafka-streams:3.6.1'
 	implementation 'org.springframework.kafka:spring-kafka:3.1.2'
+	implementation 'org.slf4j:slf4j-api:2.0.12'
 	implementation 'org.reflections:reflections:0.10.2'
 
 	compileOnly 'org.projectlombok:lombok:1.18.30'
