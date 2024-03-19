@@ -2,6 +2,7 @@ package com.VersatileDataProcessor.DataProducer.config;
 
 import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @Configuration
 public class ApiMessageProducerConfig {
@@ -27,10 +29,22 @@ public class ApiMessageProducerConfig {
         configs.put(org.apache.kafka.clients.producer.ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configs.put(org.apache.kafka.clients.producer.ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
 
-        configs.put(JsonSerializer.TYPE_MAPPINGS,
-                "ApiMessageInterface:com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface," +
-                        "MockApiMessage:com.VersatileDataProcessor.DataProducer.models.ApiMessages.MockApiMessage"
-        );
+        /*DYNAMIC TYPE MAPPING BUILDING*/
+        StringBuilder typeMappings = new StringBuilder();
+        String apiMessagePackage = "com.VersatileDataProcessor.DataProducer.models.ApiMessages";
+        Reflections reflections = new Reflections(apiMessagePackage);
+
+        Set<Class<? extends ApiMessageInterface>> subTypes = reflections.getSubTypesOf(ApiMessageInterface.class);
+
+        typeMappings.append(ApiMessageInterface.class.getSimpleName())
+                .append(":")
+                .append(ApiMessageInterface.class.getCanonicalName());
+
+        subTypes.forEach(cls -> typeMappings.append(",").append(cls.getSimpleName()).append(":").append(cls.getCanonicalName()));
+
+        /*END DYNAMIC TYPE MAPPING BUILDING*/
+
+        configs.put(JsonSerializer.TYPE_MAPPINGS, typeMappings.toString());
 
         return new DefaultKafkaProducerFactory<>(configs, new StringSerializer(), new JsonSerializer<>());
     }

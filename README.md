@@ -54,6 +54,7 @@ Decoupling database writes from data processing allows one to easily switch the 
    2. Make sure to use matching Data types and names as returned in the JSON response.
    3. Keep the variables as private and define appropriate Getters, Setters and Constructors using `Lombok`.
 3. In `config/ApiMessageProducerConfig.java`, add the Type-Mapping to the JsonSerializer in a manner similar to other messages.
+   1. NO NEED TO FOLLOW THIS STEP ANYMORE. THE TYPE MAPPINGS ARE DYNAMICALLY GENERATED VIA REFLECTIONS API AND SO ANY CLASS THAT EXTENDS THE `ApiMessageInterface` WILL AUTOMATICALLY BE INCLUDED IN THE TYPE MAPPING DURING RUN-TIME.
 4. Go to `fetcher` folder and define a new `DataFetcher` interface implementation that fetches data from the new API.
    1. Make sure to use appropriate params, and tokens wherever needed.
    2. DO NOT HARD-CODE ANY API TOKENS. USE THE `.env` AND `src/main/resources/application.properties` FILES TO IMPORT THE API KEYS/SECRETS.
@@ -67,9 +68,10 @@ Decoupling database writes from data processing allows one to easily switch the 
 1. In `DataConsumer`, go to `models/MessageType.java` and add the new Enum type corresponding to the new API.
    1. Make sure that the enum type defined in `DataProducer` and in `DataConsumer` is identical.
 2. Go to `models` folder and copy-paste the new class implementing the `ApiMessageInterface` interface as defined in the `DataProducer`.
-3. In `config/ApiMessageConsumeConfig.java`, add the Type-Mapping to the JsonDeserializer as done in `DataProducer Step 4`.
-   1. Note that the left side of the `:` in the type mapping must be same for `DataProducer` and `DataConsumer` for the messages to be directed appropriately.
-   2. The right side of the `:` may not have the same name as long as the definitions of the classes for Producer and Consumer is identical.
+3. In `config/ApiMessageConsumeConfig.java`, add the Type-Mapping to the JsonDeserializer as done in `DataProducer Step 3`.
+   1. SIMILAR TO `DataProducer`, THE TYPE MAPPINGS ARE DYNAMICALLY GENERATED AND SO THIS STEP IS KEPT FOR INFORMATION PURPOSES ONLY.
+   2. Note that the left side of the `:` in the type mapping must be same for `DataProducer` and `DataConsumer` for the messages to be directed appropriately.
+   3. The right side of the `:` may not have the same name as long as the definitions of the classes for Producer and Consumer is identical.
 4. In `deserializers/ApiMessageInterfaceDeserializer`, add appropriate `switch-case` to return the object as instance of the newly defined message class when message type matches the new API.
 
 ### Elasticsearch
