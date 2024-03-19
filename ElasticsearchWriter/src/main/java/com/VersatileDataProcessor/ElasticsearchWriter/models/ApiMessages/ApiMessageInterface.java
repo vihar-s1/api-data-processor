@@ -11,8 +11,8 @@ import java.io.Serializable;
 @JsonDeserialize(using = ApiMessageInterfaceDeserializer.class)
 @Document(indexName = "api_data")
 public interface ApiMessageInterface extends Serializable {
-    public String getId();
-    public void setId(String Id);
+    String getId();
+    void setId(String Id);
 
-    public MessageType getMessageType();
+    MessageType getMessageType();
 }

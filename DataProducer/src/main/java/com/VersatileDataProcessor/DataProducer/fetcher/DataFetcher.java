@@ -5,5 +5,5 @@ import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInte
 import java.util.List;
 
 public interface DataFetcher {
-    public List<ApiMessageInterface> fetchData();
+    List<ApiMessageInterface> fetchData();
 }

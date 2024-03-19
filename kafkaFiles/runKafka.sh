@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Check if ZooKeeper is running
-# 1. ps aux --> grab all running processes
-# 2. grep -v grep --> ignore entries matching the pattern "grep" to avoid the grep command matching the command 'grep -c "org...Main"'
-# 3. grep -c "org.apa...Main" --> return count of entries matching given filter
-ZK_STATUS=$(ps aux | grep -v grep | grep -c "org.apache.zookeeper.server.quorum.QuorumPeerMain")
+# pgrep is used to find the process IDs of processes matching  the filter.
+# -f means to compare against all arguments as well and not just process name.
+# wc -l returns the number of lines returned. 0 means no process found.
+ZK_STATUS=$(pgrep -f "org.apache.zookeeper.server.quorum.QuorumPeerMain" | wc -l)
 
 if [ "$ZK_STATUS" -eq 0 ]; then
     echo "ZooKeeper is not running. Starting ZooKeeper..."

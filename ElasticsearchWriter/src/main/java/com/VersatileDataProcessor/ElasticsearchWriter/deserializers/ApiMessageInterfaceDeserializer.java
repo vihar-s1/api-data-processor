@@ -4,7 +4,6 @@ package com.VersatileDataProcessor.ElasticsearchWriter.deserializers;
 import com.VersatileDataProcessor.ElasticsearchWriter.models.ApiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.ElasticsearchWriter.models.ApiMessages.MockApiMessage;
 import com.VersatileDataProcessor.ElasticsearchWriter.models.MessageType;
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -15,7 +14,7 @@ import java.io.IOException;
 
 public class ApiMessageInterfaceDeserializer extends JsonDeserializer<ApiMessageInterface> {
     @Override
-    public ApiMessageInterface deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public ApiMessageInterface deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
         ObjectNode root = mapper.readTree(jsonParser);
 

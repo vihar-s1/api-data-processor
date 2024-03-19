@@ -4,7 +4,6 @@ package com.VersatileDataProcessor.DataConsumer.deserializers;
 import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.MockApiMessage;
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -15,7 +14,7 @@ import java.io.IOException;
 
 public class ApiMessageInterfaceDeserializer extends JsonDeserializer<ApiMessageInterface> {
     @Override
-    public ApiMessageInterface deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public ApiMessageInterface deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
         ObjectNode root = mapper.readTree(jsonParser);
 
@@ -23,10 +22,7 @@ public class ApiMessageInterfaceDeserializer extends JsonDeserializer<ApiMessage
         String messageType = root.get("messageType").asText();
 
         return switch (MessageType.valueOf(messageType)) {
-            case TUMBLR -> null;
-            case REDDIT -> null;
-            case WEATHER -> null;
-            case RANDOM_USER -> null;
+            case TUMBLR, REDDIT, WEATHER, RANDOM_USER -> null;
             case MOCK -> mapper.readValue(root.toString(), MockApiMessage.class);
         };
     }
