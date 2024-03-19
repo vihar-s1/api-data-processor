@@ -39,12 +39,20 @@ public class ApiMessageConsumerService {
                 "Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] : [" + dataObject + "]"
         );
 
-        webClientBuilder.build()
-                .post()
-                .uri("http://localhost:8084/api/add")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(dataObject), MockApiMessage.class)
-                .retrieve()
-                .bodyToMono(MyResponseBody.class);
+         webClientBuilder.build()
+                 .post()
+                 .uri("http://localhost:8084/api/add")
+                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                 .body(Mono.just(dataObject), MockApiMessage.class)
+                 .retrieve()
+                 .bodyToMono(MyResponseBody.class)
+                 .toFuture()
+                 .whenComplete((myResponseBody, throwable) -> {
+                     if (throwable == null) {
+                         log.info("Request sent with success=[" + myResponseBody.getSuccess() + "], and return message=[" + myResponseBody.getMessage() + "]");
+                     }
+                     else throw new RuntimeException(throwable);
+                 });
+//        log.info("Sent Database write request for message at Partition=[" + partitionId + "] and offset=[" + offset + "]");
     }
 }

@@ -17,4 +17,9 @@ fi
 
 # Start Kafka server with KafkaServer.properties
 echo "Starting Kafka Server..."
-kafka-server-start KafkaServer.properties
+kafka-server-start KafkaServer.properties > kafka.log &
+echo "Kafka server running on pid: $!"
+
+echo "Starting elasticsearch..."
+elasticsearch --daemonize
+echo  "elasticsearch running on pid: $(pgrep -f elasticsearch)"
