@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.ElasticsearchWriter.models.ApiMessages;
+package com.VersatileDataProcessor.ElasticsearchWriter.models.apiMessages;
 
 import com.VersatileDataProcessor.ElasticsearchWriter.models.MessageType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

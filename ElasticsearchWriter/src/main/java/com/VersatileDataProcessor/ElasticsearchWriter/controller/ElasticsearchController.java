@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.ElasticsearchWriter.controller;
 
-import com.VersatileDataProcessor.ElasticsearchWriter.models.ApiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.apiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.ElasticsearchWriter.models.MyResponseBody;
 import com.VersatileDataProcessor.ElasticsearchWriter.repositories.ApiMessageRepository;
 import lombok.extern.slf4j.Slf4j;

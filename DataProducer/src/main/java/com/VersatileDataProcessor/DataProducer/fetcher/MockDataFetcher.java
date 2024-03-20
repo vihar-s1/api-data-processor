@@ -1,7 +1,7 @@
 package com.VersatileDataProcessor.DataProducer.fetcher;
 
-import com.VersatileDataProcessor.DataProducer.models.ApiMessages.ApiMessageInterface;
-import com.VersatileDataProcessor.DataProducer.models.ApiMessages.MockApiMessage;
+import com.VersatileDataProcessor.DataProducer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataProducer.models.apiMessages.MockApiMessage;
 import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

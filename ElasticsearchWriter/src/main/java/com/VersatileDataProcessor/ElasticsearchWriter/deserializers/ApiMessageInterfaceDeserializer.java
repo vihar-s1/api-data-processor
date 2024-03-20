@@ -1,8 +1,8 @@
 package com.VersatileDataProcessor.ElasticsearchWriter.deserializers;
 
 
-import com.VersatileDataProcessor.ElasticsearchWriter.models.ApiMessages.ApiMessageInterface;
-import com.VersatileDataProcessor.ElasticsearchWriter.models.ApiMessages.MockApiMessage;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.apiMessages.MockApiMessage;
 import com.VersatileDataProcessor.ElasticsearchWriter.models.MessageType;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

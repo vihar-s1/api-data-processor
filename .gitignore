@@ -19,3 +19,4 @@ out/
 
 # Kafka Data Files for custom server
 kafka
+kafka.log

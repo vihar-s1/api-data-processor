@@ -1,9 +1,9 @@
 package com.VersatileDataProcessor.DataConsumer.deserializers;
 
 
-import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface;
-import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.MockApiMessage;
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.MockApiMessage;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;

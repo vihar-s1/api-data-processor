@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataConsumer.models.ApiMessages;
+package com.VersatileDataProcessor.DataConsumer.models.apiMessages;
 
 import com.VersatileDataProcessor.DataConsumer.deserializers.ApiMessageInterfaceDeserializer;
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;

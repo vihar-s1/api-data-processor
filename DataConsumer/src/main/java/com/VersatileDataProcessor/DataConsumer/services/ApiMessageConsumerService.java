@@ -1,8 +1,8 @@
 package com.VersatileDataProcessor.DataConsumer.services;
 
-import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.ApiMessageInterface;
-import com.VersatileDataProcessor.DataConsumer.models.ApiMessages.MockApiMessage;
 import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.MockApiMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -53,6 +53,5 @@ public class ApiMessageConsumerService {
                      }
                      else throw new RuntimeException(throwable);
                  });
-//        log.info("Sent Database write request for message at Partition=[" + partitionId + "] and offset=[" + offset + "]");
     }
 }

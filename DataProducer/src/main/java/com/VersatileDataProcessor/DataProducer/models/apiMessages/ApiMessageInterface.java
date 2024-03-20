@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataProducer.models.ApiMessages;
+package com.VersatileDataProcessor.DataProducer.models.apiMessages;
 
 import com.VersatileDataProcessor.DataProducer.models.MessageType;
 
