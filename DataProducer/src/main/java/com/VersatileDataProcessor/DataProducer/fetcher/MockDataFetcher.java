@@ -12,7 +12,7 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class MockDataFetcher implements DataFetcher{
+public class MockDataFetcher implements DataFetcherInterface {
 
     @Autowired
     ApiMessageProducerService producerService;
@@ -20,11 +20,9 @@ public class MockDataFetcher implements DataFetcher{
     @Override
     public void fetchData() {
          List<ApiMessageInterface> data = Arrays.asList(
-                new MockApiMessage("a000" + Math.random(), "Hello World"),
-                new MockApiMessage("a001" + Math.random(), "Hello World"),
-                new MockApiMessage("a002" + Math.random(), "How is everyone"),
-                new MockApiMessage("a003" + Math.random(), "Lets Mock data"),
-                new MockApiMessage("a004" + Math.random(), "Bye World")
+                 new MockApiMessage("a000" + Math.random(), "Hello World"),
+                 new MockApiMessage("a001" + Math.random(), "Good Morning"),
+                 new MockApiMessage("a002" + Math.random(), "lorem ipsum dolor set.")
         );
 
         log.info("Messages Fetched via MockDataFetcher");

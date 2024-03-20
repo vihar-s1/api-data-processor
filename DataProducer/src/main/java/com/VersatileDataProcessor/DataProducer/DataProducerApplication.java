@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer;
 
-import com.VersatileDataProcessor.DataProducer.fetcher.DataFetcher;
+import com.VersatileDataProcessor.DataProducer.fetcher.DataFetcherInterface;
 import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +19,8 @@ import java.util.Set;
 @EnableScheduling
 public class DataProducerApplication {
 
-	@Bean
-	public WebClient.Builder getWebClientBuilder() {
-		return WebClient.builder();
-	}
-
 	@Autowired
-	private ApiMessageProducerService producerService;
-	@Autowired
-	private Set<DataFetcher> dataFetchers;
+	private Set<DataFetcherInterface> dataFetchers;
 
 	public static void main(String[] args) {
 		SpringApplication.run(DataProducerApplication.class, args);
@@ -37,7 +30,7 @@ public class DataProducerApplication {
 	public class DataFetcherScheduler {
 		@Scheduled(fixedRate = 30_000) // Run every 0.5 minute
 		public void fetchData() {
-			dataFetchers.forEach(DataFetcher::fetchData);
+			dataFetchers.forEach(DataFetcherInterface::fetchData);
 		}
 	}
 

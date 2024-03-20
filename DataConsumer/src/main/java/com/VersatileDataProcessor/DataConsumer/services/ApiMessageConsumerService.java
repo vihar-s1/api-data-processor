@@ -1,5 +1,6 @@
 package com.VersatileDataProcessor.DataConsumer.services;
 
+import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.MockApiMessage;
@@ -39,19 +40,27 @@ public class ApiMessageConsumerService {
                 "Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] : [" + dataObject + "]"
         );
 
-         webClientBuilder.build()
-                 .post()
-                 .uri("http://localhost:8084/api/add")
-                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                 .body(Mono.just(dataObject), MockApiMessage.class)
-                 .retrieve()
-                 .bodyToMono(MyResponseBody.class)
-                 .toFuture()
-                 .whenComplete((myResponseBody, throwable) -> {
-                     if (throwable == null) {
-                         log.info("Request sent with success=[" + myResponseBody.getSuccess() + "], and return message=[" + myResponseBody.getMessage() + "]");
-                     }
-                     else throw new RuntimeException(throwable);
-                 });
+        if (dataObject.getMessageType() == MessageType.JOKE){
+            log.info("Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] of type=[" + MessageType.JOKE + "]");
+            // Do not send Joke messages with processing. Need to extract the jokes, remove unnecessary information, and perform line-splits.
+            // Also need to implement support for the processed Jokes at ElasticsearchWriter application
+            // Create ProcessedMessageInterface like ApiMessageInterface
+        }
+        else{
+            webClientBuilder.build()
+                    .post()
+                    .uri("http://localhost:8084/api/add")
+                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .body(Mono.just(dataObject), dataObject.getClass())
+                    .retrieve()
+                    .bodyToMono(MyResponseBody.class)
+                    .toFuture()
+                    .whenComplete((myResponseBody, throwable) -> {
+                        if (throwable == null) {
+                            log.info("Request sent with success=[" + myResponseBody.getSuccess() + "], and return message=[" + myResponseBody.getMessage() + "]");
+                        }
+                        else throw new RuntimeException(throwable);
+                    });
+        }
     }
 }

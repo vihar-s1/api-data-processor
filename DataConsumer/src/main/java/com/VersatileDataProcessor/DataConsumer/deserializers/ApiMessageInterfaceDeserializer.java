@@ -3,6 +3,7 @@ package com.VersatileDataProcessor.DataConsumer.deserializers;
 
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.MockApiMessage;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -22,7 +23,7 @@ public class ApiMessageInterfaceDeserializer extends JsonDeserializer<ApiMessage
         String messageType = root.get("messageType").asText();
 
         return switch (MessageType.valueOf(messageType)) {
-            case TUMBLR, REDDIT, WEATHER, RANDOM_USER -> null;
+            case JOKE -> mapper.readValue(root.toString(), JokeApiMessage.class);
             case MOCK -> mapper.readValue(root.toString(), MockApiMessage.class);
         };
     }
