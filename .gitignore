@@ -1,3 +1,6 @@
+### Mac OS ###
+.DS_Store
+
 # Gradle
 .gradle
 gradle
@@ -5,7 +8,7 @@ gradlew
 gradlew.bat
 
 
-# IntelliJ IDEA
+### IntelliJ IDEA ###
 .idea
 *.iws
 *.iml
@@ -14,9 +17,9 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-# Environment Files
+### Environment Files ###
 .env
 
-# Kafka Data Files for custom server
+### Kafka Data Files for custom server ###
 kafka
 kafka.log
