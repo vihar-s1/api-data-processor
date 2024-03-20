@@ -1,8 +1,8 @@
 package com.VersatileDataProcessor.ElasticsearchWriter.controller;
 
-import com.VersatileDataProcessor.ElasticsearchWriter.models.apiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.ElasticsearchWriter.models.MyResponseBody;
-import com.VersatileDataProcessor.ElasticsearchWriter.repositories.ApiMessageRepository;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages.MessageInterface;
+import com.VersatileDataProcessor.ElasticsearchWriter.repositories.MessageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.*;
 public class ElasticsearchController {
 
     @Autowired
-    private ApiMessageRepository messageRepository;
+    private MessageRepository messageRepository;
 
     @PostMapping("/add")
-    public ResponseEntity<MyResponseBody<Object>> addMessage(@RequestBody ApiMessageInterface message){
+    public ResponseEntity<MyResponseBody<Object>> addMessage(@RequestBody MessageInterface message){
         if (message == null || message.getId() == null){
-            log.info("[POST /api/add] failed with error-code=[" + HttpStatus.BAD_REQUEST + "]");
+            log.info("[POST /api/add] failed with error-code=[" + HttpStatus.BAD_REQUEST + "] : id was either empty or null");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new MyResponseBody<>("Validation Failed. Id cannot be empty or null", false, message)
             );
         }
 
         if (messageRepository.findById(message.getId()).isPresent()){
-            log.info("[POST /api/add] failed with error-code=[" + HttpStatus.CONFLICT + "]");
+            log.info("[POST /api/add] failed with error-code=[" + HttpStatus.CONFLICT + "] : resource already exists");
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                     new MyResponseBody<>("The resource you are trying to create already exists", false, message)
             );

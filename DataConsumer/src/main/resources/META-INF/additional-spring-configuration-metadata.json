@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "spring.kafka.topic.replicationFactor",
+      "type": "java.lang.String",
+      "description": "The Replication factor kafka topic specified by spring.kafka.topic.name."
+    },
+    {
+      "name": "spring.kafka.topic.numOfPartitions",
+      "type": "java.lang.String",
+      "description": "Number of partitions for kafka topic specified bt spring.kafka.topic.name."
+    },
+    {
+      "name": "database.endpoint.add",
+      "type": "java.lang.String",
+      "description": "Endpoint to send POST request to create resource in the end databasew."
+    }
+  ]
+}

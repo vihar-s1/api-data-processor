@@ -1,4 +1,5 @@
 package com.VersatileDataProcessor.DataConsumer.models.apiMessages;
+
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;

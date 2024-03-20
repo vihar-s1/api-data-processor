@@ -1,13 +1,15 @@
 package com.VersatileDataProcessor.DataConsumer.services;
 
-import com.VersatileDataProcessor.DataConsumer.models.MessageType;
+
 import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.MockApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.processedMessages.JokeMessage;
+import com.VersatileDataProcessor.DataConsumer.models.processedMessages.MockMessage;
+import com.VersatileDataProcessor.DataConsumer.models.processedMessages.ProcessedMessageInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -30,37 +32,44 @@ public class ApiMessageConsumerService {
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "getStandardContainerFactory"
     )
-    public void rawDataObjectHandler(
-            @Payload ApiMessageInterface dataObject,
+    public void genericApiMessageHandler(
+            @Payload ApiMessageInterface apiMessage,
             @Header(KafkaHeaders.RECEIVED_PARTITION) int partitionId,
             @Header(KafkaHeaders.OFFSET) int offset
             ) {
 
         log.info(
-                "Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] : [" + dataObject + "]"
+                "Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] : [" + apiMessage + "]"
         );
 
-        if (dataObject.getMessageType() == MessageType.JOKE){
-            log.info("Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] of type=[" + MessageType.JOKE + "]");
-            // Do not send Joke messages with processing. Need to extract the jokes, remove unnecessary information, and perform line-splits.
-            // Also need to implement support for the processed Jokes at ElasticsearchWriter application
-            // Create ProcessedMessageInterface like ApiMessageInterface
+        handleApiMessage(apiMessage);
+    } // method rawDataObjectHandler() ends
+
+    private void handleApiMessage(ApiMessageInterface apiMessage) {
+        if (apiMessage == null) return;
+        switch (apiMessage.getMessageType()){
+            case MOCK -> sendDBWriteRequest( MockMessage.processApiMessage((MockApiMessage) apiMessage) );
+            case JOKE -> JokeMessage.processApiMessage((JokeApiMessage) apiMessage).forEach(this::sendDBWriteRequest);
         }
-        else{
-            webClientBuilder.build()
-                    .post()
-                    .uri("http://localhost:8084/api/add")
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                    .body(Mono.just(dataObject), dataObject.getClass())
-                    .retrieve()
-                    .bodyToMono(MyResponseBody.class)
-                    .toFuture()
-                    .whenComplete((myResponseBody, throwable) -> {
-                        if (throwable == null) {
-                            log.info("Request sent with success=[" + myResponseBody.getSuccess() + "], and return message=[" + myResponseBody.getMessage() + "]");
-                        }
-                        else throw new RuntimeException(throwable);
-                    });
-        }
+    }
+
+
+    private void sendDBWriteRequest(ProcessedMessageInterface processedMessage){
+        webClientBuilder.build()
+                .post()
+                .body(Mono.just(processedMessage), processedMessage.getClass())
+                .retrieve()
+                .bodyToMono(MyResponseBody.class)
+                .toFuture()
+                .whenComplete((myResponseBody, throwable) -> {
+                    if (throwable == null) {
+                        log.info("Request sent with success=[" + myResponseBody.getSuccess() + "], and return message=[" + myResponseBody.getMessage() + "]");
+                        log.debug("Data Sent is : " + myResponseBody.getData());
+                    }
+                    else {
+                        log.error("exception occurred : " + throwable);
+                        throw new RuntimeException(throwable);
+                    }
+                });
     }
 }

@@ -1,11 +1,11 @@
 package com.VersatileDataProcessor.DataConsumer.models.apiMessages;
 
+import com.VersatileDataProcessor.DataConsumer.models.Joke;
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -23,16 +23,4 @@ public class JokeApiMessage implements ApiMessageInterface {
     private boolean error;
     private int amount;
     private List<Joke> jokes;
-}
-
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-class Joke {
-    private String category;
-    private String type;
-    private String joke;
-    private Map<String, Boolean> flags;
 }
