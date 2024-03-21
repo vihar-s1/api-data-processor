@@ -23,3 +23,6 @@ out/
 ### Kafka Data Files for custom server ###
 kafka
 kafka.log
+
+### Kibana Files ###
+kibana.log

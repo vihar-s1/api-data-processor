@@ -11,8 +11,7 @@ if [ "$ZK_STATUS" -eq 0 ]; then
     # Start ZooKeeper (replace with your actual ZooKeeper start command)
     zkServer start
 else
-    echo "Restarting ZooKeeper Server..."
-    zkServer restart
+    echo "ZooKeeper already running..."
 fi
 
 
@@ -20,7 +19,7 @@ fi
 # Will match kafka and zookeeper
 if [ "$(pgrep -f "kafka" | wc -l)" -eq 0 ]; then
     echo "Starting Kafka Server..."
-    kafka-server-start KafkaServer.properties > kafka.log &
+    kafka-server-start KafkaServer.properties > kafka.log 2>&1 &
     echo "Kafka server running on pid: $!"
 else
   echo "kafka already running"
@@ -33,4 +32,14 @@ if [ "$(pgrep -f "elasticsearch" | wc -l)" -eq 0 ]; then
     echo "Starting elasticsearch..."
     elasticsearch --daemonize
     echo  "elasticsearch running on pid: $(pgrep -f elasticsearch)"
+fi
+
+
+# If kibana is not running then, first remove the index corresponding kibana and then start it
+if [ "$(pgrep -f "kibana" | wc -l)" -eq 0 ]; then
+  echo "Starting kibana"
+  curl -X DELETE "localhost:9200/.kibana_7.17.4_001" &
+  wait $!
+  kibana > kibana.log 2>&1 &
+  echo "kibana running on pid: $(pgrep -f kibana)"
 fi
