@@ -17,7 +17,7 @@ public class RandomUserApiFetcher implements DataFetcherInterface {
 
     @Override
     public void fetchData() {
-        String uri = "https://randomuser.me/api?results=1";
+        String uri = "https://randomuser.me/api/1.4?results=5&noinfo";;
 
         RandomUserApiMessage randomUserApiMessage = webClientBuilder.build()
                 .get()

@@ -1,7 +1,6 @@
 package com.VersatileDataProcessor.DataConsumer.models.apiMessages;
 
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
-import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.Info;
 import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.RandomUser;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
@@ -21,5 +20,4 @@ public class RandomUserApiMessage implements ApiMessageInterface{
     private MessageType messageType = MessageType.RANDOM_USER;
 
     private List<RandomUser> results;
-    private Info info;
 }

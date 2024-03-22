@@ -17,7 +17,6 @@ public class RandomUserApiMessage implements ApiMessageInterface{
     private MessageType messageType = MessageType.RANDOM_USER;
 
     private List<RandomUser> results;
-    private Info info;
 }
 
 @Getter @Setter @ToString
@@ -91,10 +90,4 @@ class ID {
 @Getter @Setter @ToString
 class Picture {
     private String large, medium, thumbnail;
-}
-
-@Getter @Setter @ToString
-class Info {
-    private String seed, version;
-    private int results, page;
 }

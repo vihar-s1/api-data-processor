@@ -29,12 +29,12 @@ public class RandomUserMessage implements ProcessedMessageInterface{
 
         List<RandomUserMessage> messages = new ArrayList<>();
 
-        for (int i=0; i<apiMessage.getInfo().getResults(); i++){
+        for (int i=0; i<apiMessage.getResults().size(); i++){
             RandomUser randomUser = apiMessage.getResults().get(i);
 
             RandomUserMessage message = new RandomUserMessage();
 
-            message.setId(message.getId() + "-" + i);
+            message.setId(apiMessage.getId() + "-" + i);
             message.setGender(randomUser.getGender());
             message.setEmail(randomUser.getEmail());
             message.setDob(randomUser.getDob().getDate());

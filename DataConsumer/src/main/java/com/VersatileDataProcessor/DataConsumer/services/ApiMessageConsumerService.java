@@ -60,28 +60,32 @@ public class ApiMessageConsumerService {
 
 
     private void sendDBWriteRequest(ProcessedMessageInterface processedMessage){
-
-        if (processedMessage.getMessageType() == MessageType.RANDOM_USER){
-            System.out.println("RANDOM - USER RECEIVED....");
-            return;
-        }
-
-        webClientBuilder.build()
-                .post()
-                .body(Mono.just(processedMessage), processedMessage.getClass())
-                .retrieve()
-                .bodyToMono(MyResponseBody.class)
-                .toFuture()
-                .whenComplete((myResponseBody, throwable) -> {
-                    if (throwable == null) {
-                        log.info("DATABASE ADD REQUEST : success=[" + myResponseBody.getSuccess() + "] : message=[" + myResponseBody.getMessage()
-                                + "] : sent dataType=[" + processedMessage.getMessageType() + "]");
-                        log.debug("Data Sent is : " + myResponseBody.getData());
-                    }
-                    else {
-                        log.error("exception occurred : dataType=[" + processedMessage.getMessageType() + "] : message=[" + myResponseBody.getMessage() + "] : " + throwable);
+        try {
+            webClientBuilder.build()
+                    .post()
+                    .body(Mono.just(processedMessage), processedMessage.getClass())
+                    .retrieve()
+                    .bodyToMono(MyResponseBody.class)
+                    .toFuture()
+                    .whenComplete((myResponseBody, throwable) -> {
+                        if (throwable == null) {
+                            log.info("DATABASE WRITE REQUEST : success=[" + myResponseBody.getSuccess() + "] : message=[" + myResponseBody.getMessage()
+                                    + "] : sent dataType=[" + processedMessage.getMessageType() + "]");
+                            log.debug("Data Sent is : " + myResponseBody.getData());
+                        }
+                        else {
+                            log.error("exception occurred : dataType=[" + processedMessage.getMessageType() + "] : message=[" + myResponseBody.getMessage() + "] : " + throwable);
 //                        throw new RuntimeException(throwable);
-                    }
-                });
+                        }
+                    });
+        }
+        catch (Exception exception){
+            log.error(
+                    "ERROR SENDING DATABASE WRITE REQUEST: Exception=[{}] : Message=[{}] : messageType=[{}]",
+                    exception.getClass().getSimpleName(),
+                    exception.getMessage(),
+                    processedMessage.getMessageType()
+            );
+        }
     }
 }
