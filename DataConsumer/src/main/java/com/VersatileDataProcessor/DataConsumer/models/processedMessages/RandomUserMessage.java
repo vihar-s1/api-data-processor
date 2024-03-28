@@ -5,7 +5,9 @@ import com.VersatileDataProcessor.DataConsumer.models.apiMessages.RandomUserApiM
 import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.ID;
 import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.Name;
 import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.RandomUser;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collections;

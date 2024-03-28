@@ -1,9 +1,9 @@
 package com.VersatileDataProcessor.DataConsumer.models.processedMessages;
 
 
-import com.VersatileDataProcessor.DataConsumer.models.messageSupport.Joke;
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.messageSupport.Joke;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

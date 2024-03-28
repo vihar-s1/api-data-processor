@@ -1,7 +1,6 @@
 package com.VersatileDataProcessor.DataConsumer.services;
 
 
-import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
 import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
@@ -13,7 +12,6 @@ import com.VersatileDataProcessor.DataConsumer.models.processedMessages.Processe
 import com.VersatileDataProcessor.DataConsumer.models.processedMessages.RandomUserMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;

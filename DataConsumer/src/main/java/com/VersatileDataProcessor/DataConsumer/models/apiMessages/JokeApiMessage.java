@@ -1,12 +1,11 @@
 package com.VersatileDataProcessor.DataConsumer.models.apiMessages;
 
-import com.VersatileDataProcessor.DataConsumer.models.messageSupport.Joke;
 import com.VersatileDataProcessor.DataConsumer.models.MessageType;
+import com.VersatileDataProcessor.DataConsumer.models.messageSupport.Joke;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter
