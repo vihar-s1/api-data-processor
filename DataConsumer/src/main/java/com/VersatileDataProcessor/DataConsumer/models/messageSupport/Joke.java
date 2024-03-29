@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataConsumer.models.messageSupport;
+package com.versatileDataProcessor.dataConsumer.models.messageSupport;
 
 import lombok.*;
 

@@ -1,0 +1,16 @@
+{
+    "properties": [
+        {
+            "name": "tumblr.api.key",
+            "type": "java.lang.String"
+        },
+        {
+            "name": "tumblr.api.secret",
+            "type": "java.lang.String"
+        },
+        {
+            "name": "tumblr.api.baseUrl",
+            "type": "java.lang.String"
+        }
+    ]
+}

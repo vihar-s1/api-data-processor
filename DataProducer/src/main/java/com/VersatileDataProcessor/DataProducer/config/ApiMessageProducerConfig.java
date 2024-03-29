@@ -1,6 +1,6 @@
-package com.VersatileDataProcessor.DataProducer.config;
+package com.versatileDataProcessor.dataProducer.config;
 
-import com.VersatileDataProcessor.DataProducer.models.apiMessages.ApiMessageInterface;
+import com.versatileDataProcessor.dataProducer.models.apiMessages.ApiMessageInterface;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +31,7 @@ public class ApiMessageProducerConfig {
 
         /*DYNAMIC TYPE MAPPING BUILDING*/
         StringBuilder typeMappings = new StringBuilder();
-        String apiMessagePackage = "com.VersatileDataProcessor.DataProducer.models.apiMessages";
+        String apiMessagePackage = "com.versatileDataProcessor.dataProducer.models.apiMessages";
         Reflections reflections = new Reflections(apiMessagePackage);
 
         Set<Class<? extends ApiMessageInterface>> subTypes = reflections.getSubTypesOf(ApiMessageInterface.class);

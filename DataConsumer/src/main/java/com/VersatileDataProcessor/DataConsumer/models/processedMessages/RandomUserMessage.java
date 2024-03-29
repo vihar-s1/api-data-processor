@@ -1,10 +1,10 @@
-package com.VersatileDataProcessor.DataConsumer.models.processedMessages;
+package com.versatileDataProcessor.dataConsumer.models.processedMessages;
 
-import com.VersatileDataProcessor.DataConsumer.models.MessageType;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.RandomUserApiMessage;
-import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.ID;
-import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.Name;
-import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.RandomUser;
+import com.versatileDataProcessor.dataConsumer.models.MessageType;
+import com.versatileDataProcessor.dataConsumer.models.apiMessages.RandomUserApiMessage;
+import com.versatileDataProcessor.dataConsumer.models.messageSupport.randomUser.ID;
+import com.versatileDataProcessor.dataConsumer.models.messageSupport.randomUser.Name;
+import com.versatileDataProcessor.dataConsumer.models.messageSupport.randomUser.RandomUser;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

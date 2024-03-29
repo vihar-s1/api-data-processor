@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.ElasticsearchWriter;
+package com.versatileDataProcessor.elasticsearchWriter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

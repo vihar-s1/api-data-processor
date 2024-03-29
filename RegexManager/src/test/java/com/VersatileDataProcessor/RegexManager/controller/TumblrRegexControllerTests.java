@@ -1,9 +1,9 @@
-package com.VersatileDataProcessor.RegexManager.controller;
+package com.versatileDataProcessor.regexManager.controller;
 
 
-import com.VersatileDataProcessor.RegexManager.models.MyResponseBody;
-import com.VersatileDataProcessor.RegexManager.models.TumblrPattern;
-import com.VersatileDataProcessor.RegexManager.repository.TumblrPatternRepository;
+import com.versatileDataProcessor.regexManager.models.MyResponseBody;
+import com.versatileDataProcessor.regexManager.models.TumblrPattern;
+import com.versatileDataProcessor.regexManager.repository.TumblrPatternRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,8 +1,8 @@
-package com.VersatileDataProcessor.ElasticsearchWriter.controller;
+package com.versatileDataProcessor.elasticsearchWriter.controller;
 
-import com.VersatileDataProcessor.ElasticsearchWriter.models.MyResponseBody;
-import com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages.MessageInterface;
-import com.VersatileDataProcessor.ElasticsearchWriter.repositories.MessageRepository;
+import com.versatileDataProcessor.elasticsearchWriter.models.MyResponseBody;
+import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.MessageInterface;
+import com.versatileDataProcessor.elasticsearchWriter.repositories.MessageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataProducer;
+package com.versatileDataProcessor.dataProducer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

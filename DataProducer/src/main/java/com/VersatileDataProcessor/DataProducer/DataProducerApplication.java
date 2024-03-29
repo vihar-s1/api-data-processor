@@ -1,6 +1,6 @@
-package com.VersatileDataProcessor.DataProducer;
+package com.versatileDataProcessor.dataProducer;
 
-import com.VersatileDataProcessor.DataProducer.fetcher.DataFetcherInterface;
+import com.versatileDataProcessor.dataProducer.fetcher.DataFetcherInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -28,13 +28,6 @@ public class DataProducerApplication {
 		@Scheduled(fixedRate = 60_000) // Run every 1 minute
 		public void fetchData() {
 			dataFetchers.forEach(DataFetcherInterface::fetchData);
-
-//			For Testing Newly Added Api-Data-Fetchers
-//			dataFetchers.forEach(dataFetcher -> {
-//                if (dataFetcher.getClass().getSimpleName().equals("RandomUserApiFetcher")) {
-//                    dataFetcher.fetchData();
-//                }
-//			});
 		}
 	}
 

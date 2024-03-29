@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataConsumer.models;
+package com.versatileDataProcessor.dataConsumer.models;
 
 import lombok.*;
 

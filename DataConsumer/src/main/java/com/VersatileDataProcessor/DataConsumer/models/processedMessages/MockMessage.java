@@ -1,7 +1,7 @@
-package com.VersatileDataProcessor.DataConsumer.models.processedMessages;
+package com.versatileDataProcessor.dataConsumer.models.processedMessages;
 
-import com.VersatileDataProcessor.DataConsumer.models.MessageType;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.MockApiMessage;
+import com.versatileDataProcessor.dataConsumer.models.MessageType;
+import com.versatileDataProcessor.dataConsumer.models.apiMessages.MockApiMessage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

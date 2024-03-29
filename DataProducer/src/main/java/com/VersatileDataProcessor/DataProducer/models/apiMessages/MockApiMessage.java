@@ -1,5 +1,5 @@
-package com.VersatileDataProcessor.DataProducer.models.apiMessages;
-import com.VersatileDataProcessor.DataProducer.models.MessageType;
+package com.versatileDataProcessor.dataProducer.models.apiMessages;
+import com.versatileDataProcessor.dataProducer.models.MessageType;
 import lombok.*;
 
 @Getter
