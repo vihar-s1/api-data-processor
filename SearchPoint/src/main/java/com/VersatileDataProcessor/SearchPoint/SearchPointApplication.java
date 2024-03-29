@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.SearchPoint;
+package com.versatileDataProcessor.searchPoint;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
