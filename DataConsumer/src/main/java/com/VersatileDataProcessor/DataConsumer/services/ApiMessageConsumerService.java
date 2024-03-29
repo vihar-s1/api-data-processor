@@ -1,15 +1,15 @@
-package com.VersatileDataProcessor.DataConsumer.services;
+package com.versatileDataProcessor.dataConsumer.services;
 
 
-import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.MockApiMessage;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.RandomUserApiMessage;
-import com.VersatileDataProcessor.DataConsumer.models.processedMessages.JokeMessage;
-import com.VersatileDataProcessor.DataConsumer.models.processedMessages.MockMessage;
-import com.VersatileDataProcessor.DataConsumer.models.processedMessages.ProcessedMessageInterface;
-import com.VersatileDataProcessor.DataConsumer.models.processedMessages.RandomUserMessage;
+import com.versatileDataProcessor.dataConsumer.models.MyResponseBody;
+import com.versatileDataProcessor.dataConsumer.models.apiMessages.ApiMessageInterface;
+import com.versatileDataProcessor.dataConsumer.models.apiMessages.JokeApiMessage;
+import com.versatileDataProcessor.dataConsumer.models.apiMessages.MockApiMessage;
+import com.versatileDataProcessor.dataConsumer.models.apiMessages.RandomUserApiMessage;
+import com.versatileDataProcessor.dataConsumer.models.processedMessages.JokeMessage;
+import com.versatileDataProcessor.dataConsumer.models.processedMessages.MockMessage;
+import com.versatileDataProcessor.dataConsumer.models.processedMessages.ProcessedMessageInterface;
+import com.versatileDataProcessor.dataConsumer.models.processedMessages.RandomUserMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;

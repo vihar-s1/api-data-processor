@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataConsumer;
+package com.versatileDataProcessor.dataConsumer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser;
+package com.versatileDataProcessor.dataConsumer.models.messageSupport.randomUser;
 
 import lombok.Getter;
 import lombok.Setter;

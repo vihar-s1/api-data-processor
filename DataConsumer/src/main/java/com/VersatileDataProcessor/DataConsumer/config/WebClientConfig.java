@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataConsumer.config;
+package com.versatileDataProcessor.dataConsumer.config;
 
 
 import org.springframework.beans.factory.annotation.Value;

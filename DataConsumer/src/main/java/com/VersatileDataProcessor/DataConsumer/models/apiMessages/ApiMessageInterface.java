@@ -1,8 +1,8 @@
-package com.VersatileDataProcessor.DataConsumer.models.apiMessages;
+package com.versatileDataProcessor.dataConsumer.models.apiMessages;
 
-import com.VersatileDataProcessor.DataConsumer.deserializers.ApiMessageInterfaceDeserializer;
-import com.VersatileDataProcessor.DataConsumer.models.MessageType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.versatileDataProcessor.dataConsumer.deserializers.ApiMessageInterfaceDeserializer;
+import com.versatileDataProcessor.dataConsumer.models.MessageType;
 
 import java.io.Serializable;
 

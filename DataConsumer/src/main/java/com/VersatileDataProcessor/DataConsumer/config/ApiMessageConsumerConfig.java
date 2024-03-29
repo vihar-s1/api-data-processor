@@ -1,6 +1,6 @@
-package com.VersatileDataProcessor.DataConsumer.config;
+package com.versatileDataProcessor.dataConsumer.config;
 
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.versatileDataProcessor.dataConsumer.models.apiMessages.ApiMessageInterface;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.reflections.Reflections;
@@ -40,7 +40,7 @@ public class ApiMessageConsumerConfig {
 
         /*DYNAMIC TYPE MAPPING BUILDING*/
         StringBuilder typeMappings = new StringBuilder();
-        String apiMessagePackage = "com.VersatileDataProcessor.DataConsumer.models.apiMessages";
+        String apiMessagePackage = "com.versatileDataProcessor.dataConsumer.models.apiMessages";
         Reflections reflections = new Reflections(apiMessagePackage);
 
         Set<Class<? extends ApiMessageInterface>> subTypes = reflections.getSubTypesOf(ApiMessageInterface.class);

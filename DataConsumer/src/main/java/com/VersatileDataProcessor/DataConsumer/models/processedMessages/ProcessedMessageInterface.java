@@ -1,6 +1,6 @@
-package com.VersatileDataProcessor.DataConsumer.models.processedMessages;
+package com.versatileDataProcessor.dataConsumer.models.processedMessages;
 
-import com.VersatileDataProcessor.DataConsumer.models.MessageType;
+import com.versatileDataProcessor.dataConsumer.models.MessageType;
 
 import java.io.Serializable;
 

@@ -1,8 +1,8 @@
-package com.VersatileDataProcessor.DataConsumer.models.apiMessages;
+package com.versatileDataProcessor.dataConsumer.models.apiMessages;
 
-import com.VersatileDataProcessor.DataConsumer.models.MessageType;
-import com.VersatileDataProcessor.DataConsumer.models.messageSupport.randomUser.RandomUser;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.versatileDataProcessor.dataConsumer.models.MessageType;
+import com.versatileDataProcessor.dataConsumer.models.messageSupport.randomUser.RandomUser;
 import lombok.*;
 
 import java.util.List;
