@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.ElasticsearchWriter.models.messageSupport.randomUser;
+package com.versatileDataProcessor.elasticsearchWriter.models.messageSupport.randomUser;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;

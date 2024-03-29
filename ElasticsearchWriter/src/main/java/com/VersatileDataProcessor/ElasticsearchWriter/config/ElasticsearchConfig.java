@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.ElasticsearchWriter.config;
+package com.versatileDataProcessor.elasticsearchWriter.config;
 
 
 import org.springframework.beans.factory.annotation.Value;

@@ -1,9 +1,9 @@
-package com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages;
+package com.versatileDataProcessor.elasticsearchWriter.models.processedMessages;
 
-import com.VersatileDataProcessor.ElasticsearchWriter.models.MessageType;
-import com.VersatileDataProcessor.ElasticsearchWriter.models.messageSupport.randomUser.ID;
-import com.VersatileDataProcessor.ElasticsearchWriter.models.messageSupport.randomUser.Name;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.versatileDataProcessor.elasticsearchWriter.models.MessageType;
+import com.versatileDataProcessor.elasticsearchWriter.models.messageSupport.randomUser.ID;
+import com.versatileDataProcessor.elasticsearchWriter.models.messageSupport.randomUser.Name;
 import lombok.*;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.Document;

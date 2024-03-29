@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.ElasticsearchWriter.models;
+package com.versatileDataProcessor.elasticsearchWriter.models;
 
 import java.io.Serializable;
 

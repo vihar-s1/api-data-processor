@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.ElasticsearchWriter;
+package com.versatileDataProcessor.elasticsearchWriter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
