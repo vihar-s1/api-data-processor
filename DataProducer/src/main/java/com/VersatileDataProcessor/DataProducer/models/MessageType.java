@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.DataProducer.models;
+package com.versatileDataProcessor.dataProducer.models;
 
 import java.io.Serializable;
 

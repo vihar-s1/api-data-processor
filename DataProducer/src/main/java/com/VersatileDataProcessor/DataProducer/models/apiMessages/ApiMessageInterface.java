@@ -1,6 +1,6 @@
-package com.VersatileDataProcessor.DataProducer.models.apiMessages;
+package com.versatileDataProcessor.dataProducer.models.apiMessages;
 
-import com.VersatileDataProcessor.DataProducer.models.MessageType;
+import com.versatileDataProcessor.dataProducer.models.MessageType;
 
 import java.io.Serializable;
 

@@ -1,7 +1,7 @@
-package com.VersatileDataProcessor.DataProducer.fetcher;
+package com.versatileDataProcessor.dataProducer.fetcher;
 
-import com.VersatileDataProcessor.DataProducer.models.apiMessages.RandomUserApiMessage;
-import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
+import com.versatileDataProcessor.dataProducer.models.apiMessages.RandomUserApiMessage;
+import com.versatileDataProcessor.dataProducer.service.ApiMessageProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class RandomUserApiFetcher implements DataFetcherInterface {
 
     @Override
     public void fetchData() {
-        String uri = "https://randomuser.me/api/1.4?results=5&noinfo";;
+        String uri = "https://randomuser.me/api/1.4?results=5&noinfo";
 
         RandomUserApiMessage randomUserApiMessage = webClientBuilder.build()
                 .get()
