@@ -4,10 +4,8 @@ package com.versatileDataProcessor.dataConsumer.services;
 import com.versatileDataProcessor.dataConsumer.models.MyResponseBody;
 import com.versatileDataProcessor.dataConsumer.models.apiMessages.ApiMessageInterface;
 import com.versatileDataProcessor.dataConsumer.models.apiMessages.JokeApiMessage;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.MockApiMessage;
 import com.versatileDataProcessor.dataConsumer.models.apiMessages.RandomUserApiMessage;
 import com.versatileDataProcessor.dataConsumer.models.processedMessages.JokeMessage;
-import com.versatileDataProcessor.dataConsumer.models.processedMessages.MockMessage;
 import com.versatileDataProcessor.dataConsumer.models.processedMessages.ProcessedMessageInterface;
 import com.versatileDataProcessor.dataConsumer.models.processedMessages.RandomUserMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +48,6 @@ public class ApiMessageConsumerService {
     private void handleApiMessage(ApiMessageInterface apiMessage) {
         if (apiMessage == null) return;
         switch (apiMessage.getMessageType()){
-            case MOCK -> sendDBWriteRequest( MockMessage.processApiMessage((MockApiMessage) apiMessage) );
             case JOKE -> JokeMessage.processApiMessage((JokeApiMessage) apiMessage).forEach(this::sendDBWriteRequest);
             case RANDOM_USER -> RandomUserMessage.processApiMessage((RandomUserApiMessage) apiMessage).forEach(this::sendDBWriteRequest);
         }

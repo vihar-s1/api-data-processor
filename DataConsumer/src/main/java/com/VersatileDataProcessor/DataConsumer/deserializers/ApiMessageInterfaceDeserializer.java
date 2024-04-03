@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.versatileDataProcessor.dataConsumer.models.MessageType;
 import com.versatileDataProcessor.dataConsumer.models.apiMessages.ApiMessageInterface;
 import com.versatileDataProcessor.dataConsumer.models.apiMessages.JokeApiMessage;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.MockApiMessage;
 import com.versatileDataProcessor.dataConsumer.models.apiMessages.RandomUserApiMessage;
 
 import java.io.IOException;
@@ -26,7 +25,6 @@ public class ApiMessageInterfaceDeserializer extends JsonDeserializer<ApiMessage
         return switch (MessageType.valueOf(messageType)) {
             case JOKE -> mapper.readValue(root.toString(), JokeApiMessage.class);
             case RANDOM_USER -> mapper.readValue(root.toString(), RandomUserApiMessage.class);
-            case MOCK -> mapper.readValue(root.toString(), MockApiMessage.class);
         };
     }
 }
