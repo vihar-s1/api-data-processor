@@ -3,7 +3,6 @@ package com.versatileDataProcessor.regexManager.controller;
 import com.versatileDataProcessor.regexManager.models.MyResponseBody;
 import com.versatileDataProcessor.regexManager.models.TumblrPattern;
 import com.versatileDataProcessor.regexManager.repository.TumblrPatternRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,12 @@ import java.util.Optional;
 @RequestMapping("/tumblr")
 public class TumblrRegexController {
 
-    @Autowired
+    final
     TumblrPatternRepository tumblrPatternRepository;
+
+    public TumblrRegexController(TumblrPatternRepository tumblrPatternRepository) {
+        this.tumblrPatternRepository = tumblrPatternRepository;
+    }
 
     @GetMapping("/all")
     public List<TumblrPattern> getAllRegexPatterns(){

@@ -3,17 +3,19 @@ package com.versatileDataProcessor.dataProducer.fetcher;
 import com.versatileDataProcessor.dataProducer.models.apiMessages.RandomUserApiMessage;
 import com.versatileDataProcessor.dataProducer.service.ApiMessageProducerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
 @Component
 public class RandomUserApiFetcher implements DataFetcherInterface {
-    @Autowired
-    private WebClient.Builder webClientBuilder;
-    @Autowired
-    private ApiMessageProducerService producerService;
+    private final WebClient.Builder webClientBuilder;
+    private final ApiMessageProducerService producerService;
+
+    public RandomUserApiFetcher(WebClient.Builder webClientBuilder, ApiMessageProducerService producerService) {
+        this.webClientBuilder = webClientBuilder;
+        this.producerService = producerService;
+    }
 
     @Override
     public void fetchData() {

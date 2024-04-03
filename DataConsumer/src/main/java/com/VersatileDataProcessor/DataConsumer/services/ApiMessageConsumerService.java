@@ -9,7 +9,6 @@ import com.versatileDataProcessor.dataConsumer.models.processedMessages.JokeMess
 import com.versatileDataProcessor.dataConsumer.models.processedMessages.ProcessedMessageInterface;
 import com.versatileDataProcessor.dataConsumer.models.processedMessages.RandomUserMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -24,8 +23,11 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class ApiMessageConsumerService {
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
+    private final WebClient.Builder webClientBuilder;
+
+    public ApiMessageConsumerService(WebClient.Builder webClientBuilder) {
+        this.webClientBuilder = webClientBuilder;
+    }
 
     @KafkaListener(
             topics = "${spring.kafka.topic.name}",

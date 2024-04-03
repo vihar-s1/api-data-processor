@@ -3,7 +3,6 @@ package com.versatileDataProcessor.dataProducer.fetcher;
 import com.versatileDataProcessor.dataProducer.models.apiMessages.JokeApiMessage;
 import com.versatileDataProcessor.dataProducer.service.ApiMessageProducerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -11,10 +10,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class JokeAPIFetcher implements DataFetcherInterface{
 
-    @Autowired
-    private WebClient.Builder webClientBuilder;
-    @Autowired
-    private ApiMessageProducerService producerService;
+    private final WebClient.Builder webClientBuilder;
+    private final ApiMessageProducerService producerService;
+
+    public JokeAPIFetcher(WebClient.Builder webClientBuilder, ApiMessageProducerService producerService) {
+        this.webClientBuilder = webClientBuilder;
+        this.producerService = producerService;
+    }
 
     @Override
     public void fetchData() {

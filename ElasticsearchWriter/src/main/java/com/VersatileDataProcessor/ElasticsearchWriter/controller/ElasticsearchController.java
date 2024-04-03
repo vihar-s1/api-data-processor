@@ -4,7 +4,6 @@ import com.versatileDataProcessor.elasticsearchWriter.models.MyResponseBody;
 import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.MessageInterface;
 import com.versatileDataProcessor.elasticsearchWriter.repositories.MessageRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class ElasticsearchController {
 
-    @Autowired
-    private MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
+
+    public ElasticsearchController(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
+    }
 
     @PostMapping("/add")
     public ResponseEntity<MyResponseBody<Object>> addMessage(@RequestBody MessageInterface message) {

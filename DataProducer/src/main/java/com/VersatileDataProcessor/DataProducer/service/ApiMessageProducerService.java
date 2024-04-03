@@ -2,7 +2,6 @@ package com.versatileDataProcessor.dataProducer.service;
 
 import com.versatileDataProcessor.dataProducer.models.apiMessages.ApiMessageInterface;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,11 +14,14 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @Slf4j
 public class ApiMessageProducerService {
-    @Autowired
-    private KafkaTemplate<String, ApiMessageInterface> kafkaTemplate;
+    private final KafkaTemplate<String, ApiMessageInterface> kafkaTemplate;
 
     @Value(value = "${spring.kafka.topic.name}")
     private String kafkaTopicName;
+
+    public ApiMessageProducerService(KafkaTemplate<String, ApiMessageInterface> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     @Bean
     public WebClient.Builder getWebClientBuilder() {

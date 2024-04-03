@@ -2,7 +2,6 @@ package com.versatileDataProcessor.dataProducer;
 
 import com.versatileDataProcessor.dataProducer.fetcher.DataFetcherInterface;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,8 +15,11 @@ import java.util.Set;
 @EnableScheduling
 public class DataProducerApplication {
 
-	@Autowired
-	private Set<DataFetcherInterface> dataFetchers;
+	private final Set<DataFetcherInterface> dataFetchers;
+
+	public DataProducerApplication(Set<DataFetcherInterface> dataFetchers) {
+		this.dataFetchers = dataFetchers;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(DataProducerApplication.class, args);
