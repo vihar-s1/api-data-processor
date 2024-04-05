@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Set;
 
-@Getter @Setter @ToString
-@NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 @Component
 @JsonDeserialize(as = JokeMessage.class)
 @Document(indexName = "jokes")
