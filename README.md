@@ -6,6 +6,11 @@ The application has been implemented in such a way that allows changing the sour
 
 The application has been divided in 5 loosely coupled Java SpringBoot applications communicating through messaging queues or REST API calls only.
 
+## ISSUES TO CHECK
+
+- Problem in fetching data from elasticsearch since an Interface cannot be instantiated.
+  - Convert to a single concrete class ???
+
 ## Component Applications
 
 Below given is a brief overview of all loosely coupled applications in the project.
