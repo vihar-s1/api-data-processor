@@ -25,7 +25,7 @@ public class ElasticsearchController {
     @PostMapping("/add")
     public ResponseEntity<MyResponseBody<Object>> addMessage(@RequestBody MessageInterface message) {
         try {
-            if (message == null || message.getId() == null) {
+            if (message == null || message.getId() == null || message.getId().isBlank() ) {
                 log.info(
                         "[POST /api/add] failed with error-code=[{}] : id was either empty or null : dataType=[{}]",
                         HttpStatus.BAD_REQUEST,

@@ -8,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
+@Data @NoArgsConstructor @AllArgsConstructor
 public class JokeApiMessage implements ApiMessageInterface {
     private String id = UUID.randomUUID().toString();
 

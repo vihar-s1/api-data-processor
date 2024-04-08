@@ -35,14 +35,16 @@ public class ApiMessageProducerService {
         future.whenComplete((result, exception) -> {
             if (exception == null) {
                 log.info(
-                        "Sent Message to Partition=[" + result.getRecordMetadata().partition()
-                        + "] with Offset=[" + result.getRecordMetadata().offset()
-                        + "] : [" + message + "]"
+                        "Sent Message to Partition=[{}] with Offset=[{}] : [{}]",
+                        result.getRecordMetadata().partition(),
+                        result.getRecordMetadata().offset(),
+                        message
                 );
             }
             else {
-                log.warn(
-                    "Unable to send message=[" + message + "] due to :" + exception.getCause().toString()
+                log.error(
+                        "Unable to send message=[{}] due to :{}", message,
+                        exception.getCause().toString()
                 );
             }
         });

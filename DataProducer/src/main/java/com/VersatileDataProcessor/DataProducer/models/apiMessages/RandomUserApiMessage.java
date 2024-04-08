@@ -6,11 +6,7 @@ import lombok.*;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 public class RandomUserApiMessage implements ApiMessageInterface{
     private String id = UUID.randomUUID().toString();
     @Getter

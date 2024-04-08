@@ -9,8 +9,7 @@ import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.stereotype.Component;
 
-@Getter @Setter @ToString
-@NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor
 @Component
 @JsonDeserialize(as = RandomUserMessage.class)
 @Document(indexName = "random-users")
