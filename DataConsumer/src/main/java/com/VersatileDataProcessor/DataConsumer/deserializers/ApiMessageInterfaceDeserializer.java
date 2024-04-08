@@ -23,7 +23,11 @@ public class ApiMessageInterfaceDeserializer extends JsonDeserializer<ApiMessage
         String messageType = root.get("messageType").asText();
 
         return switch (MessageType.valueOf(messageType)) {
-            case JOKE -> mapper.readValue(root.toString(), JokeApiMessage.class);
+            case JOKE -> {
+                if (root.get("jokes") == null)
+                    throw new IllegalStateException("field jokes cannot be null when messageType = " + messageType);
+                yield mapper.readValue(root.toString(), JokeApiMessage.class);
+            }
             case RANDOM_USER -> mapper.readValue(root.toString(), RandomUserApiMessage.class);
         };
     }
