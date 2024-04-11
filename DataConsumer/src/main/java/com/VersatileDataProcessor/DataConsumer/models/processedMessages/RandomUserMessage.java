@@ -12,6 +12,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Getter @Setter
 @ToString
@@ -31,12 +32,10 @@ public class RandomUserMessage implements ProcessedMessageInterface{
 
         List<RandomUserMessage> messages = new ArrayList<>();
 
-        for (int i=0; i<apiMessage.getResults().size(); i++){
-            RandomUser randomUser = apiMessage.getResults().get(i);
-
+        for (RandomUser randomUser : apiMessage.getResults()){
             RandomUserMessage message = new RandomUserMessage();
 
-            message.setId(apiMessage.getId() + "-" + i);
+            message.setId( String.valueOf(Objects.hash(randomUser)) );
             message.setGender(randomUser.getGender());
             message.setEmail(randomUser.getEmail());
             message.setDob(randomUser.getDob().getDate());
