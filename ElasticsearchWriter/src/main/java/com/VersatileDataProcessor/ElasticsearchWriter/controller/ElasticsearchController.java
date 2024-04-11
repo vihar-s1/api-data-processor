@@ -2,24 +2,25 @@ package com.versatileDataProcessor.elasticsearchWriter.controller;
 
 import com.versatileDataProcessor.elasticsearchWriter.models.MyResponseBody;
 import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.MessageInterface;
-import com.versatileDataProcessor.elasticsearchWriter.repositories.MessageRepository;
+import com.versatileDataProcessor.elasticsearchWriter.models.standardMessage.Adapter;
+import com.versatileDataProcessor.elasticsearchWriter.models.standardMessage.StandardMessage;
+import com.versatileDataProcessor.elasticsearchWriter.repositories.CentralRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/api")
 public class ElasticsearchController {
 
-    private final MessageRepository messageRepository;
+    private final CentralRepository centralRepository;
 
-    public ElasticsearchController(MessageRepository messageRepository) {
-        this.messageRepository = messageRepository;
+    public ElasticsearchController(CentralRepository centralRepository) {
+        this.centralRepository = centralRepository;
     }
 
     @PostMapping("/add")
@@ -36,7 +37,7 @@ public class ElasticsearchController {
                 );
             }
 
-            if (messageRepository.findById(message.getId()).isPresent()) {
+            if (centralRepository.findById(message.getId()).isPresent()) {
                 log.info(
                         "[POST /api/add] failed with error-code=[{}] : resource already exists : dataType=[{}]",
                         HttpStatus.CONFLICT,
@@ -47,7 +48,7 @@ public class ElasticsearchController {
                 );
             }
 
-            MessageInterface savedMessage = messageRepository.save(message);
+            StandardMessage savedMessage = centralRepository.save(Adapter.genericAdapter(message));
             log.info(
                     "[POST /api/add] Successful with return-code=[{}] : dataType=[{}]",
                     HttpStatus.OK,
@@ -66,6 +67,22 @@ public class ElasticsearchController {
             log.debug(
                     "Error Occurred for Object=[{}]", message
             );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new MyResponseBody<>("Internal Server Error !", false, null)
+            );
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<MyResponseBody<Object>> getAllMessages() {
+        try {
+            Iterable<StandardMessage> messages = centralRepository.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new MyResponseBody<>("All Messages", true, messages)
+            );
+        }
+        catch (Exception exception) {
+            log.error("Error Processing [getAllMessages] : Exception=[{}]", exception.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new MyResponseBody<>("Internal Server Error !", false, null)
             );

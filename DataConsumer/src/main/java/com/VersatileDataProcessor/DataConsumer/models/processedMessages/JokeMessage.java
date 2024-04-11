@@ -36,12 +36,10 @@ public class JokeMessage implements ProcessedMessageInterface{
 
         List<JokeMessage> jokeMessages = new ArrayList<>();
 
-        for (int i = 0; i < jokes.size(); i++) {
-            Joke joke = jokes.get(i);
-
+        for ( Joke joke : jokes ) {
             JokeMessage jokeMsg = new JokeMessage();
 
-            jokeMsg.setId( apiMessage.getId() + "-" + i );
+            jokeMsg.setId( String.valueOf(Objects.hash(joke.getJoke())) );
 
             jokeMsg.setStatements(Arrays.asList(
                     joke.getJoke().split("(?<=[.!?])\\s+")
