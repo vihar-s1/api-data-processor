@@ -1,0 +1,75 @@
+name: Microservice Tests
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    data-producer-test:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+            - name: Set up JDK 21
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "21"
+                  distribution: "corretto"
+            - name: Setup Gradle
+              uses: gradle/actions/setup-gradle@v3
+            - name: Run test suites
+              run: gradle :DataProducer:test
+    data-consumer-test:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+            - name: Set up JDK 21
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "21"
+                  distribution: "corretto"
+            - name: Setup Gradle
+              uses: gradle/actions/setup-gradle@v3
+            - name: Run test suites
+              run: gradle :DataConsumer:test
+    regex-manager-test:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+            - name: Set up JDK 21
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "21"
+                  distribution: "corretto"
+            - name: Setup Gradle
+              uses: gradle/actions/setup-gradle@v3
+            - name: Run test suites
+              run: gradle :RegexManager:test
+    elasticsearch-writer-test:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v4
+            - name: Set up JDK 21
+              uses: actions/setup-java@v4
+              with:
+                  java-version: "21"
+                  distribution: "corretto"
+            - name: Setup Gradle
+              uses: gradle/actions/setup-gradle@v3
+            - name: Run test suites
+              run: gradle :ElasticsearchWriter:test
