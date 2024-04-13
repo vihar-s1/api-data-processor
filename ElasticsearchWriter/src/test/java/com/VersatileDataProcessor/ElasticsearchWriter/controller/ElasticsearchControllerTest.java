@@ -2,7 +2,11 @@ package com.versatileDataProcessor.elasticsearchWriter.controller;
 
 import com.versatileDataProcessor.elasticsearchWriter.models.MyResponseBody;
 import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.MessageInterface;
-import com.versatileDataProcessor.elasticsearchWriter.repositories.MessageRepository;
+import com.versatileDataProcessor.elasticsearchWriter.models.standardMessage.Adapter;
+import com.versatileDataProcessor.elasticsearchWriter.models.standardMessage.StandardMessage;
+import com.versatileDataProcessor.elasticsearchWriter.repositories.CentralRepository;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,20 +25,30 @@ import static org.junit.jupiter.api.Assertions.*;
 class ElasticsearchControllerTest {
 
     @Mock
-    private MessageRepository messageRepository;
+    private CentralRepository centralRepository;
 
     @InjectMocks
     private ElasticsearchController elasticsearchController;
 
+    @BeforeAll
+    static void setUp() {
+        mockStatic(Adapter.class);
+    }
+
     @Test
     void testAddMessage_Success() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
-        when(message.getId()).thenReturn("someId");
-        when(messageRepository.findById(anyString())).thenReturn(java.util.Optional.empty());
-        when(messageRepository.save(message)).thenReturn(message);
+        MessageInterface message =  mock(MessageInterface.class);
+        StandardMessage standardMessage = mock(StandardMessage.class);
 
         // When
+        when(Adapter.genericAdapter(any(MessageInterface.class))).thenReturn(standardMessage);
+
+        when(message.getId()).thenReturn("someId");
+
+        when(centralRepository.findById(anyString())).thenReturn(java.util.Optional.empty());
+        when(centralRepository.save(any(StandardMessage.class))).thenReturn(standardMessage);
+
         ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
 
         // Then
@@ -44,7 +58,7 @@ class ElasticsearchControllerTest {
         assertTrue(responseEntity.getBody().getSuccess());
 
         // Verify that the messageRepository.save() method was called with the correct argument
-        verify(messageRepository, times(1)).save(message);
+        verify(centralRepository, times(1)).save(standardMessage);
     }
 
     @Test
@@ -65,9 +79,9 @@ class ElasticsearchControllerTest {
     void testAddMessage_NullId() {
         // Given
         MessageInterface message = mock(MessageInterface.class);
-        when(message.getId()).thenReturn(null);
 
         // When
+        when(message.getId()).thenReturn(null);
         ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
 
         // Then
@@ -81,10 +95,15 @@ class ElasticsearchControllerTest {
     void testAddMessage_IdAlreadyExists() {
         // Given
         MessageInterface message = mock(MessageInterface.class);
-        when(message.getId()).thenReturn("existingId");
-        when(messageRepository.findById(anyString())).thenReturn(Optional.of(message));
+        StandardMessage standardMessage = mock(StandardMessage.class);
 
         // When
+        when(Adapter.genericAdapter(any(MessageInterface.class))).thenReturn(standardMessage);
+
+        when(message.getId()).thenReturn("existingId");
+
+        when(centralRepository.findById(anyString())).thenReturn(Optional.of(standardMessage));
+
         ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
 
         // Then
@@ -98,10 +117,15 @@ class ElasticsearchControllerTest {
     void testAddMessage_InternalServerError() {
         // Given
         MessageInterface message = mock(MessageInterface.class);
-        when(message.getId()).thenReturn("someId");
-        when(messageRepository.findById(anyString())).thenThrow(RuntimeException.class); // Simulating an internal error
+        StandardMessage standardMessage = mock(StandardMessage.class);
+
 
         // When
+        when(Adapter.genericAdapter(any(MessageInterface.class))).thenReturn(standardMessage);
+
+        when(message.getId()).thenReturn("someId");
+        when(message.getId()).thenReturn("someId");
+        when(centralRepository.findById(anyString())).thenThrow(RuntimeException.class); // Simulating an internal error
         ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
 
         // Then
@@ -115,9 +139,9 @@ class ElasticsearchControllerTest {
     void testAddMessage_MessageWithEmptyId() {
         // Given
         MessageInterface message = mock(MessageInterface.class);
-        when(message.getId()).thenReturn("");
 
         // When
+        when(message.getId()).thenReturn("");
         ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
 
         // Then
@@ -146,10 +170,11 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_MessageWithExistingId() {
         // Given
-        String existingId = "existingId";
         MessageInterface message = mock(MessageInterface.class);
-        when(message.getId()).thenReturn(existingId);
-        when(messageRepository.findById(existingId)).thenReturn(Optional.of(message));
+        StandardMessage standardMessage = mock(StandardMessage.class);
+
+        when(message.getId()).thenReturn("existingId");
+        when(centralRepository.findById(anyString())).thenReturn(Optional.of(standardMessage));
 
         // When
         ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
@@ -165,8 +190,11 @@ class ElasticsearchControllerTest {
     void testAddMessage_ExceptionDuringSaving() {
         // Given
         MessageInterface message = mock(MessageInterface.class);
+        StandardMessage standardMessage = mock(StandardMessage.class);
+
         when(message.getId()).thenReturn("someId");
-        when(messageRepository.save(message)).thenThrow(new RuntimeException("Failed to save"));
+        when(standardMessage.getId()).thenReturn("someId");
+        when(centralRepository.save(standardMessage)).thenThrow(new RuntimeException("Failed to save"));
 
         // When
         ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
