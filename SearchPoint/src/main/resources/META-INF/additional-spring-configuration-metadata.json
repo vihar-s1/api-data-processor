@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "spring.elasticsearch.hostname",
+      "type": "java.lang.String",
+      "description": "Hostname for elasticsearch server."
+    },
+    {
+      "name": "spring.elasticsearch.port",
+      "type": "java.lang.Integer",
+      "description": "Port on which elasticsearch is running."
+    }
+  ]
+}
