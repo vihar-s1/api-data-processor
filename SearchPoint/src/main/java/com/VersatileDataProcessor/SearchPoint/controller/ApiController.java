@@ -1,5 +1,6 @@
 package com.versatileDataProcessor.searchPoint.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.versatileDataProcessor.searchPoint.models.MessageType;
 import com.versatileDataProcessor.searchPoint.models.MyResponseBody;
@@ -39,22 +40,22 @@ public class ApiController {
             MessageType type = MessageType.valueOf(messageType.toUpperCase().replace("-", "_"));
 
             if (page < MIN_PAGE || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) {
-                log.error("Invalid Page=[{}] or PageSize=[{}] requested", pageSize, page);
+                log.error("Invalid Page=[{}] and PageSize=[{}] requested", pageSize, page);
 
                 String jsonData = String.format(
-                        "{page: {expected: {min: %d}, received: %d}, pageSize: {expected: {min: %d, max: %d}, received: %d}}",
+                        "{\"page\": {\"expected\": {\"min\": %d}, \"received\": %d}, \"pageSize\": {\"expected\": {\"min\": %d, \"max\": %d}, \"received\": %d}}",
                         MIN_PAGE, page, MIN_PAGE_SIZE, MAX_PAGE_SIZE, pageSize
                 );
 
                 ObjectMapper objectMapper = new ObjectMapper();
-                Map<String, Object> data = objectMapper.readValue(jsonData, Map.class);
+                Map<String, Object> data = objectMapper.readValue(jsonData, new TypeReference<>() {});
 
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         new MyResponseBody<>("Invalid 'page' or 'pageSize' value", false, data)
                 );
             }
-
-            List<StandardMessage> standardMessages = centralRepository.findAllByMessageType(type, PageRequest.of(page, pageSize));
+            // PageRequest.of takes 0-based page number and pageSize.
+            List<StandardMessage> standardMessages = centralRepository.findAllByMessageType(type, PageRequest.of(page-1, pageSize));
             Map<String, Object> data = new HashMap<>();
             data.put("standardMessages", standardMessages);
             data.put("size", standardMessages.size());
