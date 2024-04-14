@@ -4,10 +4,12 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.versatileDataProcessor.searchPoint.models.StandardMessage;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+@Slf4j
 public class StandardMessageSerializer extends JsonSerializer<StandardMessage> {
 
     @Override
@@ -26,12 +28,11 @@ public class StandardMessageSerializer extends JsonSerializer<StandardMessage> {
                 if (fieldValue != null) {
                     gen.writeObjectField(field.getName(), fieldValue);
                 }
-            } catch (IllegalAccessException e) {
+            } catch (IllegalAccessException exception) {
                 // Handle IllegalAccessException if necessary
-                e.printStackTrace();
+                log.error("Error Serializing StandardMessage : {} : {}", exception.getClass().getName(), exception.getMessage());
             }
         }
-
         gen.writeEndObject(); // End writing the JSON object
     }
 }

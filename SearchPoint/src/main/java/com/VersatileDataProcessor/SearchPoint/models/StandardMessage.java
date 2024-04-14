@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Data @AllArgsConstructor
+@Data
 @Document(indexName = "api-data")
 @TypeAlias("StandardMessage")
 @JsonSerialize(using = StandardMessageSerializer.class)
@@ -41,11 +41,10 @@ public class StandardMessage implements Serializable {
     private Name name;
     private ID userId;
 
-    public StandardMessage() {
-        this.additionalData = new HashMap<>();
-    }
-
     public void addAdditional(String key, String value){
+        if (this.additionalData == null){
+            this.additionalData = new HashMap<>();
+        }
         if (key != null && value != null) {
             additionalData.put(key, value);
         }
