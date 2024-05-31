@@ -72,20 +72,4 @@ public class ElasticsearchController {
             );
         }
     }
-
-    @GetMapping("/all")
-    public ResponseEntity<MyResponseBody<Object>> getAllMessages() {
-        try {
-            Iterable<StandardMessage> messages = centralRepository.findAll();
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new MyResponseBody<>("All Messages", true, messages)
-            );
-        }
-        catch (Exception exception) {
-            log.error("Error Processing [getAllMessages] : Exception=[{}]", exception.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new MyResponseBody<>("Internal Server Error !", false, null)
-            );
-        }
-    }
 }
