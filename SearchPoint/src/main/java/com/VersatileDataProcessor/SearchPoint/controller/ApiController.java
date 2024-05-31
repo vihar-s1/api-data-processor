@@ -13,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -66,6 +63,7 @@ public class ApiController {
         }
     }
 
+
     @GetMapping("/message/{messageId}")
     public ResponseEntity<MyResponseBody<Object>> getMessageById(@PathVariable String messageId) {
         try {
@@ -91,9 +89,32 @@ public class ApiController {
     }
 
 
-    @GetMapping("/searchByTag")
+    @GetMapping("/tag/{tag}")
     public ResponseEntity<MyResponseBody<Object>> searchMessagesByTag(
-            @RequestParam String tag,
+            @PathVariable String tag,
+            @RequestParam(defaultValue = "20") int pageSize,
+            @RequestParam(defaultValue = "1") int page
+    ) {
+            try {
+                if (page < MIN_PAGE || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) {
+                    return handleInvalidPageOrPageSize(page, pageSize, "GET /searchByTag");
+                }
+
+                List<StandardMessage> standardMessages = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page-1, pageSize));
+                Map<String, Object> data = new HashMap<>();
+                data.put("standardMessages", standardMessages);
+                data.put("size", standardMessages.size());
+
+                return handleGenericSuccess(data, "[GET /searchByTag]: Executed Successfully");
+            }
+            catch (Exception e) {
+                return handleGenericException(e);
+            }
+        }
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<MyResponseBody<Object>> searchMessagesByCategory(
+            @PathVariable String category,
             @RequestParam(defaultValue = "20") int pageSize,
             @RequestParam(defaultValue = "1") int page
     ) {
@@ -102,21 +123,22 @@ public class ApiController {
                 return handleInvalidPageOrPageSize(page, pageSize, "GET /searchByTag");
             }
 
-            List<StandardMessage> standardMessages = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page, pageSize));
+            List<StandardMessage> standardMessages = centralRepository.findAllByAdditionalDataContainsIgnoreCase("category", category, PageRequest.of(page-1, pageSize));
             Map<String, Object> data = new HashMap<>();
             data.put("standardMessages", standardMessages);
             data.put("size", standardMessages.size());
 
-            return handleGenericSuccess(data, "[GET /searchByTag]: Executed Successfully");
+            return handleGenericSuccess(data, "[GET /searchMessagesByCategory]: Executed Successfully");
         }
         catch (Exception e) {
             return handleGenericException(e);
         }
     }
 
-    @GetMapping("/searchByUserName")
+
+    @GetMapping("/username/{userName}")
     public ResponseEntity<MyResponseBody<Object>> searchMessagesByUserName(
-            @RequestParam String userName,
+            @PathVariable String userName,
             @RequestParam(defaultValue = "20") int pageSize,
             @RequestParam(defaultValue = "1") int page
     ) {
@@ -125,7 +147,7 @@ public class ApiController {
                 return handleInvalidPageOrPageSize(page, pageSize, "GET /searchByUserName");
             }
 
-            List<StandardMessage> standardMessages = centralRepository.findAllByNameContaining(userName, PageRequest.of(page, pageSize));
+            List<StandardMessage> standardMessages = centralRepository.findAllByNameContainingIgnoreCase(userName, PageRequest.of(page-1, pageSize));
             Map<String, Object> data = new HashMap<>();
             data.put("standardMessages", standardMessages);
             data.put("size", standardMessages.size());
@@ -136,7 +158,6 @@ public class ApiController {
             return handleGenericException(e);
         }
     }
-
 
 
     /****************************************** PRIVATE METHODS ******************************************/
@@ -159,7 +180,7 @@ public class ApiController {
         log.error("[{}]: Invalid Page=[{}] or PageSize=[{}] requested", callingEndpoint, page, pageSize);
 
         String jsonData = String.format(
-                "{page: {expected: {min: %d}, received: %d}, pageSize: {expected: {min: %d, max: %d}, received: %d}}",
+                "{\"page\": {\"expected\": {\"min\": %d}, \"received\": %d}, \"pageSize\": {\"expected\": {\"min\": %d, \"max\": %d}, \"received\": %d}}",
                 MIN_PAGE, page, MIN_PAGE_SIZE, MAX_PAGE_SIZE, pageSize
         );
 
