@@ -1,7 +1,7 @@
 package com.VersatileDataProcessor.SearchPoint.controller;
 
-import com.VersatileDataProcessor.SearchPoint.models.MyResponseBody;
-import com.VersatileDataProcessor.SearchPoint.models.StandardMessage;
+import com.VersatileDataProcessor.Models.InternalHttpResponse;
+import com.VersatileDataProcessor.Models.standardMediaData.StandardMediaData;
 import com.VersatileDataProcessor.SearchPoint.repositories.CentralRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,21 +25,21 @@ public class RestrictedController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<MyResponseBody<Object>> getAllMessages(
+    public ResponseEntity<InternalHttpResponse<?>> getAllMessages(
             @RequestParam(defaultValue = "20") int pageSize,
             @RequestParam(defaultValue = "0") int page
     ) {
         try {
-            Page<StandardMessage> standardMessages = centralRepository.findAll(PageRequest.of(page, pageSize));
+            Page<StandardMediaData> standardMessages = centralRepository.findAll(PageRequest.of(page, pageSize));
 
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new MyResponseBody<>("All Messages", true, standardMessages)
+                    new InternalHttpResponse<>(true, standardMessages)
             );
         }
         catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new MyResponseBody<>(e.getMessage(), false, e)
+                    new InternalHttpResponse<>(false, e)
             );
         }
     }

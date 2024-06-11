@@ -1,29 +1,22 @@
 package com.VersatileDataProcessor.SearchPoint.repositories;
 
-import com.VersatileDataProcessor.SearchPoint.models.MessageType;
-import com.VersatileDataProcessor.SearchPoint.models.StandardMessage;
+import com.VersatileDataProcessor.Models.ApiType;
+import com.VersatileDataProcessor.Models.standardMediaData.StandardMediaData;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import java.util.List;
 
 
-public interface CentralRepository extends ElasticsearchRepository<StandardMessage, String> {
+public interface CentralRepository extends ElasticsearchRepository<StandardMediaData, String> {
 
-    String findAllByAdditionalDataQueryString = "{\"bool\": {\"must\": [{\"wildcard\": {\"additionalData.?0\": \"*?1*\"}}]}}";
+    String findAllByAdditionalDataQueryString = "{\"bool\": {\"must\": [{\"wildcard\": {\"additional.?0\": \"*?1*\"}}]}}";
     String findAllByNameQueryString = "{\"bool\":{\"should\":[{\"wildcard\":{\"name.title\":{\"value\":\"*?0*\"}}},{\"wildcard\":{\"name.first\":{\"value\":\"*?0*\"}}},{\"wildcard\":{\"name.last\":{\"value\":\"*?0*\"}}}]}}";
 
+    List<StandardMediaData> findAllByApiType(ApiType messageType, Pageable pageable);
 
-    List<StandardMessage> findAllByMessageType(MessageType messageType, Pageable pageable);
-
-    @Query(findAllByAdditionalDataQueryString)
-    List<StandardMessage> findAllByAdditionalDataContainsIgnoreCase(String key, String value, Pageable pageable);
-    // Joke API
-
-    List<StandardMessage> findAllByTagsContainingIgnoreCase(String tag, Pageable pageable);
+    // Joke AP
+    List<StandardMediaData> findAllByTagsContainingIgnoreCase(String tag, Pageable pageable);
 
     // Random User API
-    @Query(findAllByNameQueryString)
-    List<StandardMessage> findAllByNameContainingIgnoreCase(String name, Pageable pageable);
 }
