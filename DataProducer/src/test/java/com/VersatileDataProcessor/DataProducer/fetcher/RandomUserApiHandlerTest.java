@@ -1,7 +1,7 @@
 package com.VersatileDataProcessor.DataProducer.fetcher;
 
-import com.VersatileDataProcessor.DataProducer.models.apiMessages.RandomUserApiMessage;
 import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
+import com.VersatileDataProcessor.Models.apiResponse.randomUser.RandomUserApiResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class RandomUserApiFetcherTest {
+class RandomUserApiHandlerTest {
 
     @Mock
     private WebClient.Builder webClientBuilder;
@@ -28,16 +28,16 @@ class RandomUserApiFetcherTest {
     private WebClient.ResponseSpec responseSpec;
 
     @Mock
-    private Mono<RandomUserApiMessage> randomUserApiMessageMono;
+    private Mono<RandomUserApiResponse> randomUserApiMessageMono;
 
     @Mock
-    private RandomUserApiMessage randomUserApiMessage;
+    private RandomUserApiResponse randomUserApiMessage;
 
     @Mock
     private ApiMessageProducerService apiMessageProducerService;
 
     @InjectMocks
-    private RandomUserApiFetcher randomUserApiFetcher;
+    private RandomUserApiHandler randomUserApiHandler;
 
     @Test
     void getUser_success() {
@@ -49,11 +49,11 @@ class RandomUserApiFetcherTest {
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(uri)).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(RandomUserApiMessage.class)).thenReturn(randomUserApiMessageMono);
+        when(responseSpec.bodyToMono(RandomUserApiResponse.class)).thenReturn(randomUserApiMessageMono);
         when(randomUserApiMessageMono.block()).thenReturn(randomUserApiMessage);
 
         // When
-        randomUserApiFetcher.fetchData();
+        randomUserApiHandler.fetchData();
 
         // Then
         verify(apiMessageProducerService, times(1)).sendMessage(randomUserApiMessage);

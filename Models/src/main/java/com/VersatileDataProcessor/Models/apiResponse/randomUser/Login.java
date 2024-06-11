@@ -1,4 +1,4 @@
-package com.VersatileDataProcessor.Models.models.apiResponse.randomUser;
+package com.VersatileDataProcessor.Models.apiResponse.randomUser;
 
 import lombok.Getter;
 import lombok.Setter;

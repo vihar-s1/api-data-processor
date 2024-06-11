@@ -1,11 +1,11 @@
-package com.VersatileDataProcessor.Models.models.apiResponse.randomUser;
+package com.VersatileDataProcessor.Models.apiResponse.randomUser;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter @Setter @ToString
-public class RandomUser {
+public class User {
     private String gender;
     private Name name;
     private Location location;

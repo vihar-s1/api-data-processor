@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer.service;
 
-import com.VersatileDataProcessor.DataProducer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.Models.apiResponse.ApiResponseInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,12 +14,12 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @Slf4j
 public class ApiMessageProducerService {
-    private final KafkaTemplate<String, ApiMessageInterface> kafkaTemplate;
+    private final KafkaTemplate<String, ApiResponseInterface> kafkaTemplate;
 
     @Value(value = "${spring.kafka.topic.name}")
     private String kafkaTopicName;
 
-    public ApiMessageProducerService(KafkaTemplate<String, ApiMessageInterface> kafkaTemplate) {
+    public ApiMessageProducerService(KafkaTemplate<String, ApiResponseInterface> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -29,8 +29,8 @@ public class ApiMessageProducerService {
     }
 
 
-    public void sendMessage(ApiMessageInterface message) {
-        CompletableFuture<SendResult<String, ApiMessageInterface>> future = kafkaTemplate.send(kafkaTopicName, message.getId(), message);
+    public void sendMessage(ApiResponseInterface message) {
+        CompletableFuture<SendResult<String, ApiResponseInterface>> future = kafkaTemplate.send(kafkaTopicName, message.getId(), message);
 
         future.whenComplete((result, exception) -> {
             if (exception == null) {

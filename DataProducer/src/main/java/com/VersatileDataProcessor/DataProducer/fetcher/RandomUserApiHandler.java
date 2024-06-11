@@ -1,37 +1,36 @@
 package com.VersatileDataProcessor.DataProducer.fetcher;
 
-import com.VersatileDataProcessor.DataProducer.models.apiMessages.JokeApiMessage;
 import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
+import com.VersatileDataProcessor.Models.apiResponse.randomUser.RandomUserApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
 @Component
-public class JokeAPIFetcher implements DataFetcherInterface{
-
+public class RandomUserApiHandler implements ApiDataHandlerInterface {
     private final WebClient.Builder webClientBuilder;
     private final ApiMessageProducerService producerService;
 
-    public JokeAPIFetcher(WebClient.Builder webClientBuilder, ApiMessageProducerService producerService) {
+    public RandomUserApiHandler(WebClient.Builder webClientBuilder, ApiMessageProducerService producerService) {
         this.webClientBuilder = webClientBuilder;
         this.producerService = producerService;
     }
 
     @Override
     public void fetchData() {
-        String uri = "https://v2.jokeapi.dev/joke/Any?type=single&amount=5";
+        String uri = "https://randomuser.me/api/1.4?results=5&noinfo";
 
-        JokeApiMessage jokes = webClientBuilder.build()
+        RandomUserApiResponse randomUserResponse = webClientBuilder.build()
                 .get()
                 .uri(uri)
                 .retrieve()
-                .bodyToMono(JokeApiMessage.class)
+                .bodyToMono(RandomUserApiResponse.class)
                 .block();
 
-        log.info("Jokes fetched by JokeApiFetcher");
-        log.info("Sending Jokes to Kafka");
+        log.info("Random User fetched by {}", RandomUserApiHandler.class.getSimpleName());
+        log.info("Sending the random user to Kafka");
 
-        producerService.sendMessage(jokes);
+        producerService.sendMessage(randomUserResponse);
     }
 }

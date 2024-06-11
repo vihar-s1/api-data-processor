@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer.fetcher;
 
 
-public interface DataFetcherInterface {
+public interface ApiDataHandlerInterface {
     void fetchData();
 }

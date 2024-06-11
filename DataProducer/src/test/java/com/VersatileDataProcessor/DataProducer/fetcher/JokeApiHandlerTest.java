@@ -1,7 +1,7 @@
 package com.VersatileDataProcessor.DataProducer.fetcher;
 
-import com.VersatileDataProcessor.DataProducer.models.apiMessages.JokeApiMessage;
 import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
+import com.VersatileDataProcessor.Models.apiResponse.joke.JokeApiResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class JokeAPIFetcherTest {
+class JokeApiHandlerTest {
 
     @Mock
     private WebClient.Builder webClientBuilder;
@@ -29,16 +29,16 @@ class JokeAPIFetcherTest {
     private WebClient.ResponseSpec responseSpec;
 
     @Mock
-    private Mono<JokeApiMessage> jokeApiMessageMono;
+    private Mono<JokeApiResponse> jokeApiResponseMono;
 
     @Mock
-    private JokeApiMessage jokeApiMessage;
+    private JokeApiResponse jokeApiResponse;
 
     @Mock
     private ApiMessageProducerService apiMessageProducerService;
 
     @InjectMocks
-    private JokeAPIFetcher jokeAPIFetcher;
+    private JokeApiHandler jokeApiHandler;
 
     @BeforeAll
     static void setup() {
@@ -54,13 +54,13 @@ class JokeAPIFetcherTest {
         when(webClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(uri)).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.retrieve()).thenReturn(responseSpec);
-        when(responseSpec.bodyToMono(JokeApiMessage.class)).thenReturn(jokeApiMessageMono);
-        when(jokeApiMessageMono.block()).thenReturn(jokeApiMessage);
+        when(responseSpec.bodyToMono(JokeApiResponse.class)).thenReturn(jokeApiResponseMono);
+        when(jokeApiResponseMono.block()).thenReturn(jokeApiResponse);
 
         // When
-        jokeAPIFetcher.fetchData();
+        jokeApiHandler.fetchData();
 
         // Then
-        verify(apiMessageProducerService, times(1)).sendMessage(jokeApiMessage);
+        verify(apiMessageProducerService, times(1)).sendMessage(jokeApiResponse);
     }
 }
