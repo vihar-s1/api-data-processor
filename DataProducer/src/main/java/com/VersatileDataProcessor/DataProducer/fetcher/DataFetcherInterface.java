@@ -1,4 +1,4 @@
-package com.versatileDataProcessor.dataProducer.fetcher;
+package com.VersatileDataProcessor.DataProducer.fetcher;
 
 
 public interface DataFetcherInterface {

@@ -1,8 +1,8 @@
-package com.versatileDataProcessor.elasticsearchWriter.models.processedMessages;
+package com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages;
 
+import com.VersatileDataProcessor.ElasticsearchWriter.deserializers.MessageInterfaceDeserializer;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.MessageType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.versatileDataProcessor.elasticsearchWriter.deserializers.MessageInterfaceDeserializer;
-import com.versatileDataProcessor.elasticsearchWriter.models.MessageType;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;

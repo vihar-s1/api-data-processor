@@ -1,6 +1,6 @@
-package com.versatileDataProcessor.dataProducer.models.apiMessages;
+package com.VersatileDataProcessor.DataProducer.models.apiMessages;
 
-import com.versatileDataProcessor.dataProducer.models.MessageType;
+import com.VersatileDataProcessor.DataProducer.models.MessageType;
 import lombok.*;
 
 import java.util.List;

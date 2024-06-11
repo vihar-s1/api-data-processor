@@ -1,6 +1,6 @@
-package com.versatileDataProcessor.dataProducer;
+package com.VersatileDataProcessor.DataProducer;
 
-import com.versatileDataProcessor.dataProducer.fetcher.DataFetcherInterface;
+import com.VersatileDataProcessor.DataProducer.fetcher.DataFetcherInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

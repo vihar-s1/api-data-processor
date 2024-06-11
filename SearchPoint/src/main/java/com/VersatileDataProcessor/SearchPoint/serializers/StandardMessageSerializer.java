@@ -1,9 +1,9 @@
-package com.versatileDataProcessor.searchPoint.serializers;
+package com.VersatileDataProcessor.SearchPoint.serializers;
 
+import com.VersatileDataProcessor.SearchPoint.models.StandardMessage;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.versatileDataProcessor.searchPoint.models.StandardMessage;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

@@ -1,7 +1,7 @@
-package com.versatileDataProcessor.dataProducer.fetcher;
+package com.VersatileDataProcessor.DataProducer.fetcher;
 
-import com.versatileDataProcessor.dataProducer.models.apiMessages.RandomUserApiMessage;
-import com.versatileDataProcessor.dataProducer.service.ApiMessageProducerService;
+import com.VersatileDataProcessor.DataProducer.models.apiMessages.RandomUserApiMessage;
+import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

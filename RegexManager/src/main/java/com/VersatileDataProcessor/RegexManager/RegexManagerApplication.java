@@ -1,4 +1,4 @@
-package com.versatileDataProcessor.regexManager;
+package com.VersatileDataProcessor.RegexManager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

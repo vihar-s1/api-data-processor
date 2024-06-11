@@ -1,13 +1,13 @@
-package com.versatileDataProcessor.dataConsumer.services;
+package com.VersatileDataProcessor.DataConsumer.services;
 
 
-import com.versatileDataProcessor.dataConsumer.models.MyResponseBody;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.ApiMessageInterface;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.JokeApiMessage;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.RandomUserApiMessage;
-import com.versatileDataProcessor.dataConsumer.models.processedMessages.JokeMessage;
-import com.versatileDataProcessor.dataConsumer.models.processedMessages.ProcessedMessageInterface;
-import com.versatileDataProcessor.dataConsumer.models.processedMessages.RandomUserMessage;
+import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.RandomUserApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.processedMessages.JokeMessage;
+import com.VersatileDataProcessor.DataConsumer.models.processedMessages.ProcessedMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.processedMessages.RandomUserMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;

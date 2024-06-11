@@ -1,4 +1,4 @@
-package com.versatileDataProcessor.searchPoint.config;
+package com.VersatileDataProcessor.SearchPoint.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

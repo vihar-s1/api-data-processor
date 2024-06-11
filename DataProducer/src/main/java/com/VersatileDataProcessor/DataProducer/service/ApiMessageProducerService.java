@@ -1,6 +1,6 @@
-package com.versatileDataProcessor.dataProducer.service;
+package com.VersatileDataProcessor.DataProducer.service;
 
-import com.versatileDataProcessor.dataProducer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataProducer.models.apiMessages.ApiMessageInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

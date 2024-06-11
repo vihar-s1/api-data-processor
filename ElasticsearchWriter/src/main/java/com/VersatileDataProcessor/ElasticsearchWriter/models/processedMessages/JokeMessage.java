@@ -1,8 +1,10 @@
-package com.versatileDataProcessor.elasticsearchWriter.models.processedMessages;
+package com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages;
 
+import com.VersatileDataProcessor.ElasticsearchWriter.models.MessageType;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.versatileDataProcessor.elasticsearchWriter.models.MessageType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.stereotype.Component;

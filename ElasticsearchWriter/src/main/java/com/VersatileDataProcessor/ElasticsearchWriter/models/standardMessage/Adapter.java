@@ -1,8 +1,8 @@
-package com.versatileDataProcessor.elasticsearchWriter.models.standardMessage;
+package com.VersatileDataProcessor.ElasticsearchWriter.models.standardMessage;
 
-import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.JokeMessage;
-import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.MessageInterface;
-import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.RandomUserMessage;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages.JokeMessage;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages.MessageInterface;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages.RandomUserMessage;
 
 
 public class Adapter {

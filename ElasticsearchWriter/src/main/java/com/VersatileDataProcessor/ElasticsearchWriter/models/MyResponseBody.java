@@ -1,6 +1,8 @@
-package com.versatileDataProcessor.elasticsearchWriter.models;
+package com.VersatileDataProcessor.ElasticsearchWriter.models;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class MyResponseBody<T> {

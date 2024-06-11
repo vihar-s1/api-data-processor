@@ -1,7 +1,7 @@
-package com.versatileDataProcessor.dataProducer.fetcher;
+package com.VersatileDataProcessor.DataProducer.fetcher;
 
-import com.versatileDataProcessor.dataProducer.models.apiMessages.JokeApiMessage;
-import com.versatileDataProcessor.dataProducer.service.ApiMessageProducerService;
+import com.VersatileDataProcessor.DataProducer.models.apiMessages.JokeApiMessage;
+import com.VersatileDataProcessor.DataProducer.service.ApiMessageProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;

@@ -1,10 +1,10 @@
-package com.versatileDataProcessor.searchPoint.repositories;
+package com.VersatileDataProcessor.SearchPoint.repositories;
 
-import com.versatileDataProcessor.searchPoint.models.MessageType;
-import com.versatileDataProcessor.searchPoint.models.StandardMessage;
+import com.VersatileDataProcessor.SearchPoint.models.MessageType;
+import com.VersatileDataProcessor.SearchPoint.models.StandardMessage;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

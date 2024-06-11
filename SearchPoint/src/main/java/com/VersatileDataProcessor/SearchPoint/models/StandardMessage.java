@@ -1,15 +1,10 @@
-package com.versatileDataProcessor.searchPoint.models;
+package com.VersatileDataProcessor.SearchPoint.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.VersatileDataProcessor.SearchPoint.models.messageSupport.ID;
+import com.VersatileDataProcessor.SearchPoint.models.messageSupport.Name;
+import com.VersatileDataProcessor.SearchPoint.serializers.StandardMessageSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonValueInstantiator;
-import com.versatileDataProcessor.searchPoint.models.messageSupport.ID;
-import com.versatileDataProcessor.searchPoint.models.messageSupport.Name;
-import com.versatileDataProcessor.searchPoint.serializers.StandardMessageSerializer;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
 import org.springframework.data.annotation.TypeAlias;

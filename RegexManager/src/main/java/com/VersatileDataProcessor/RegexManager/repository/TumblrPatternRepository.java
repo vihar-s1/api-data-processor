@@ -1,6 +1,6 @@
-package com.versatileDataProcessor.regexManager.repository;
+package com.VersatileDataProcessor.RegexManager.repository;
 
-import com.versatileDataProcessor.regexManager.models.TumblrPattern;
+import com.VersatileDataProcessor.RegexManager.models.TumblrPattern;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

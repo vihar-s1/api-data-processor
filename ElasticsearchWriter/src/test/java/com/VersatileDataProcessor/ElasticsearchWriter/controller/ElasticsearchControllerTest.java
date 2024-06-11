@@ -1,12 +1,11 @@
-package com.versatileDataProcessor.elasticsearchWriter.controller;
+package com.VersatileDataProcessor.ElasticsearchWriter.controller;
 
-import com.versatileDataProcessor.elasticsearchWriter.models.MyResponseBody;
-import com.versatileDataProcessor.elasticsearchWriter.models.processedMessages.MessageInterface;
-import com.versatileDataProcessor.elasticsearchWriter.models.standardMessage.Adapter;
-import com.versatileDataProcessor.elasticsearchWriter.models.standardMessage.StandardMessage;
-import com.versatileDataProcessor.elasticsearchWriter.repositories.CentralRepository;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.MyResponseBody;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages.MessageInterface;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.standardMessage.Adapter;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.standardMessage.StandardMessage;
+import com.VersatileDataProcessor.ElasticsearchWriter.repositories.CentralRepository;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,9 +16,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
-
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ElasticsearchControllerTest {

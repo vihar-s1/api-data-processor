@@ -1,4 +1,4 @@
-package com.versatileDataProcessor.dataConsumer.models;
+package com.VersatileDataProcessor.DataConsumer.models;
 
 import java.io.Serializable;
 

@@ -1,13 +1,13 @@
-package com.versatileDataProcessor.dataConsumer.deserializers;
+package com.VersatileDataProcessor.DataConsumer.deserializers;
 
+import com.VersatileDataProcessor.DataConsumer.models.MessageType;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.messageSupport.Joke;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.versatileDataProcessor.dataConsumer.models.MessageType;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.ApiMessageInterface;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.JokeApiMessage;
-import com.versatileDataProcessor.dataConsumer.models.messageSupport.Joke;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

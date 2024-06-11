@@ -1,4 +1,4 @@
-package com.versatileDataProcessor.searchPoint.models;
+package com.VersatileDataProcessor.SearchPoint.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

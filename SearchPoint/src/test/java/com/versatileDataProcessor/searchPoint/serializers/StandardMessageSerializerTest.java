@@ -1,17 +1,16 @@
-package com.versatileDataProcessor.searchPoint.serializers;
+package com.VersatileDataProcessor.SearchPoint.serializers;
 
-import com.fasterxml.jackson.core.JsonParseException;
+import com.VersatileDataProcessor.SearchPoint.models.MessageType;
+import com.VersatileDataProcessor.SearchPoint.models.StandardMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.versatileDataProcessor.searchPoint.models.MessageType;
-import com.versatileDataProcessor.searchPoint.models.StandardMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class StandardMessageSerializerTest {

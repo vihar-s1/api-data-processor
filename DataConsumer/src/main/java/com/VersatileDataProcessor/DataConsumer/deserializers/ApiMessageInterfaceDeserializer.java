@@ -1,15 +1,15 @@
-package com.versatileDataProcessor.dataConsumer.deserializers;
+package com.VersatileDataProcessor.DataConsumer.deserializers;
 
 
+import com.VersatileDataProcessor.DataConsumer.models.MessageType;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
+import com.VersatileDataProcessor.DataConsumer.models.apiMessages.RandomUserApiMessage;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.versatileDataProcessor.dataConsumer.models.MessageType;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.ApiMessageInterface;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.JokeApiMessage;
-import com.versatileDataProcessor.dataConsumer.models.apiMessages.RandomUserApiMessage;
 
 import java.io.IOException;
 

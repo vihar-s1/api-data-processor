@@ -1,4 +1,4 @@
-package com.versatileDataProcessor.regexManager.models;
+package com.VersatileDataProcessor.RegexManager.models;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package com.versatileDataProcessor.searchPoint.models.messageSupport;
+package com.VersatileDataProcessor.SearchPoint.models.messageSupport;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;

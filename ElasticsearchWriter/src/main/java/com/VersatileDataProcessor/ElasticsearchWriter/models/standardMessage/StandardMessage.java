@@ -1,8 +1,8 @@
-package com.versatileDataProcessor.elasticsearchWriter.models.standardMessage;
+package com.VersatileDataProcessor.ElasticsearchWriter.models.standardMessage;
 
-import com.versatileDataProcessor.elasticsearchWriter.models.MessageType;
-import com.versatileDataProcessor.elasticsearchWriter.models.messageSupport.randomUser.ID;
-import com.versatileDataProcessor.elasticsearchWriter.models.messageSupport.randomUser.Name;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.MessageType;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.messageSupport.randomUser.ID;
+import com.VersatileDataProcessor.ElasticsearchWriter.models.messageSupport.randomUser.Name;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
