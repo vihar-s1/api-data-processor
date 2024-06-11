@@ -1,11 +1,11 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.3'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id ("java")
+	id ("org.springframework.boot").version("3.2.3")
+	id ("io.spring.dependency-management").version("1.1.4")
 }
 
-group = 'com.versatileDataProcessor'
-version = '0.0.1-SNAPSHOT'
+group = "com.versatileDataProcessor"
+version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
@@ -23,29 +23,30 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
+	maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-webflux:3.2.3'
-	implementation 'org.springframework:spring-web:6.1.5'
-	implementation 'org.apache.kafka:kafka-streams:3.6.1'
-	implementation 'org.springframework.kafka:spring-kafka:3.1.2'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.4'
-	implementation 'org.slf4j:slf4j-api:2.0.12'
-	implementation 'org.reflections:reflections:0.10.2'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.3")
+	implementation("org.springframework:spring-web:6.1.5")
+	implementation("org.apache.kafka:kafka-streams:3.6.1")
+	implementation("org.springframework.kafka:spring-kafka:3.1.2")
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.15.4")
+	implementation("org.slf4j:slf4j-api:2.0.12")
+	implementation("org.reflections:reflections:0.10.2")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-	compileOnly 'org.projectlombok:lombok:1.18.30'
+	compileOnly("org.projectlombok:lombok:1.18.30")
 
-	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.2.3'
+	developmentOnly("org.springframework.boot:spring-boot-devtools:3.2.3")
 
-	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.3'
-	testImplementation 'org.springframework.kafka:spring-kafka-test:3.1.2'
+	testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.3")
+	testImplementation("org.junit.jupiter:junit-jupiter")
+	testImplementation("org.springframework.kafka:spring-kafka-test:3.1.2")
 }
 
-tasks.named('test') {
+tasks.named("test") {
 	useJUnitPlatform()
 }
