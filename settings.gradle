@@ -5,3 +5,7 @@ include ":RegexManager"
 include ":DataConsumer"
 include ":ElasticsearchWriter"
 include ":SearchPoint"
+include ":Models"
+
+include ":Models"
+

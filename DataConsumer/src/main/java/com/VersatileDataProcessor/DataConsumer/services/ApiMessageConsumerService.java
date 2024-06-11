@@ -1,13 +1,11 @@
 package com.VersatileDataProcessor.DataConsumer.services;
 
-
-import com.VersatileDataProcessor.DataConsumer.models.MyResponseBody;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.JokeApiMessage;
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.RandomUserApiMessage;
-import com.VersatileDataProcessor.DataConsumer.models.processedMessages.JokeMessage;
-import com.VersatileDataProcessor.DataConsumer.models.processedMessages.ProcessedMessageInterface;
-import com.VersatileDataProcessor.DataConsumer.models.processedMessages.RandomUserMessage;
+import com.VersatileDataProcessor.Models.InternalHttpResponse;
+import com.VersatileDataProcessor.Models.apiResponse.ApiResponseInterface;
+import com.VersatileDataProcessor.Models.apiResponse.joke.JokeApiResponse;
+import com.VersatileDataProcessor.Models.apiResponse.randomUser.RandomUserApiResponse;
+import com.VersatileDataProcessor.Models.standardMediaData.Adapter;
+import com.VersatileDataProcessor.Models.standardMediaData.StandardMediaData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -35,43 +33,43 @@ public class ApiMessageConsumerService {
             containerFactory = "getStandardContainerFactory"
     )
     public void genericApiMessageHandler(
-            @Payload ApiMessageInterface apiMessage,
+            @Payload ApiResponseInterface apiResponse,
             @Header(KafkaHeaders.RECEIVED_PARTITION) int partitionId,
             @Header(KafkaHeaders.OFFSET) int offset
             ) {
 
         log.info(
-                "Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] : [" + apiMessage + "]"
+                "Received Message at Partition=[" + partitionId + "], Offset=[" + offset + "] : [" + apiResponse + "]"
         );
 
-        handleApiMessage(apiMessage);
+        handleApiMessage(apiResponse);
     } // method rawDataObjectHandler() ends
 
-    private void handleApiMessage(ApiMessageInterface apiMessage) {
+    private void handleApiMessage(ApiResponseInterface apiMessage) {
         if (apiMessage == null) return;
-        switch (apiMessage.getMessageType()){
-            case JOKE -> JokeMessage.processApiMessage((JokeApiMessage) apiMessage).forEach(this::sendDBWriteRequest);
-            case RANDOM_USER -> RandomUserMessage.processApiMessage((RandomUserApiMessage) apiMessage).forEach(this::sendDBWriteRequest);
+
+        switch (apiMessage.getApiType()){
+            case JOKE -> Adapter.toStandardMediaData((JokeApiResponse) apiMessage).forEach(this::sendDBWriteRequest);
+            case RANDOM_USER -> Adapter.toStandardMediaData((RandomUserApiResponse) apiMessage).forEach(this::sendDBWriteRequest);
         }
     }
 
 
-    private void sendDBWriteRequest(ProcessedMessageInterface processedMessage){
+    private void sendDBWriteRequest(StandardMediaData mediaData){
         try {
             webClientBuilder.build()
                     .post()
-                    .body(Mono.just(processedMessage), processedMessage.getClass())
+                    .body(Mono.just(mediaData), StandardMediaData.class)
                     .retrieve()
-                    .bodyToMono(MyResponseBody.class)
+                    .bodyToMono(InternalHttpResponse.class)
                     .toFuture()
-                    .whenComplete((myResponseBody, throwable) -> {
+                    .whenComplete((httpResponse, throwable) -> {
                         if (throwable == null) {
-                            log.info("DATABASE WRITE REQUEST : success=[" + myResponseBody.getSuccess() + "] : message=[" + myResponseBody.getMessage()
-                                    + "] : sent dataType=[" + processedMessage.getMessageType() + "]");
-                            log.debug("Data Sent is : " + myResponseBody.getData());
+                            log.info("DATABASE WRITE REQUEST : apiType=[{}] : success=[{}]", httpResponse.getSuccess(), mediaData.getApiType());
+                            log.debug("Data Sent is : {}", httpResponse.getData());
                         }
                         else {
-                            log.error("exception occurred : dataType=[" + processedMessage.getMessageType() + "] : message=[" + myResponseBody.getMessage() + "] : " + throwable);
+                            log.error("Returned Throwable=[{}] : apiType=[{}]", throwable, mediaData.getApiType());
 //                        throw new RuntimeException(throwable);
                         }
                     });
@@ -81,7 +79,7 @@ public class ApiMessageConsumerService {
                     "ERROR SENDING DATABASE WRITE REQUEST: Exception=[{}] : Message=[{}] : messageType=[{}]",
                     exception.getClass().getSimpleName(),
                     exception.getMessage(),
-                    processedMessage.getMessageType()
+                    mediaData.getApiType()
             );
         }
     }

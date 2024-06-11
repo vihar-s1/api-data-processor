@@ -25,6 +25,8 @@ repositories {
 }
 
 dependencies {
+	implementation(project(":Models"))
+
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb:3.2.3")
 	implementation("org.springframework.boot:spring-boot-starter-jersey:3.2.3")
 	implementation("org.springframework:spring-web:6.1.5")

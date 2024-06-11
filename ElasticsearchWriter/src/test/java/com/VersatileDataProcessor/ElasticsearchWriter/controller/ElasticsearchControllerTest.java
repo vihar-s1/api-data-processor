@@ -1,11 +1,8 @@
 package com.VersatileDataProcessor.ElasticsearchWriter.controller;
 
-import com.VersatileDataProcessor.ElasticsearchWriter.models.MyResponseBody;
-import com.VersatileDataProcessor.ElasticsearchWriter.models.processedMessages.MessageInterface;
-import com.VersatileDataProcessor.ElasticsearchWriter.models.standardMessage.Adapter;
-import com.VersatileDataProcessor.ElasticsearchWriter.models.standardMessage.StandardMessage;
-import com.VersatileDataProcessor.ElasticsearchWriter.repositories.CentralRepository;
-import org.junit.jupiter.api.BeforeAll;
+import com.VersatileDataProcessor.ElasticsearchWriter.repositories.MediaDataRepository;
+import com.VersatileDataProcessor.Models.InternalHttpResponse;
+import com.VersatileDataProcessor.Models.standardMediaData.StandardMediaData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,40 +20,31 @@ import static org.mockito.Mockito.*;
 class ElasticsearchControllerTest {
 
     @Mock
-    private CentralRepository centralRepository;
+    private MediaDataRepository centralRepository;
 
     @InjectMocks
     private ElasticsearchController elasticsearchController;
 
-    @BeforeAll
-    static void setUp() {
-        mockStatic(Adapter.class);
-    }
-
     @Test
     void testAddMessage_Success() {
         // Given
-        MessageInterface message =  mock(MessageInterface.class);
-        StandardMessage standardMessage = mock(StandardMessage.class);
+        StandardMediaData mediaData =  mock(StandardMediaData.class);
 
         // When
-        when(Adapter.genericAdapter(any(MessageInterface.class))).thenReturn(standardMessage);
-
-        when(message.getId()).thenReturn("someId");
-
+        when(mediaData.getId()).thenReturn("someId");
         when(centralRepository.findById(anyString())).thenReturn(java.util.Optional.empty());
-        when(centralRepository.save(any(StandardMessage.class))).thenReturn(standardMessage);
+        when(centralRepository.save(any(StandardMediaData.class))).thenReturn(mediaData);
 
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("The resource was created successfully", responseEntity.getBody().getMessage());
+        assertEquals(mediaData, responseEntity.getBody().getData());
         assertTrue(responseEntity.getBody().getSuccess());
 
         // Verify that the messageRepository.save() method was called with the correct argument
-        verify(centralRepository, times(1)).save(standardMessage);
+        verify(centralRepository, times(1)).save(mediaData);
     }
 
     @Test
@@ -64,143 +52,134 @@ class ElasticsearchControllerTest {
         // Given
 
         // When
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(null);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(null);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getMessage());
+        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
     @Test
     void testAddMessage_NullId() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
+        StandardMediaData mediaData = mock(StandardMediaData.class);
 
         // When
-        when(message.getId()).thenReturn(null);
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        when(mediaData.getId()).thenReturn(null);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getMessage());
+        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
     @Test
     void testAddMessage_IdAlreadyExists() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
-        StandardMessage standardMessage = mock(StandardMessage.class);
+        StandardMediaData mediaData = mock(StandardMediaData.class);
 
         // When
-        when(Adapter.genericAdapter(any(MessageInterface.class))).thenReturn(standardMessage);
+        when(mediaData.getId()).thenReturn("existingId");
+        when(centralRepository.findById(anyString())).thenReturn(Optional.of(mediaData));
 
-        when(message.getId()).thenReturn("existingId");
-
-        when(centralRepository.findById(anyString())).thenReturn(Optional.of(standardMessage));
-
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("The resource you are trying to create already exists", responseEntity.getBody().getMessage());
+        assertEquals("The resource you are trying to create already exists", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
     @Test
     void testAddMessage_InternalServerError() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
-        StandardMessage standardMessage = mock(StandardMessage.class);
+        StandardMediaData mediaData = mock(StandardMediaData.class);
 
 
         // When
-        when(Adapter.genericAdapter(any(MessageInterface.class))).thenReturn(standardMessage);
-
-        when(message.getId()).thenReturn("someId");
-        when(message.getId()).thenReturn("someId");
+        when(mediaData.getId()).thenReturn("someId");
+        when(mediaData.getId()).thenReturn("someId");
         when(centralRepository.findById(anyString())).thenThrow(RuntimeException.class); // Simulating an internal error
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Internal Server Error !", responseEntity.getBody().getMessage());
+        assertEquals("Internal Server Error !", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
     @Test
     void testAddMessage_MessageWithEmptyId() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
+        StandardMediaData mediaData = mock(StandardMediaData.class);
 
         // When
-        when(message.getId()).thenReturn("");
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        when(mediaData.getId()).thenReturn("");
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getMessage());
+        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
     @Test
     void testAddMessage_MessageWithWhitespaceId() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
-        when(message.getId()).thenReturn("   ");
+        StandardMediaData mediaData = mock(StandardMediaData.class);
+        when(mediaData.getId()).thenReturn("   ");
 
         // When
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getMessage());
+        assertEquals("Validation Failed. Id cannot be empty or null", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
     @Test
     void testAddMessage_MessageWithExistingId() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
-        StandardMessage standardMessage = mock(StandardMessage.class);
+        StandardMediaData mediaData = mock(StandardMediaData.class);
 
-        when(message.getId()).thenReturn("existingId");
-        when(centralRepository.findById(anyString())).thenReturn(Optional.of(standardMessage));
 
         // When
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        when(mediaData.getId()).thenReturn("existingId");
+        when(centralRepository.findById(anyString())).thenReturn(Optional.of(mediaData));
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("The resource you are trying to create already exists", responseEntity.getBody().getMessage());
+        assertEquals("The resource you are trying to create already exists", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
     @Test
     void testAddMessage_ExceptionDuringSaving() {
         // Given
-        MessageInterface message = mock(MessageInterface.class);
-        StandardMessage standardMessage = mock(StandardMessage.class);
+        StandardMediaData mediaData = mock(StandardMediaData.class);
 
-        when(message.getId()).thenReturn("someId");
-        when(standardMessage.getId()).thenReturn("someId");
-        when(centralRepository.save(standardMessage)).thenThrow(new RuntimeException("Failed to save"));
+        when(mediaData.getId()).thenReturn("someId");
+        when(mediaData.getId()).thenReturn("someId");
+        when(centralRepository.save(mediaData)).thenThrow(new RuntimeException("Failed to save"));
 
         // When
-        ResponseEntity<MyResponseBody<Object>> responseEntity = elasticsearchController.addMessage(message);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("Internal Server Error !", responseEntity.getBody().getMessage());
+        assertEquals("Internal Server Error !", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 }

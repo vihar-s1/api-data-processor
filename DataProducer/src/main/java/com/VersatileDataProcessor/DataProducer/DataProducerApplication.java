@@ -1,6 +1,6 @@
 package com.VersatileDataProcessor.DataProducer;
 
-import com.VersatileDataProcessor.DataProducer.fetcher.DataFetcherInterface;
+import com.VersatileDataProcessor.DataProducer.fetcher.ApiDataHandlerInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,10 +15,10 @@ import java.util.Set;
 @EnableScheduling
 public class DataProducerApplication {
 
-	private final Set<DataFetcherInterface> dataFetchers;
+	private final Set<ApiDataHandlerInterface> apiDataHandlers;
 
-	public DataProducerApplication(Set<DataFetcherInterface> dataFetchers) {
-		this.dataFetchers = dataFetchers;
+	public DataProducerApplication(Set<ApiDataHandlerInterface> apiDataHandlers) {
+		this.apiDataHandlers = apiDataHandlers;
 	}
 
 	public static void main(String[] args) {
@@ -29,7 +29,7 @@ public class DataProducerApplication {
 	public class DataFetcherScheduler {
 		@Scheduled(fixedRate = 60_000) // Run every 1 minute
 		public void fetchData() {
-			dataFetchers.forEach(DataFetcherInterface::fetchData);
+			apiDataHandlers.forEach(ApiDataHandlerInterface::fetchData);
 		}
 	}
 

@@ -1,9 +1,8 @@
 package com.VersatileDataProcessor.DataConsumer.config;
 
-import com.VersatileDataProcessor.DataConsumer.models.apiMessages.ApiMessageInterface;
+import com.VersatileDataProcessor.Models.apiResponse.ApiResponseInterface;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @EnableKafka
 @Configuration
@@ -27,7 +25,7 @@ public class ApiMessageConsumerConfig {
     private int groupId;
 
     @Bean
-    public ConsumerFactory<String, ApiMessageInterface> getConsumerFactory() {
+    public ConsumerFactory<String, ApiResponseInterface> getConsumerFactory() {
         Map<String, Object> configs = new HashMap<>();
 
         configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
@@ -38,29 +36,29 @@ public class ApiMessageConsumerConfig {
         // Important: Configure JsonDeserializer to trust all packages
         configs.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 
-        /*DYNAMIC TYPE MAPPING BUILDING*/
-        StringBuilder typeMappings = new StringBuilder();
-        String apiMessagePackage = "com.VersatileDataProcessor.DataConsumer.models.apiMessages";
-        Reflections reflections = new Reflections(apiMessagePackage);
+//        /*DYNAMIC TYPE MAPPING BUILDING*/
+//        StringBuilder typeMappings = new StringBuilder();
+//        String apiMessagePackage = "com.VersatileDataProcessor.DataConsumer.models.apiMessages";
+//        Reflections reflections = new Reflections(apiMessagePackage);
+//
+//        Set<Class<? extends ApiMessageInterface>> subTypes = reflections.getSubTypesOf(ApiMessageInterface.class);
+//
+//        typeMappings.append(ApiMessageInterface.class.getSimpleName())
+//                .append(":")
+//                .append(ApiMessageInterface.class.getCanonicalName());
+//
+//        subTypes.forEach(cls -> typeMappings.append(",").append(cls.getSimpleName()).append(":").append(cls.getCanonicalName()));
+//
+//        /*END DYNAMIC TYPE MAPPING BUILDING*/
+//
+//        configs.put(JsonDeserializer.TYPE_MAPPINGS, typeMappings.toString());
 
-        Set<Class<? extends ApiMessageInterface>> subTypes = reflections.getSubTypesOf(ApiMessageInterface.class);
-
-        typeMappings.append(ApiMessageInterface.class.getSimpleName())
-                .append(":")
-                .append(ApiMessageInterface.class.getCanonicalName());
-
-        subTypes.forEach(cls -> typeMappings.append(",").append(cls.getSimpleName()).append(":").append(cls.getCanonicalName()));
-
-        /*END DYNAMIC TYPE MAPPING BUILDING*/
-
-        configs.put(JsonDeserializer.TYPE_MAPPINGS, typeMappings.toString());
-
-        return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(ApiMessageInterface.class));
+        return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(ApiResponseInterface.class));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ApiMessageInterface> getStandardContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, ApiMessageInterface> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, ApiResponseInterface> getStandardContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, ApiResponseInterface> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(getConsumerFactory());
         return factory;
     }
