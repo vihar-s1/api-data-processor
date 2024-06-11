@@ -1,11 +1,11 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.3'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id("java")
+	id("org.springframework.boot").version("3.2.3")
+	id("io.spring.dependency-management").version("1.1.4")
 }
 
-group = 'com.versatileDataProcessor'
-version = '0.0.1-SNAPSHOT'
+group = "com.versatileDataProcessor"
+version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
@@ -21,25 +21,26 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
+	maven { url "https://repo.spring.io/milestone" }
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:3.2.3'
-	implementation 'org.springframework.boot:spring-boot-starter-jersey:3.2.3'
-	implementation 'org.springframework:spring-web:6.1.5'
-	implementation 'org.springframework.boot:spring-boot-starter-web:3.2.3'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb:3.2.3")
+	implementation("org.springframework.boot:spring-boot-starter-jersey:3.2.3")
+	implementation("org.springframework:spring-web:6.1.5")
+	implementation("org.springframework.boot:spring-boot-starter-web:3.2.3")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-	compileOnly 'org.projectlombok:lombok:1.18.30'
+	compileOnly("org.projectlombok:lombok:1.18.30")
 
-	developmentOnly 'org.springframework.boot:spring-boot-devtools:3.2.3'
+	developmentOnly("org.springframework.boot:spring-boot-devtools:3.2.3")
 
-	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.3'
+	testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.3")
+	testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
-tasks.named('test') {
+tasks.named("test") {
 	useJUnitPlatform()
 }
