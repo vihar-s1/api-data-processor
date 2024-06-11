@@ -1,11 +1,8 @@
 rootProject.name = "SocialMediaDataProcessor"
 
-include ":DataProducer"
-include ":RegexManager"
-include ":DataConsumer"
-include ":ElasticsearchWriter"
-include ":SearchPoint"
-include ":Models"
-
-include ":Models"
-
+include ":producer"
+include ":regexManager"
+include ":consumer"
+include ":elasticsearchManager"
+include ":searchPoint"
+include ":models"
