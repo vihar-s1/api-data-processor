@@ -1,7 +1,8 @@
-package com.VersatileDataProcessor.DataConsumer.models.messageSupport;
+package com.VersatileDataProcessor.Models.apiResponse.joke;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Map;
 
 @Getter
@@ -9,7 +10,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Joke {
+public class Joke implements Serializable {
     private String category;
     private String type;
     private String joke;
