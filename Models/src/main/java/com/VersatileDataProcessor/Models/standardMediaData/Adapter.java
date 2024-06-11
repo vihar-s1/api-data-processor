@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class Adapter {
+public class Adapter {
     public static List<StandardMediaData> toStandardMediaData(JokeApiResponse apiResponse) {
         List<StandardMediaData> mediaDataList = new ArrayList<>();
         if (apiResponse == null || apiResponse.isError() || apiResponse.getAmount() == 0) {
