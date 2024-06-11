@@ -1,0 +1,28 @@
+plugins {
+    id("java")
+}
+
+group = 'com.versatileDataProcessor'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+    compileOnly("org.projectlombok:lombok:1.18.30")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.3")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
