@@ -1,4 +1,4 @@
-package com.apiDataProcessor.searchPoint.repositories;
+package com.apiDataProcessor.searchService.repositories;
 
 import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.standardMediaData.StandardMediaData;

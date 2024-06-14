@@ -2,7 +2,7 @@ plugins {
     id("java")
 }
 
-group = "com.versatileDataProcessor"
+group = "com.apiDataProcessor"
 version = "1.0.0"
 
 java {

@@ -1,4 +1,4 @@
-package com.apiDataProcessor.searchPoint.controller;
+package com.apiDataProcessor.searchService.controller;
 
 import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.InternalHttpResponse;

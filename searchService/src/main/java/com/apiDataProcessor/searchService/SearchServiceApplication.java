@@ -1,13 +1,13 @@
-package com.apiDataProcessor.searchPoint;
+package com.apiDataProcessor.searchService;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SearchPointApplication {
+public class SearchServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SearchPointApplication.class, args);
+		SpringApplication.run(SearchServiceApplication.class, args);
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.apiDataProcessor.searchPoint.config;
+package com.apiDataProcessor.searchService.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

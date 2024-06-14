@@ -1,8 +1,8 @@
-rootProject.name = "SocialMediaDataProcessor"
+rootProject.name = "apiDataProcessor"
 
 include ":producer"
 include ":regexManager"
 include ":consumer"
 include ":elasticsearchManager"
-include ":searchPoint"
+include ":searchService"
 include ":models"
