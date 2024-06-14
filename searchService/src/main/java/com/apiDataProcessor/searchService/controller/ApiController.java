@@ -3,7 +3,7 @@ package com.apiDataProcessor.searchService.controller;
 import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.InternalHttpResponse;
 import com.apiDataProcessor.models.standardMediaData.StandardMediaData;
-import com.apiDataProcessor.searchPoint.repositories.CentralRepository;
+import com.apiDataProcessor.searchService.repositories.CentralRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

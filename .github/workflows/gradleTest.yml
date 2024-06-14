@@ -9,7 +9,7 @@ on:
             - main
 
 jobs:
-    data-producer-test:
+    producer-test:
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -24,8 +24,8 @@ jobs:
             - name: Setup Gradle
               uses: gradle/actions/setup-gradle@v3
             - name: Run test suites
-              run: gradle :DataProducer:test
-    data-consumer-test:
+              run: gradle :producer:test
+    consumer-test:
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -40,7 +40,7 @@ jobs:
             - name: Setup Gradle
               uses: gradle/actions/setup-gradle@v3
             - name: Run test suites
-              run: gradle :DataConsumer:test
+              run: gradle :consumer:test
     regex-manager-test:
         runs-on: ubuntu-latest
         permissions:
@@ -56,8 +56,8 @@ jobs:
             - name: Setup Gradle
               uses: gradle/actions/setup-gradle@v3
             - name: Run test suites
-              run: gradle :RegexManager:test
-    elasticsearch-writer-test:
+              run: gradle :regexManager:test
+    elasticsearch-manager-test:
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -72,8 +72,8 @@ jobs:
             - name: Setup Gradle
               uses: gradle/actions/setup-gradle@v3
             - name: Run test suites
-              run: gradle :ElasticsearchWriter:test
-    searchpoint-test:
+              run: gradle :elasticsearchManager:test
+    search-service-test:
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -88,4 +88,4 @@ jobs:
             - name: Setup Gradle
               uses: gradle/actions/setup-gradle@v3
             - name: Run test suites
-              run: gradle :SearchPoint:test
+              run: gradle :searchService:test

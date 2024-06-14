@@ -2,7 +2,7 @@ package com.apiDataProcessor.searchService.controller;
 
 import com.apiDataProcessor.models.InternalHttpResponse;
 import com.apiDataProcessor.models.standardMediaData.StandardMediaData;
-import com.apiDataProcessor.searchPoint.repositories.CentralRepository;
+import com.apiDataProcessor.searchService.repositories.CentralRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
