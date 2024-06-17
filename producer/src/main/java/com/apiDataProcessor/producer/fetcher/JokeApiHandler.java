@@ -22,16 +22,16 @@ public class JokeApiHandler implements ApiDataHandlerInterface {
     public void fetchData() {
         String uri = "https://v2.jokeapi.dev/joke/Any?type=single&amount=5";
 
-        JokeApiResponse jokeResponse = webClientBuilder.build()
+        webClientBuilder.build()
                 .get()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(JokeApiResponse.class)
-                .block();
+                .subscribe(jokeApiResponse -> {
+                    log.info("Joke(s) fetched by {}", JokeApiHandler.class.getSimpleName());
+                    log.info("Sending the joke(s) to Kafka");
 
-        log.info("Jokes fetched by {}", JokeApiHandler.class.getSimpleName());
-        log.info("Sending Jokes to Kafka");
-
-        producerService.sendMessage(jokeResponse);
+                    producerService.sendMessage(jokeApiResponse);
+                });
     }
 }

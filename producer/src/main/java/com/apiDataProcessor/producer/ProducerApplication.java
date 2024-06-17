@@ -27,7 +27,7 @@ public class ProducerApplication {
 
 	@Component
 	public class DataFetcherScheduler {
-		@Scheduled(fixedRate = 60_000) // Run every 1 minute
+		@Scheduled(fixedRate = 15_000) // Run every 1 minute
 		public void fetchData() {
 			apiDataHandlers.forEach(ApiDataHandlerInterface::fetchData);
 		}

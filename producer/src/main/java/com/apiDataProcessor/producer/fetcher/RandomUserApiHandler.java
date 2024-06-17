@@ -21,16 +21,16 @@ public class RandomUserApiHandler implements ApiDataHandlerInterface {
     public void fetchData() {
         String uri = "https://randomuser.me/api/1.4?results=5&noinfo";
 
-        RandomUserApiResponse randomUserResponse = webClientBuilder.build()
+        webClientBuilder.build()
                 .get()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(RandomUserApiResponse.class)
-                .block();
+                .subscribe(randomUserApiResponse -> {
+                    log.info("Random User(s) fetched by {}", RandomUserApiHandler.class.getSimpleName());
+                    log.info("Sending the random user(s) to Kafka");
 
-        log.info("Random User fetched by {}", RandomUserApiHandler.class.getSimpleName());
-        log.info("Sending the random user to Kafka");
-
-        producerService.sendMessage(randomUserResponse);
+                    producerService.sendMessage(randomUserApiResponse);
+                });
     }
 }
