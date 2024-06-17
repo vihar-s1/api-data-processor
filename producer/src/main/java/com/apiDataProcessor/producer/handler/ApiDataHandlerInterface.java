@@ -1,4 +1,4 @@
-package com.apiDataProcessor.producer.fetcher;
+package com.apiDataProcessor.producer.handler;
 
 
 public interface ApiDataHandlerInterface {

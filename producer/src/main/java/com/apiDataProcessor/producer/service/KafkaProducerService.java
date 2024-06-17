@@ -13,13 +13,13 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
-public class ApiMessageProducerService {
+public class KafkaProducerService {
     private final KafkaTemplate<String, ApiResponseInterface> kafkaTemplate;
 
     @Value(value = "${spring.kafka.topic.name}")
     private String kafkaTopicName;
 
-    public ApiMessageProducerService(KafkaTemplate<String, ApiResponseInterface> kafkaTemplate) {
+    public KafkaProducerService(KafkaTemplate<String, ApiResponseInterface> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -29,21 +29,24 @@ public class ApiMessageProducerService {
     }
 
 
-    public void sendMessage(ApiResponseInterface message) {
-        CompletableFuture<SendResult<String, ApiResponseInterface>> future = kafkaTemplate.send(kafkaTopicName, message.getId(), message);
+    public void sendMessage(ApiResponseInterface response) {
+        CompletableFuture<SendResult<String, ApiResponseInterface>> future = kafkaTemplate.send(kafkaTopicName, response.getId(), response);
 
         future.whenComplete((result, exception) -> {
             if (exception == null) {
                 log.info(
-                        "Sent Message to Partition=[{}] with Offset=[{}] : [{}]",
+                        "Sent Message to Partition=[{}] with Offset=[{}] : apiType=[{}] : response=[id={}]",
                         result.getRecordMetadata().partition(),
                         result.getRecordMetadata().offset(),
-                        message
+                        response.getApiType(),
+                        response.getId()
                 );
             }
             else {
                 log.error(
-                        "Unable to send message=[{}] due to :{}", message,
+                        "Unable to send (apiType=[{}], response=[id={}]) due to :{}",
+                        response.getApiType(),
+                        response.getId(),
                         exception.getCause().toString()
                 );
             }

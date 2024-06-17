@@ -1,6 +1,6 @@
 package com.apiDataProcessor.producer;
 
-import com.apiDataProcessor.producer.fetcher.ApiDataHandlerInterface;
+import com.apiDataProcessor.producer.handler.ApiDataHandlerInterface;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
