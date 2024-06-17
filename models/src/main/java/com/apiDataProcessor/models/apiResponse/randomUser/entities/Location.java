@@ -1,4 +1,4 @@
-package com.apiDataProcessor.models.apiResponse.randomUser;
+package com.apiDataProcessor.models.apiResponse.randomUser.entities;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -4,5 +4,6 @@ import java.io.Serializable;
 
 public enum ApiType implements Serializable {
     JOKE,
-    RANDOM_USER
+    RANDOM_USER,
+    TWITTER
 }

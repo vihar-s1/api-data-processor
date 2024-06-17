@@ -1,5 +1,6 @@
 package com.apiDataProcessor.models.apiResponse.randomUser;
 
+import com.apiDataProcessor.models.apiResponse.randomUser.entities.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
