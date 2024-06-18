@@ -25,7 +25,6 @@ public class DatabaseWebClientConfig {
     public WebClient.Builder getWebClientBuilder() {
 
         String encodedCredentials = Base64Util.encode(dbManagerUsername + ":" + dbManagerPassword);
-        System.out.println(encodedCredentials);
 
         return WebClient.builder()
                 .baseUrl(ESAddEndPoint)
