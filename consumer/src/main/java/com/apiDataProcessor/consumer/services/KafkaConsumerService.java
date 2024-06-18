@@ -66,7 +66,12 @@ public class KafkaConsumerService {
                             log.debug("Data Sent is : {}", httpResponse.getData());
                         }
                         else {
-                            log.error("Returned Throwable=[{}] : apiType=[{}]", throwable, channelPost.getApiType());
+                            log.error(
+                                    "DATABASE WRITE REQUEST apiType=[{}] : Throwable=[{}], Message=[{}]",
+                                    channelPost.getApiType(),
+                                    throwable.getClass().getSimpleName(),
+                                    throwable.getMessage()
+                            );
 //                        throw new RuntimeException(throwable);
                         }
                     });

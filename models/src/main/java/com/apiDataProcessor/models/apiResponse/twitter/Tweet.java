@@ -19,7 +19,7 @@ public class Tweet {
     public static final String ID = "id";
     public static final String TEXT = "text";
     public static final String AUTHOR_ID = "author_id";
-    public static final String CONVERSION_ID = "conversion_id";
+    public static final String CONVERSATION_ID = "conversation_id";
     public static final String LANGUAGE = "lang";
     public static final String CREATED_AT = "created_at";
     public static final String EDIT_HISTORY_TWEEET_IDS = "edit_history_tweet_ids";
@@ -45,8 +45,8 @@ public class Tweet {
     @JsonProperty(AUTHOR_ID)
     private String authorId;
 
-    @JsonProperty(CONVERSION_ID)
-    private String conversionId;
+    @JsonProperty(CONVERSATION_ID)
+    private String conversationId;
 
     @JsonProperty(LANGUAGE)
     private String language;

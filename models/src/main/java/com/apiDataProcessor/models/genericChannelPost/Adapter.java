@@ -7,6 +7,7 @@ import com.apiDataProcessor.models.apiResponse.randomUser.RandomUserApiResponse;
 import com.apiDataProcessor.models.apiResponse.randomUser.User;
 import com.apiDataProcessor.models.apiResponse.twitter.Tweet;
 import com.apiDataProcessor.models.apiResponse.twitter.TwitterApiResponse;
+import com.apiDataProcessor.models.genericChannelPost.enums.Language;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;
@@ -27,9 +28,17 @@ public class Adapter {
             channelPost.setApiType(ApiType.JOKE);
 
             channelPost.setApiId(hashString(joke.getJoke()));
-            channelPost.setId( hashString(apiResponse.getId() + channelPost.getApiId()) );
+            channelPost.setId( hashString(channelPost.getApiId()) );
 
             channelPost.setJokeStatements( Arrays.stream(joke.getJoke().split("\n")).toList() );
+            channelPost.addToAdditional("category", joke.getCategory());
+            channelPost.addToAdditional("type", joke.getType());
+
+            joke.getFlags().forEach((flag, exists) -> {
+                if (exists) {
+                    channelPost.addToTags(flag);
+                }
+            });
 
             channelPostList.add(channelPost);
         }
@@ -46,7 +55,7 @@ public class Adapter {
             channelPost.setApiType(ApiType.RANDOM_USER);
 
             channelPost.setApiId(hashString(randomUser.toString()));
-            channelPost.setId( hashString(apiResponse.getId() + channelPost.getApiId()) );
+            channelPost.setId( hashString(channelPost.getApiId()) );
 
             channelPost.setUser(randomUser);
 
@@ -67,6 +76,23 @@ public class Adapter {
 
             channelPost.setApiId(tweet.getId());
             channelPost.setId( hashString(tweet.getId()) );
+
+            channelPost.setConversationId(tweet.getConversationId());
+            channelPost.setBody(tweet.getText());
+            channelPost.setAuthorId(tweet.getAuthorId());
+            channelPost.setCreatedAt(tweet.getCreatedAt());
+            channelPost.setLanguage(Language.getLanguage(tweet.getLanguage()));
+
+            if (tweet.getInReplyToUserId() != null) {
+                channelPost.addToAdditional("inReplyToUserId", tweet.getInReplyToUserId());
+            }
+            if (tweet.getPossiblySensitive() != null) {
+                channelPost.addToAdditional("possiblySensitive", tweet.getPossiblySensitive());
+            }
+            if (tweet.getEditHistoryTweetIDs() != null && !tweet.getEditHistoryTweetIDs().isEmpty()) {
+                channelPost.addToAdditional("editHistoryTweetIDs", tweet.getEditHistoryTweetIDs());
+            }
+            // unhandled fields: attachments, editControls, entities, referencedTweets, replySettings, nonPublicMetrics, organicMetrics, promotedMetrics, publicMetrics
 
             channelPostList.add(channelPost);
         }
