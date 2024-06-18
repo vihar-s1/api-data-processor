@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class TwitterResponse implements ApiResponseInterface {
+public class TwitterApiResponse implements ApiResponseInterface {
     private String id = UUID.randomUUID().toString();
 
     @Setter(AccessLevel.NONE)
@@ -19,6 +19,6 @@ public class TwitterResponse implements ApiResponseInterface {
     private List<Tweet> data;
 
     // field to ignore after deserialized
-    private TwitterResponseAdditional includes;
+    private TwitterApiResponseAdditional includes;
 
 }

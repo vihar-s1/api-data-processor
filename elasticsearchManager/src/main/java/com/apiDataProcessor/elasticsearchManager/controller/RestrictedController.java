@@ -1,6 +1,6 @@
 package com.apiDataProcessor.elasticsearchManager.controller;
 
-import com.apiDataProcessor.elasticsearchManager.repository.MediaDataRepository;
+import com.apiDataProcessor.elasticsearchManager.repository.ChannelPostRepository;
 import com.apiDataProcessor.models.InternalHttpResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/restricted")
 public class RestrictedController {
 
-    private final MediaDataRepository mediaDataRepository;
+    private final ChannelPostRepository channelPostRepository;
 
-    public RestrictedController(MediaDataRepository mediaDataRepository) {
-        this.mediaDataRepository = mediaDataRepository;
+    public RestrictedController(ChannelPostRepository channelPostRepository) {
+        this.channelPostRepository = channelPostRepository;
     }
 
     @GetMapping("/all")
@@ -25,7 +25,7 @@ public class RestrictedController {
         try {
             log.info("[GET /api/all] : Request Received");
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new InternalHttpResponse<>(true, mediaDataRepository.findAll())
+                    new InternalHttpResponse<>(true, channelPostRepository.findAll())
             );
         } catch (Exception exception) {
             log.error(

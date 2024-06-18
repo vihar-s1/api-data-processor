@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class WebClientConfig {
+public class DatabaseWebClientConfig {
 
     @Value(value = "${database.endpoint.add}")
     private String ESAddEndPoint;

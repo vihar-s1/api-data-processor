@@ -1,4 +1,4 @@
-package com.apiDataProcessor.models.standardMediaData;
+package com.apiDataProcessor.models.genericChannelPost;
 
 import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.randomUser.User;
@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.*;
 
 @Data @NoArgsConstructor @AllArgsConstructor
-@Document(indexName = "standard_media_data") // to store in elasticsearch-database
-public class StandardMediaData implements Serializable {
+@Document(indexName = "social-media-posts") // to store in elasticsearch-database
+public class GenericChannelPost implements Serializable {
     @Id
     private String id;
     private String apiId;

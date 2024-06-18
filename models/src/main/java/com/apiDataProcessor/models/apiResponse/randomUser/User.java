@@ -18,4 +18,9 @@ public class User {
     private ID id;
     private Picture picture;
     private String nat;
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
 }

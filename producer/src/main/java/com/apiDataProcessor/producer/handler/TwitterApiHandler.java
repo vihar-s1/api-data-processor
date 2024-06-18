@@ -1,6 +1,6 @@
 package com.apiDataProcessor.producer.handler;
 
-import com.apiDataProcessor.models.apiResponse.twitter.TwitterResponse;
+import com.apiDataProcessor.models.apiResponse.twitter.TwitterApiResponse;
 import com.apiDataProcessor.producer.service.ApiDataHandlerService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class TwitterApiHandler implements ApiDataHandlerInterface {
 
         apiDataHandlerService.fetchData(
             uri,
-            TwitterResponse.class,
+            TwitterApiResponse.class,
             httpHeaders -> {
                 httpHeaders.setBearerAuth(twitterBearerToken);
             }

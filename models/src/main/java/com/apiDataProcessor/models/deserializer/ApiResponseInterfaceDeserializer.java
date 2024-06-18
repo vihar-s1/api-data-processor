@@ -4,7 +4,7 @@ import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.ApiResponseInterface;
 import com.apiDataProcessor.models.apiResponse.joke.JokeApiResponse;
 import com.apiDataProcessor.models.apiResponse.randomUser.RandomUserApiResponse;
-import com.apiDataProcessor.models.apiResponse.twitter.TwitterResponse;
+import com.apiDataProcessor.models.apiResponse.twitter.TwitterApiResponse;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
@@ -24,7 +24,7 @@ public class ApiResponseInterfaceDeserializer extends JsonDeserializer<ApiRespon
         return switch (ApiType.valueOf(messageType)) {
             case JOKE -> mapper.readValue(root.toString(), JokeApiResponse.class);
             case RANDOM_USER -> mapper.readValue(root.toString(), RandomUserApiResponse.class);
-            case TWITTER -> mapper.readValue(root.toString(), TwitterResponse.class);
+            case TWITTER -> mapper.readValue(root.toString(), TwitterApiResponse.class);
         };
     }
 }

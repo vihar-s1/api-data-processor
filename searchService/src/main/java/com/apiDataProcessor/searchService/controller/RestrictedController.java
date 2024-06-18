@@ -1,7 +1,7 @@
 package com.apiDataProcessor.searchService.controller;
 
 import com.apiDataProcessor.models.InternalHttpResponse;
-import com.apiDataProcessor.models.standardMediaData.StandardMediaData;
+import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
 import com.apiDataProcessor.searchService.repositories.CentralRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,7 +30,7 @@ public class RestrictedController {
             @RequestParam(defaultValue = "0") int page
     ) {
         try {
-            Page<StandardMediaData> standardMessages = centralRepository.findAll(PageRequest.of(page, pageSize));
+            Page<GenericChannelPost> standardMessages = centralRepository.findAll(PageRequest.of(page, pageSize));
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new InternalHttpResponse<>(true, standardMessages)

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TwitterResponseAdditional {
+public class TwitterApiResponseAdditional {
     public static final String MEDIA = "media";
     @JsonProperty(MEDIA)
     private List<Media> media;
