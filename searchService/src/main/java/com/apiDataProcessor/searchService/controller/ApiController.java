@@ -2,7 +2,7 @@ package com.apiDataProcessor.searchService.controller;
 
 import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.InternalHttpResponse;
-import com.apiDataProcessor.models.standardMediaData.StandardMediaData;
+import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
 import com.apiDataProcessor.searchService.repositories.CentralRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -46,10 +46,10 @@ public class ApiController {
                 return handleInvalidPageOrPageSize(page, pageSize, "GET /" + apiType + "/all");
             }
             // PageRequest.of takes 0-based page number and pageSize.
-            List<StandardMediaData> StandardMediaDatas = centralRepository.findAllByApiType(apiType_enum, PageRequest.of(page-1, pageSize));
+            List<GenericChannelPost> genericChannelPosts = centralRepository.findAllByApiType(apiType_enum, PageRequest.of(page-1, pageSize));
             Map<String, Object> data = new HashMap<>();
-            data.put("StandardMediaDatas", StandardMediaDatas);
-            data.put("size", StandardMediaDatas.size());
+            data.put("genericChannelPosts", genericChannelPosts);
+            data.put("size", genericChannelPosts.size());
 
             return handleGenericSuccess(data, "[GET /{}/all]: Executed Successfully", apiType);
         }
@@ -76,15 +76,15 @@ public class ApiController {
                         new InternalHttpResponse<>(false,"Invalid or Missing Message ID")
                 );
             }
-            Optional<StandardMediaData> StandardMediaData = centralRepository.findById(messageId);
+            Optional<GenericChannelPost> genericChannelPost = centralRepository.findById(messageId);
 
-            if (StandardMediaData.isEmpty()){
-                log.warn("[GET /message/{}]: No StandardMediaData Object found for given ID", messageId);
+            if (genericChannelPost.isEmpty()){
+                log.warn("[GET /message/{}]: No genericChannelPost Object found for given ID", messageId);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new InternalHttpResponse<>(false,"No StandardMediaData Object found for given ID")
+                        new InternalHttpResponse<>(false,"No genericChannelPost Object found for given ID")
                 );
             }
-            return handleGenericSuccess(StandardMediaData.get(), "[GET /message/{}]: Executed Successfully", messageId);
+            return handleGenericSuccess(genericChannelPost.get(), "[GET /message/{}]: Executed Successfully", messageId);
         }
         catch (Exception exception) {
             return handleGenericException(exception);
@@ -102,10 +102,10 @@ public class ApiController {
                     return handleInvalidPageOrPageSize(page, pageSize, "GET /searchByTag");
                 }
 
-                List<StandardMediaData> StandardMediaDatas = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page-1, pageSize));
+                List<GenericChannelPost> genericChannelPosts = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page-1, pageSize));
                 Map<String, Object> data = new HashMap<>();
-                data.put("StandardMediaDatas", StandardMediaDatas);
-                data.put("size", StandardMediaDatas.size());
+                data.put("genericChannelPosts", genericChannelPosts);
+                data.put("size", genericChannelPosts.size());
 
                 return handleGenericSuccess(data, "[GET /searchByTag]: Executed Successfully");
             }

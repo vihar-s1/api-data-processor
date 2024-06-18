@@ -1,8 +1,8 @@
 package com.apiDataProcessor.elasticsearchManager.controller;
 
-import com.apiDataProcessor.elasticsearchManager.repository.MediaDataRepository;
+import com.apiDataProcessor.elasticsearchManager.repository.ChannelPostRepository;
 import com.apiDataProcessor.models.InternalHttpResponse;
-import com.apiDataProcessor.models.standardMediaData.StandardMediaData;
+import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 class ElasticsearchControllerTest {
 
     @Mock
-    private MediaDataRepository centralRepository;
+    private ChannelPostRepository centralRepository;
 
     @InjectMocks
     private ElasticsearchController elasticsearchController;
@@ -28,23 +28,23 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_Success() {
         // Given
-        StandardMediaData mediaData =  mock(StandardMediaData.class);
+        GenericChannelPost channelPost =  mock(GenericChannelPost.class);
 
         // When
-        when(mediaData.getId()).thenReturn("someId");
+        when(channelPost.getId()).thenReturn("someId");
         when(centralRepository.findById(anyString())).thenReturn(java.util.Optional.empty());
-        when(centralRepository.save(any(StandardMediaData.class))).thenReturn(mediaData);
+        when(centralRepository.save(any(GenericChannelPost.class))).thenReturn(channelPost);
 
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals(mediaData, responseEntity.getBody().getData());
+        assertEquals(channelPost, responseEntity.getBody().getData());
         assertTrue(responseEntity.getBody().getSuccess());
 
         // Verify that the messageRepository.save() method was called with the correct argument
-        verify(centralRepository, times(1)).save(mediaData);
+        verify(centralRepository, times(1)).save(channelPost);
     }
 
     @Test
@@ -64,11 +64,11 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_NullId() {
         // Given
-        StandardMediaData mediaData = mock(StandardMediaData.class);
+        GenericChannelPost channelPost = mock(GenericChannelPost.class);
 
         // When
-        when(mediaData.getId()).thenReturn(null);
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        when(channelPost.getId()).thenReturn(null);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -80,13 +80,13 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_IdAlreadyExists() {
         // Given
-        StandardMediaData mediaData = mock(StandardMediaData.class);
+        GenericChannelPost channelPost = mock(GenericChannelPost.class);
 
         // When
-        when(mediaData.getId()).thenReturn("existingId");
-        when(centralRepository.findById(anyString())).thenReturn(Optional.of(mediaData));
+        when(channelPost.getId()).thenReturn("existingId");
+        when(centralRepository.findById(anyString())).thenReturn(Optional.of(channelPost));
 
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
@@ -98,14 +98,14 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_InternalServerError() {
         // Given
-        StandardMediaData mediaData = mock(StandardMediaData.class);
+        GenericChannelPost channelPost = mock(GenericChannelPost.class);
 
 
         // When
-        when(mediaData.getId()).thenReturn("someId");
-        when(mediaData.getId()).thenReturn("someId");
+        when(channelPost.getId()).thenReturn("someId");
+        when(channelPost.getId()).thenReturn("someId");
         when(centralRepository.findById(anyString())).thenThrow(RuntimeException.class); // Simulating an internal error
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
@@ -117,11 +117,11 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_MessageWithEmptyId() {
         // Given
-        StandardMediaData mediaData = mock(StandardMediaData.class);
+        GenericChannelPost channelPost = mock(GenericChannelPost.class);
 
         // When
-        when(mediaData.getId()).thenReturn("");
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        when(channelPost.getId()).thenReturn("");
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -133,11 +133,11 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_MessageWithWhitespaceId() {
         // Given
-        StandardMediaData mediaData = mock(StandardMediaData.class);
-        when(mediaData.getId()).thenReturn("   ");
+        GenericChannelPost channelPost = mock(GenericChannelPost.class);
+        when(channelPost.getId()).thenReturn("   ");
 
         // When
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -149,13 +149,13 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_MessageWithExistingId() {
         // Given
-        StandardMediaData mediaData = mock(StandardMediaData.class);
+        GenericChannelPost channelPost = mock(GenericChannelPost.class);
 
 
         // When
-        when(mediaData.getId()).thenReturn("existingId");
-        when(centralRepository.findById(anyString())).thenReturn(Optional.of(mediaData));
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        when(channelPost.getId()).thenReturn("existingId");
+        when(centralRepository.findById(anyString())).thenReturn(Optional.of(channelPost));
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
@@ -167,14 +167,14 @@ class ElasticsearchControllerTest {
     @Test
     void testAddMessage_ExceptionDuringSaving() {
         // Given
-        StandardMediaData mediaData = mock(StandardMediaData.class);
+        GenericChannelPost channelPost = mock(GenericChannelPost.class);
 
-        when(mediaData.getId()).thenReturn("someId");
-        when(mediaData.getId()).thenReturn("someId");
-        when(centralRepository.save(mediaData)).thenThrow(new RuntimeException("Failed to save"));
+        when(channelPost.getId()).thenReturn("someId");
+        when(channelPost.getId()).thenReturn("someId");
+        when(centralRepository.save(channelPost)).thenThrow(new RuntimeException("Failed to save"));
 
         // When
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(mediaData);
+        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());

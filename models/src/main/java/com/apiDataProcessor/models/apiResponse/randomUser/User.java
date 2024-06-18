@@ -1,5 +1,6 @@
 package com.apiDataProcessor.models.apiResponse.randomUser;
 
+import com.apiDataProcessor.models.apiResponse.randomUser.entities.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,4 +18,9 @@ public class User {
     private ID id;
     private Picture picture;
     private String nat;
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
 }

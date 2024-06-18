@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class ApiMessageProducerConfig {
+public class KafkaProducerConfig {
 
     @Value(value = "${spring.kafka.bootstrap-servers}")
     private String bootstrapServer;

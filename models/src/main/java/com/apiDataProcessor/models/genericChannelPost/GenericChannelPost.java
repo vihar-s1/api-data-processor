@@ -1,21 +1,31 @@
-package com.apiDataProcessor.models.standardMediaData;
+package com.apiDataProcessor.models.genericChannelPost;
 
 import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.randomUser.User;
+import com.apiDataProcessor.models.genericChannelPost.enums.Language;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Data @NoArgsConstructor @AllArgsConstructor
-@Document(indexName = "standard_media_data") // to store in elasticsearch-database
-public class StandardMediaData implements Serializable {
+@Document(indexName = "social-media-posts") // to store in elasticsearch-database
+public class GenericChannelPost implements Serializable {
     @Id
     private String id;
     private String apiId;
     private ApiType apiType;
+    private String authorId;
+    private String conversationId;
+
+    private String title;
+    private String body;
+    private Language language;
+    private Timestamp createdAt;
+    private Timestamp lastUpdatedAt;
 
     @Setter(AccessLevel.NONE)
     private Map<String, Object> additional;
