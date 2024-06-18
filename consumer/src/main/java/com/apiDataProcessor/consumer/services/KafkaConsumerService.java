@@ -39,10 +39,10 @@ public class KafkaConsumerService {
             @Header(KafkaHeaders.OFFSET) int offset
             ) {
 
-        log.info("Received Message at Partition=[{}], Offset=[{}] : [{}]", partitionId, offset, apiResponse);
-        if (apiResponse == null) {
-            return;
-        }
+        log.info(
+                "Received Message at Partition=[{}], Offset=[{}] : [(apiType={}, id={})]",
+                partitionId, offset, apiResponse.getApiType(), apiResponse.getId()
+        );
 
         switch (apiResponse.getApiType()) {
             case JOKE -> Adapter.toGenericChannelPost((JokeApiResponse) apiResponse).forEach(this::sendDBWriteRequest);

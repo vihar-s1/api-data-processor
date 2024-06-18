@@ -7,16 +7,18 @@ import com.apiDataProcessor.models.apiResponse.randomUser.RandomUserApiResponse;
 import com.apiDataProcessor.models.apiResponse.randomUser.User;
 import com.apiDataProcessor.models.apiResponse.twitter.Tweet;
 import com.apiDataProcessor.models.apiResponse.twitter.TwitterApiResponse;
+import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+
+import static com.apiDataProcessor.utils.utils.hashString;
 
 public class Adapter {
 
     public static List<GenericChannelPost> toGenericChannelPost(JokeApiResponse apiResponse) {
-        List<GenericChannelPost> channelPostList = new ArrayList<>();
+        List<GenericChannelPost> channelPostList = Lists.newArrayList();
+
         if (apiResponse == null || apiResponse.isError() || apiResponse.getAmount() == 0) {
             return channelPostList;
         }
@@ -24,8 +26,8 @@ public class Adapter {
             GenericChannelPost channelPost = new GenericChannelPost();
             channelPost.setApiType(ApiType.JOKE);
 
-            channelPost.setApiId(UUID.fromString(joke.getJoke()).toString());
-            channelPost.setId( UUID.fromString(apiResponse.getId() + "-" + channelPost.getApiId()).toString() );
+            channelPost.setApiId(hashString(joke.getJoke()));
+            channelPost.setId( hashString(apiResponse.getId() + channelPost.getApiId()) );
 
             channelPost.setJokeStatements( Arrays.stream(joke.getJoke().split("\n")).toList() );
 
@@ -35,7 +37,7 @@ public class Adapter {
     }
 
     public static List<GenericChannelPost> toGenericChannelPost(RandomUserApiResponse apiResponse) {
-        List<GenericChannelPost> channelPostList = new ArrayList<>();
+        List<GenericChannelPost> channelPostList = Lists.newArrayList();
         if (apiResponse == null || apiResponse.getId() == null || apiResponse.getResults() == null) {
             return channelPostList;
         }
@@ -43,10 +45,9 @@ public class Adapter {
             GenericChannelPost channelPost = new GenericChannelPost();
             channelPost.setApiType(ApiType.RANDOM_USER);
 
-            UUID uuid = UUID.fromString(apiResponse.getId() + "-" + randomUser.hashCode());
-            channelPost.setId( uuid.toString() );
+            channelPost.setApiId(hashString(randomUser.toString()));
+            channelPost.setId( hashString(apiResponse.getId() + channelPost.getApiId()) );
 
-            channelPost.setApiId(apiResponse.getId());
             channelPost.setUser(randomUser);
 
             channelPostList.add(channelPost);
@@ -56,7 +57,7 @@ public class Adapter {
     }
 
     public static List<GenericChannelPost> toGenericChannelPost(TwitterApiResponse apiResponse) {
-        List<GenericChannelPost> channelPostList = new ArrayList<>();
+        List<GenericChannelPost> channelPostList = Lists.newArrayList();
         if (apiResponse == null || apiResponse.getData() == null || apiResponse.getData().isEmpty()) {
             return channelPostList;
         }
@@ -64,8 +65,8 @@ public class Adapter {
             GenericChannelPost channelPost = new GenericChannelPost();
             channelPost.setApiType(ApiType.TWITTER);
 
-            channelPost.setId( UUID.fromString(apiResponse.getId() + "-" + tweet.getId()).toString() );
             channelPost.setApiId(tweet.getId());
+            channelPost.setId( hashString(tweet.getId()) );
 
             channelPostList.add(channelPost);
         }
