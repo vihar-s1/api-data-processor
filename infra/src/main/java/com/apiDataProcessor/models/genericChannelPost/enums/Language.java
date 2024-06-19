@@ -1,12 +1,12 @@
 package com.apiDataProcessor.models.genericChannelPost.enums;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.Getter;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
 public enum Language {
