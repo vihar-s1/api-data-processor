@@ -12,6 +12,6 @@ public class RedditApiHandler implements ApiDataHandlerInterface {
 
     @Override
     public void fetchData() {
-        System.out.println("Fetching data from Reddit API");
+        redditService.fetchData();
     }
 }

@@ -19,11 +19,19 @@ public class GenericChannelPost implements Serializable {
     private String apiId;
     private ApiType apiType;
     private String authorId;
-    private String conversationId;
+    private String author;
+
+    private String parentId;
+    private String parentName;
 
     private String title;
     private String body;
+    private String htmlBody;
     private Language language;
+
+    private Long totalLikes;
+    private Long totalDislikes;
+
     private Timestamp createdAt;
     private Timestamp lastUpdatedAt;
 

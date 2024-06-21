@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer.service;
 
+import com.apiDataProcessor.models.apiResponse.reddit.RedditApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -27,12 +28,19 @@ public class RedditService {
     private String clientSecret;
     @Value(value = "${reddit.api.redirectUri}")
     private String redirectUri;
-    @Value(value = "${reddit.api.accessTokenUri}")
-    private String accessTokenUri;
+
+    private final String accessTokenUri = "https://www.reddit.com/api/v1/access_token";
+    private final String dataUri = "https://oauth.reddit.com/new";
 
     private String refreshToken = null;
     private String accessToken = null;
     private Timestamp accessTokenExpiryTimeStamp;
+
+    private final ApiDataHandlerService apiDataHandlerService;
+
+    public RedditService(ApiDataHandlerService apiDataHandlerService) {
+        this.apiDataHandlerService = apiDataHandlerService;
+    }
 
     public boolean checkState(String state) {
         return state.equals(STATE);
@@ -102,6 +110,38 @@ public class RedditService {
         configs.put("accessTokenExpiryTimeStamp", this.accessTokenExpiryTimeStamp.toString());
 
         return configs;
+    }
+
+    public void fetchData() {
+        // fetch data from Reddit
+        if (this.accessToken == null) {
+            if (this.refreshToken == null) {
+                log.warn("Reddit service not yet Authenticated");
+                return;
+            }
+            try {
+                this.accessToken = getAccessToken();
+            } catch (IOException | InterruptedException eX) {
+                log.error("Error occurred while fetching access token: {}", eX.getMessage());
+                return;
+            }
+        }
+        else if (expiredToken()) {
+            try {
+                this.accessToken = getAccessToken();
+            } catch (IOException | InterruptedException eX) {
+                log.error("Error occurred while fetching access token: {}", eX.getMessage());
+                return;
+            }
+        }
+
+        apiDataHandlerService.fetchData(
+                this.dataUri,
+                RedditApiResponse.class,
+                httpHeaders -> {
+                    httpHeaders.setBearerAuth(this.accessToken);
+                }
+        );
     }
 
     private boolean expiredToken() {
