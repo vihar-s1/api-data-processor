@@ -9,13 +9,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.UUID;
 
 @JsonDeserialize(as = JokeApiResponse.class)
 @Data @NoArgsConstructor @AllArgsConstructor
 public class JokeApiResponse implements ApiResponseInterface {
-    private String id = UUID.randomUUID().toString(); // Default Value
-
     @Getter
     private final ApiType apiType = ApiType.JOKE;
 

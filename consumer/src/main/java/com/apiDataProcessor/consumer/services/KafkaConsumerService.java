@@ -4,6 +4,7 @@ import com.apiDataProcessor.models.InternalHttpResponse;
 import com.apiDataProcessor.models.apiResponse.ApiResponseInterface;
 import com.apiDataProcessor.models.apiResponse.joke.JokeApiResponse;
 import com.apiDataProcessor.models.apiResponse.randomUser.RandomUserApiResponse;
+import com.apiDataProcessor.models.apiResponse.reddit.RedditApiResponse;
 import com.apiDataProcessor.models.apiResponse.twitter.TwitterApiResponse;
 import com.apiDataProcessor.models.genericChannelPost.Adapter;
 import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
@@ -40,14 +41,15 @@ public class KafkaConsumerService {
             ) {
 
         log.info(
-                "Received Message at Partition=[{}], Offset=[{}] : [(apiType={}, id={})]",
-                partitionId, offset, apiResponse.getApiType(), apiResponse.getId()
+                "Received Message at Partition=[{}], Offset=[{}] : [(apiType={})]",
+                partitionId, offset, apiResponse.getApiType()
         );
 
         switch (apiResponse.getApiType()) {
             case JOKE -> Adapter.toGenericChannelPost((JokeApiResponse) apiResponse).forEach(this::sendDBWriteRequest);
             case RANDOM_USER -> Adapter.toGenericChannelPost((RandomUserApiResponse) apiResponse).forEach(this::sendDBWriteRequest);
             case TWITTER -> Adapter.toGenericChannelPost((TwitterApiResponse) apiResponse).forEach(this::sendDBWriteRequest);
+            case REDDIT -> Adapter.toGenericChannelPost((RedditApiResponse) apiResponse).forEach(this::sendDBWriteRequest);
         }
     } // method genericApiResponseListener() ends
 

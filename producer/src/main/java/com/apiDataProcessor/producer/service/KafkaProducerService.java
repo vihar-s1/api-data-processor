@@ -30,23 +30,21 @@ public class KafkaProducerService {
 
 
     public void sendMessage(ApiResponseInterface response) {
-        CompletableFuture<SendResult<String, ApiResponseInterface>> future = kafkaTemplate.send(kafkaTopicName, response.getId(), response);
+        CompletableFuture<SendResult<String, ApiResponseInterface>> future = kafkaTemplate.send(kafkaTopicName, response);
 
         future.whenComplete((result, exception) -> {
             if (exception == null) {
                 log.info(
-                        "Sent Message to Partition=[{}] with Offset=[{}] : apiType=[{}] : response=[id={}]",
+                        "Sent Message to Partition=[{}] with Offset=[{}] : apiType=[{}]",
                         result.getRecordMetadata().partition(),
                         result.getRecordMetadata().offset(),
-                        response.getApiType(),
-                        response.getId()
+                        response.getApiType()
                 );
             }
             else {
                 log.error(
-                        "Unable to send (apiType=[{}], response=[id={}]) due to :{}",
+                        "Unable to send (apiType=[{}]) due to :{}",
                         response.getApiType(),
-                        response.getId(),
                         exception.getCause().toString()
                 );
             }

@@ -8,8 +8,5 @@ import java.io.Serializable;
 
 @JsonDeserialize(using = ApiResponseInterfaceDeserializer.class)
 public interface ApiResponseInterface extends Serializable {
-    String getId();
-    void setId(String id);
-
     ApiType getApiType();
 }
