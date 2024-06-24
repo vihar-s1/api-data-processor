@@ -62,6 +62,27 @@ Reddit API requires multiple API calls in order to authenticate and fetch data.
   - The `access_token` is used to make further API calls to fetch data.
   - The `refresh_token` is used to get a new `access_token` when the current one expires.
 
+#### Case of Reddit API
+
+Reddit API requires multiple API calls in order to authenticate and fetch data.
+- First, a `POST` request is made to https://www.reddit.com/api/v1/authorize to get the authentication code.
+  - It takes following parameters:
+    - `client_id` : The client id of the application.
+    - `response_type` : The response type. In this case, it is `code`.
+    - `state` : A random string to prevent CSRF attacks.
+    - `redirect_uri` : The redirect URI of the application, in this case `http://localhost:8082/reddit/callback`.
+    - `duration` : The duration for which the token is valid. In this case, it is `permanent`.
+    - `scope` : The scope of the token. In this case, it is `read`.
+- The authorize API call then makes `GET` call to the `redirect_uri` with parameters `code` and `state` or `error` in case of error.
+- The `redirect_uri` endpoint uses the code to send a `POST` request to https://www.reddit.com/api/v1/access_token to get the access token.
+  - It takes following parameters:
+    - `grant_type` : The grant type. In this case, it is `authorization_code`.
+    - `code` : The code received from the authorize API call.
+    - `redirect_uri` : The redirect URI of the application, in this case `http://localhost:8082/reddit/callback`.
+  - It returns `access_token` and `refresh_token` on success which are stored in `RedditService` as Instance Variables.
+  - The `access_token` is used to make further API calls to fetch data.
+  - The `refresh_token` is used to get a new `access_token` when the current one expires.
+
 ### consumer
 
 - `consumer` is a Kafka Consumer that reads data from the Kafka topic and processes it.
