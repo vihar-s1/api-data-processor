@@ -36,10 +36,10 @@ Below given is a brief overview of all loosely coupled applications in the proje
 ### producer
 
 - `producer` is a REST service that fetches data from various social media APIs and sends it to a Kafka topic. 
-- The data is fetched using the `handler` package and the data is sent to Kafka using the `KafkaProducerService` class.
+- The data is fetched using the `service.api` package and the data is sent to Kafka using the `KafkaProducerService` class.
 - The `KafkaProducerConfig` class defines the Kafka Producer configurations and the `KafkaProducerService` class uses the `KafkaTemplate` to send the data to the Kafka topic.
-- `ApiDataHandleInterface` defines the template code required for fetching data from the API. The implementation classes are called periodically to fetch data from the API.
-  - `NOTE` the implementation classes are in `handler` package and each must be annotated with `@Component` to be picked up by the SpringBoot Application Context.
+- `ApiServiceInterface` defines the template code required for fetching data from the API. The implementation classes are called periodically to fetch data from the API.
+  - `NOTE` the implementation classes are in `service.api` package and each must be annotated with `@Service` to be picked up by the SpringBoot Application Context.
 
 #### Case of Reddit API
 

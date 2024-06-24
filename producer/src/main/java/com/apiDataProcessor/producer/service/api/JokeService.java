@@ -1,16 +1,15 @@
-package com.apiDataProcessor.producer.handler;
+package com.apiDataProcessor.producer.service.api;
 
 import com.apiDataProcessor.models.apiResponse.joke.JokeApiResponse;
 import com.apiDataProcessor.producer.service.ApiDataHandlerService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
-public class JokeApiHandler implements ApiDataHandlerInterface {
+@Service
+public class JokeService implements ApiServiceInterface{
 
     private final ApiDataHandlerService apiDataHandlerService;
 
-    public JokeApiHandler(ApiDataHandlerService apiDataHandlerService) {
+    public JokeService(ApiDataHandlerService apiDataHandlerService) {
         this.apiDataHandlerService = apiDataHandlerService;
     }
 
@@ -19,5 +18,10 @@ public class JokeApiHandler implements ApiDataHandlerInterface {
         String uri = "https://v2.jokeapi.dev/joke/Any?type=single&amount=5";
 
         apiDataHandlerService.fetchData(uri, JokeApiResponse.class);
+    }
+
+    @Override
+    public boolean isExecutable() {
+        return true;
     }
 }

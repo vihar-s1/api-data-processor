@@ -1,7 +1,7 @@
 package com.apiDataProcessor.producer.controller;
 
 import com.apiDataProcessor.models.InternalHttpResponse;
-import com.apiDataProcessor.producer.service.RedditService;
+import com.apiDataProcessor.producer.service.api.RedditService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
