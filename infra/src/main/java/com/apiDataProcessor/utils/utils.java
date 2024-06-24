@@ -11,4 +11,8 @@ public class utils {
         }
         return Hashing.sha256().hashString(str, StandardCharsets.UTF_8).toString();
     }
+
+    public static boolean isEmpty(String str) {
+        return str == null || str.isBlank();
+    }
 }

@@ -1,6 +1,7 @@
-package com.apiDataProcessor.producer.service;
+package com.apiDataProcessor.producer.service.api;
 
 import com.apiDataProcessor.models.apiResponse.reddit.RedditApiResponse;
+import com.apiDataProcessor.producer.service.ApiDataHandlerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,11 @@ import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.util.Map;
 
-@Service
+import static com.apiDataProcessor.utils.utils.isEmpty;
+
 @Slf4j
-public class RedditService {
+@Service
+public class RedditService implements ApiServiceInterface {
     private final String STATE = "checkIt";
 //    private final String STATE = hashString(UUID.randomUUID().toString()); // randomizing state string
 
@@ -42,8 +45,56 @@ public class RedditService {
         this.apiDataHandlerService = apiDataHandlerService;
     }
 
+    @Override
+    public void fetchData() {
+        // fetch data from Reddit
+        if (this.accessToken == null) {
+            if (this.refreshToken == null) {
+                log.warn("Reddit service not yet Authenticated. Authenticate using: {}.", getAuthUrl());
+                return;
+            }
+            try {
+                this.accessToken = getAccessToken();
+            } catch (IOException | InterruptedException eX) {
+                log.error("Error occurred while fetching access token: {}", eX.getMessage());
+                return;
+            }
+        }
+        else if (expiredToken()) {
+            try {
+                this.accessToken = getAccessToken();
+            } catch (IOException | InterruptedException eX) {
+                log.error("Error occurred while regenerating access token: {}", eX.getMessage());
+                return;
+            }
+        }
+
+        apiDataHandlerService.fetchData(
+                this.dataUri,
+                RedditApiResponse.class,
+                httpHeaders -> {
+                    httpHeaders.setBearerAuth(this.accessToken);
+                }
+        );
+    }
+
+    @Override
+    public boolean isExecutable() {
+        return !isEmpty(clientId) && !isEmpty(clientSecret) & !isEmpty(redirectUri);
+    }
+
     public boolean checkState(String state) {
         return state.equals(STATE);
+    }
+
+    public String getAuthUrl() {
+        return "https://www.reddit.com/api/v1/authorize" +
+                "?client_id=" + this.clientId +
+                "&response_type=code" +
+                "&state=" + this.STATE +
+                "&redirect_uri=" + this.redirectUri +
+                "&duration=permanent" +
+                "&scope=read,identity";
     }
 
     @SuppressWarnings("unchecked")
@@ -110,38 +161,6 @@ public class RedditService {
         configs.put("accessTokenExpiryTimeStamp", this.accessTokenExpiryTimeStamp.toString());
 
         return configs;
-    }
-
-    public void fetchData() {
-        // fetch data from Reddit
-        if (this.accessToken == null) {
-            if (this.refreshToken == null) {
-                log.warn("Reddit service not yet Authenticated");
-                return;
-            }
-            try {
-                this.accessToken = getAccessToken();
-            } catch (IOException | InterruptedException eX) {
-                log.error("Error occurred while fetching access token: {}", eX.getMessage());
-                return;
-            }
-        }
-        else if (expiredToken()) {
-            try {
-                this.accessToken = getAccessToken();
-            } catch (IOException | InterruptedException eX) {
-                log.error("Error occurred while fetching access token: {}", eX.getMessage());
-                return;
-            }
-        }
-
-        apiDataHandlerService.fetchData(
-                this.dataUri,
-                RedditApiResponse.class,
-                httpHeaders -> {
-                    httpHeaders.setBearerAuth(this.accessToken);
-                }
-        );
     }
 
     private boolean expiredToken() {
