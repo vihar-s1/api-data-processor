@@ -9,4 +9,6 @@ import java.io.Serializable;
 @JsonDeserialize(using = ApiResponseInterfaceDeserializer.class)
 public interface ApiResponseInterface extends Serializable {
     ApiType getApiType();
+
+    Long size();
 }

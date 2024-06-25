@@ -20,9 +20,6 @@ out/
 ### Environment Files ###
 .env
 
-### Kafka Data Files for custom server ###
+### Files for custom server ###
 kafka
-kafka.log
-
-### Kibana Files ###
-kibana.log
+*.log

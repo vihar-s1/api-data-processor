@@ -20,4 +20,8 @@ public class TwitterApiResponse implements ApiResponseInterface {
     // field to ignore after deserialized
     private TwitterApiResponseAdditional includes;
 
+    @Override
+    public Long size() {
+        return (long) data.size();
+    }
 }

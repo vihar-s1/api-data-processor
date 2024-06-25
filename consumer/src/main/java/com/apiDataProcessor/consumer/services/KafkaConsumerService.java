@@ -41,9 +41,16 @@ public class KafkaConsumerService {
             ) {
 
         log.info(
-                "Received Message at Partition=[{}], Offset=[{}] : [(apiType={})]",
+                "Received Response at Partition=[{}], Offset=[{}] : apiType=[{}]",
                 partitionId, offset, apiResponse.getApiType()
         );
+
+        if (apiResponse.size() == 0) {
+            log.warn(
+                    "Api Response is Empty at Partition=[{}], Offset=[{}]: apiType=[{}]",
+                    partitionId, offset, apiResponse.getApiType()
+            );
+        }
 
         switch (apiResponse.getApiType()) {
             case JOKE -> Adapter.toGenericChannelPost((JokeApiResponse) apiResponse).forEach(this::sendDBWriteRequest);

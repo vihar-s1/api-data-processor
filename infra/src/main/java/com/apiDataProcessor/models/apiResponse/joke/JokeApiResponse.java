@@ -19,5 +19,10 @@ public class JokeApiResponse implements ApiResponseInterface {
     private boolean error;
     private int amount;
     private List<Joke> jokes;
+
+    @Override
+    public Long size() {
+        return (long) this.amount;
+    }
 }
 

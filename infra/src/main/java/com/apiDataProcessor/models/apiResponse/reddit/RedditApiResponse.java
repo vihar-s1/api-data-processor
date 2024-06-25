@@ -15,5 +15,10 @@ public class RedditApiResponse implements ApiResponseInterface {
 
     private String kind;
     private RedditApiResponseData data;
+
+    @Override
+    public Long size() {
+        return data.getCount();
+    }
 }
 
