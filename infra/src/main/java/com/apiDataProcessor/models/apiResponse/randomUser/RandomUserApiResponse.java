@@ -17,4 +17,9 @@ public class RandomUserApiResponse implements ApiResponseInterface {
     private ApiType apiType = ApiType.RANDOM_USER;
 
     private List<User> results;
+
+    @Override
+    public Long size() {
+        return (long) results.size();
+    }
 }

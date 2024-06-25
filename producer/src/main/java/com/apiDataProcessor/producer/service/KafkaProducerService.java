@@ -35,7 +35,7 @@ public class KafkaProducerService {
         future.whenComplete((result, exception) -> {
             if (exception == null) {
                 log.info(
-                        "Sent Message to Partition=[{}] with Offset=[{}] : apiType=[{}]",
+                        "Sent Response to Partition=[{}] with Offset=[{}] : apiType=[{}]",
                         result.getRecordMetadata().partition(),
                         result.getRecordMetadata().offset(),
                         response.getApiType()
@@ -43,7 +43,7 @@ public class KafkaProducerService {
             }
             else {
                 log.error(
-                        "Unable to send (apiType=[{}]) due to :{}",
+                        "Unable to send Response with apiType=[{}] due to :{}",
                         response.getApiType(),
                         exception.getCause().toString()
                 );

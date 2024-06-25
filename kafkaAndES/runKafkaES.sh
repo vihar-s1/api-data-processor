@@ -11,10 +11,10 @@ ZK_STATUS=$(pgrep -f "org.apache.zookeeper.server.quorum.QuorumPeerMain" | wc -l
 if [ "$ZK_STATUS" -eq 0 ]; then
     echo "ZooKeeper is not running. Starting ZooKeeper..."
     # Start ZooKeeper (replace with your actual ZooKeeper start command)
-    zkServer start >> "$TEMP_FILE" 2>&1 &
-    wait $!
+    zkServer start-foreground >> zookeeper.log 2>&1 &
+    echo "ZooKeeper running on pid: $!"
 else
-    echo "ZooKeeper already running..."
+    echo "ZooKeeper already running on pid: $(pgrep -f "org.apache.zookeeper.server.quorum.QuorumPeerMain")"
 fi
 
 
@@ -25,7 +25,7 @@ if [ "$(pgrep -f "kafka" | wc -l)" -eq 0 ]; then
     kafka-server-start KafkaServer.properties > kafka.log 2>&1 &
     echo "Kafka server running on pid: $!"
 else
-  echo "kafka already running"
+  echo "kafka already running on pid: $(pgrep -f "kafka")"
 fi
 
 

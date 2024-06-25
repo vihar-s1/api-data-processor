@@ -49,7 +49,7 @@ public class RedditController {
             Map<String, String> data = Maps.newHashMap();
             if (accessToken != null) {
                 data.put("accessToken", accessToken);
-                log.info("Reddit callback successful.");
+                log.info("Reddit callback authentication successful.");
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new InternalHttpResponse<>(true, data)
                 );
