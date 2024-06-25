@@ -1,0 +1,19 @@
+plugins {
+    id 'com.palantir.docker' version '0.26.0' apply false
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    tasks.register("dockerBuild").configure {
+        if (project.name == "infra") {
+            return
+        }
+
+        dependsOn build
+        exec {
+            workingDir project.projectDir
+            commandLine "docker", "build", "-t", "adp-${project.name.toLowerCase()}:${project.version}", "."
+        }
+    }
+}
