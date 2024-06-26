@@ -38,29 +38,8 @@ Below given is a brief overview of all loosely coupled applications in the proje
 - `producer` is a REST service that fetches data from various social media APIs and sends it to a Kafka topic. 
 - The data is fetched using the `service.api` package and the data is sent to Kafka using the `KafkaProducerService` class.
 - The `KafkaProducerConfig` class defines the Kafka Producer configurations and the `KafkaProducerService` class uses the `KafkaTemplate` to send the data to the Kafka topic.
-- `ApiServiceInterface` defines the template code required for fetching data from the API. The implementation classes are called periodically to fetch data from the API.
+- `ApiService` abstract class defines the template code required for fetching data from the API. The implementation classes are called periodically to fetch data from the API.
   - `NOTE` the implementation classes are in `service.api` package and each must be annotated with `@Service` to be picked up by the SpringBoot Application Context.
-
-#### Case of Reddit API
-
-Reddit API requires multiple API calls in order to authenticate and fetch data.
-- First, a `POST` request is made to https://www.reddit.com/api/v1/authorize to get the authentication code.
-  - It takes following parameters:
-    - `client_id` : The client id of the application.
-    - `response_type` : The response type. In this case, it is `code`.
-    - `state` : A random string to prevent CSRF attacks.
-    - `redirect_uri` : The redirect URI of the application, in this case `http://localhost:8082/reddit/callback`.
-    - `duration` : The duration for which the token is valid. In this case, it is `permanent`.
-    - `scope` : The scope of the token. In this case, it is `read`.
-- The authorize API call then makes `GET` call to the `redirect_uri` with parameters `code` and `state` or `error` in case of error.
-- The `redirect_uri` endpoint uses the code to send a `POST` request to https://www.reddit.com/api/v1/access_token to get the access token.
-  - It takes following parameters:
-    - `grant_type` : The grant type. In this case, it is `authorization_code`.
-    - `code` : The code received from the authorize API call.
-    - `redirect_uri` : The redirect URI of the application, in this case `http://localhost:8082/reddit/callback`.
-  - It returns `access_token` and `refresh_token` on success which are stored in `RedditService` as Instance Variables.
-  - The `access_token` is used to make further API calls to fetch data.
-  - The `refresh_token` is used to get a new `access_token` when the current one expires.
 
 #### Case of Reddit API
 
@@ -153,17 +132,18 @@ gradle regexManager:bootRun
 - Create appropriate class for the posts as well.
 - The response must implement `ApiResponseInterface`.
 - Go to `models.deserializer.ApiResponseInterfaceDeserializer` and add a new case for the newly created API enum for successful deserialization.
-- In the `models.genericChannelPost.Adapter`, implement a static function named 
+- In the `models.genericChannelPost.Adapter`, implement a static function named `toGenericChannelPost` that converts the API response to a `GenericChannelPost`.
 
 ### producer
 
-- Create a new class in the `producer.handler` package that implements `ApiDataHandleInterface`.
-  - The class must be annotated with `@Component`.
-  - The class must implement the `fetchData` method to fetch data from the API.
+- Create a new class in the `producer.service.api` package that extends abstract class `ApiService`.
+  - The class must be annotated with `@Service`.
+  - The class must implement the `fetchData` method to fetch data from the API along with the additional abstract methods.
 - Add any additional configurations secrets required in the `application.properties` file.
   - This may include API key, secret, token or more.
   - Make sure to import them in `application.properties` from `.env` file.
   - Use `@Value` annotation to inject the values in the class.
+  - Add import validations in the `isExecutable` method to check if the required configurations are present.
 
 ### consumer
 

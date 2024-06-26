@@ -5,7 +5,7 @@ import com.apiDataProcessor.producer.service.ApiDataHandlerService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JokeService implements ApiServiceInterface{
+public class JokeService extends ApiService {
 
     private final ApiDataHandlerService apiDataHandlerService;
 
@@ -22,6 +22,11 @@ public class JokeService implements ApiServiceInterface{
 
     @Override
     public boolean isExecutable() {
+        return true;
+    }
+
+    @Override
+    public boolean isAuthorized() {
         return true;
     }
 }
