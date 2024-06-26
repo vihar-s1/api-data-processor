@@ -1,6 +1,6 @@
 package com.apiDataProcessor.producer;
 
-import com.apiDataProcessor.producer.service.api.ApiServiceInterface;
+import com.apiDataProcessor.producer.service.api.ApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,9 +19,9 @@ import java.util.concurrent.TimeUnit;
 @EnableScheduling
 public class ProducerApplication {
 
-	private final Set<ApiServiceInterface> apiServices;
+	private final Set<ApiService> apiServices;
 
-	public ProducerApplication(Set<ApiServiceInterface> apiServices) {
+	public ProducerApplication(Set<ApiService> apiServices) {
 		this.apiServices = apiServices;
 	}
 

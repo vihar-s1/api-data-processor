@@ -5,7 +5,7 @@ import com.apiDataProcessor.producer.service.ApiDataHandlerService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RandomUserService implements ApiServiceInterface {
+public class RandomUserService extends ApiService {
 
     private final ApiDataHandlerService apiDataHandlerService;
 
@@ -23,6 +23,11 @@ public class RandomUserService implements ApiServiceInterface {
 
     @Override
     public boolean isExecutable() {
+        return true;
+    }
+
+    @Override
+    public boolean isAuthorized() {
         return true;
     }
 }

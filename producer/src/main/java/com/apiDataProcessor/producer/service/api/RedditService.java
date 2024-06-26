@@ -21,7 +21,7 @@ import static com.apiDataProcessor.utils.utils.isEmpty;
 
 @Slf4j
 @Service
-public class RedditService implements ApiServiceInterface {
+public class RedditService extends ApiService {
     private final String STATE = "checkIt";
 //    private final String STATE = hashString(UUID.randomUUID().toString()); // randomizing state string
 
@@ -47,24 +47,20 @@ public class RedditService implements ApiServiceInterface {
 
     @Override
     public void fetchData() {
-        // fetch data from Reddit
-        if (this.accessToken == null) {
-            if (this.refreshToken == null) {
-                log.warn("Reddit service not yet Authenticated. Authenticate using: {}.", getAuthUrl());
-                return;
-            }
+
+        if (!isExecutable()) {
+            log.warn("Reddit service not yet Authenticated. Please provide Client ID, Client Secret and Redirect URI.");
+            return;
+        }
+        else if (!isAuthorized()) {
+            log.warn("Reddit service not yet Authenticated. Please authenticate via: {}", getAuthUrl());
+            return;
+        }
+        else if (tokenExpired()) {
             try {
                 this.accessToken = getAccessToken();
             } catch (IOException | InterruptedException eX) {
                 log.error("Error occurred while fetching access token: {}", eX.getMessage());
-                return;
-            }
-        }
-        else if (expiredToken()) {
-            try {
-                this.accessToken = getAccessToken();
-            } catch (IOException | InterruptedException eX) {
-                log.error("Error occurred while regenerating access token: {}", eX.getMessage());
                 return;
             }
         }
@@ -81,6 +77,11 @@ public class RedditService implements ApiServiceInterface {
     @Override
     public boolean isExecutable() {
         return !isEmpty(clientId) && !isEmpty(clientSecret) & !isEmpty(redirectUri);
+    }
+
+    @Override
+    public boolean isAuthorized() {
+        return !isEmpty(accessToken) && !isEmpty(refreshToken);
     }
 
     public boolean checkState(String state) {
@@ -127,7 +128,7 @@ public class RedditService implements ApiServiceInterface {
         if (this.refreshToken == null) {
             return null;
         }
-        if (this.accessToken != null && !expiredToken()) {
+        if (this.accessToken != null && !tokenExpired()) {
             return this.accessToken;
         }
         String authenticationHeader = "Basic " + Base64Util.encode(clientId + ":" + clientSecret);
@@ -163,7 +164,7 @@ public class RedditService implements ApiServiceInterface {
         return configs;
     }
 
-    private boolean expiredToken() {
+    private boolean tokenExpired() {
         // null expiry timestamp or a timestamp before current-time means token is expired
         return this.accessTokenExpiryTimeStamp == null || this.accessTokenExpiryTimeStamp.before(new Timestamp(System.currentTimeMillis()));
     }
