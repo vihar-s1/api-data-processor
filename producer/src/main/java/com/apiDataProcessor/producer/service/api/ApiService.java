@@ -1,6 +1,16 @@
 package com.apiDataProcessor.producer.service.api;
 
+import com.apiDataProcessor.producer.service.ApiRequestService;
+
 public abstract class ApiService {
+
+    protected final ApiRequestService apiRequestService;
+
+    protected ApiService(ApiRequestService apiRequestService) {
+        this.apiRequestService = apiRequestService;
+    }
+
+
     /**
      * Fetch data from the API and handle it (Send to kafka directly)
      */

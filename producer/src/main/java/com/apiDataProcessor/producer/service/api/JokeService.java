@@ -1,23 +1,21 @@
 package com.apiDataProcessor.producer.service.api;
 
 import com.apiDataProcessor.models.apiResponse.joke.JokeApiResponse;
-import com.apiDataProcessor.producer.service.ApiDataHandlerService;
+import com.apiDataProcessor.producer.service.ApiRequestService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class JokeService extends ApiService {
 
-    private final ApiDataHandlerService apiDataHandlerService;
-
-    public JokeService(ApiDataHandlerService apiDataHandlerService) {
-        this.apiDataHandlerService = apiDataHandlerService;
+    public JokeService(ApiRequestService apiRequestService) {
+        super(apiRequestService);
     }
 
     @Override
     public void fetchData() {
         String uri = "https://v2.jokeapi.dev/joke/Any?type=single&amount=5";
 
-        apiDataHandlerService.fetchData(uri, JokeApiResponse.class);
+        apiRequestService.fetchData(uri, JokeApiResponse.class);
     }
 
     @Override
