@@ -1,16 +1,14 @@
 package com.apiDataProcessor.producer.service.api;
 
 import com.apiDataProcessor.models.apiResponse.randomUser.RandomUserApiResponse;
-import com.apiDataProcessor.producer.service.ApiDataHandlerService;
+import com.apiDataProcessor.producer.service.ApiRequestService;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RandomUserService extends ApiService {
 
-    private final ApiDataHandlerService apiDataHandlerService;
-
-    public RandomUserService(ApiDataHandlerService apiDataHandlerService) {
-        this.apiDataHandlerService = apiDataHandlerService;
+    public RandomUserService(ApiRequestService apiRequestService) {
+        super(apiRequestService);
     }
 
 
@@ -18,7 +16,7 @@ public class RandomUserService extends ApiService {
     public void fetchData() {
         String uri = "https://randomuser.me/api/1.4?results=5&noinfo";
 
-        apiDataHandlerService.fetchData(uri, RandomUserApiResponse.class);
+        apiRequestService.fetchData(uri, RandomUserApiResponse.class);
     }
 
     @Override

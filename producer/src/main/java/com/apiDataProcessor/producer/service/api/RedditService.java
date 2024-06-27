@@ -1,29 +1,23 @@
 package com.apiDataProcessor.producer.service.api;
 
 import com.apiDataProcessor.models.apiResponse.reddit.RedditApiResponse;
-import com.apiDataProcessor.producer.service.ApiDataHandlerService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.apiDataProcessor.producer.service.ApiRequestService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Base64Util;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.sql.Timestamp;
 import java.util.Map;
+import java.util.UUID;
 
-import static com.apiDataProcessor.utils.utils.isEmpty;
+import static com.apiDataProcessor.utils.utils.*;
 
 @Slf4j
 @Service
 public class RedditService extends ApiService {
-    private final String STATE = "checkIt";
-//    private final String STATE = hashString(UUID.randomUUID().toString()); // randomizing state string
+    private final String STATE = hashString(UUID.randomUUID().toString()); // randomizing state string
 
     @Value(value =  "${reddit.api.clientId}")
     private String clientId;
@@ -33,16 +27,13 @@ public class RedditService extends ApiService {
     private String redirectUri;
 
     private final String accessTokenUri = "https://www.reddit.com/api/v1/access_token";
-    private final String dataUri = "https://oauth.reddit.com/new";
 
     private String refreshToken = null;
     private String accessToken = null;
     private Timestamp accessTokenExpiryTimeStamp;
 
-    private final ApiDataHandlerService apiDataHandlerService;
-
-    public RedditService(ApiDataHandlerService apiDataHandlerService) {
-        this.apiDataHandlerService = apiDataHandlerService;
+    public RedditService(ApiRequestService apiRequestService) {
+        super(apiRequestService);
     }
 
     @Override
@@ -65,12 +56,10 @@ public class RedditService extends ApiService {
             }
         }
 
-        apiDataHandlerService.fetchData(
-                this.dataUri,
+        apiRequestService.fetchData(
+                this.getDataUri(),
                 RedditApiResponse.class,
-                httpHeaders -> {
-                    httpHeaders.setBearerAuth(this.accessToken);
-                }
+                httpHeaders -> httpHeaders.setBearerAuth(this.accessToken)
         );
     }
 
@@ -98,19 +87,20 @@ public class RedditService extends ApiService {
                 "&scope=read,identity";
     }
 
-    @SuppressWarnings("unchecked")
+    public String getDataUri() {
+        return "https://oauth.reddit.com/new";
+    }
+
     public String getAccessToken(String code) throws IOException, InterruptedException {
-        String authenticationHeader = "Basic " + Base64Util.encode(clientId + ":" + clientSecret);
-        String requestParam = "grant_type=authorization_code" + "&" + "code=" + code + "&" + "redirect_uri=" + this.redirectUri;
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(accessTokenUri))
-                .header("Authorization", authenticationHeader)
-                .POST(HttpRequest.BodyPublishers.ofString(requestParam))
-                .build();
+        Map<String, String> requestParams = Maps.newHashMap();
+        requestParams.put("grant_type", "authorization_code");
+        requestParams.put("code", code);
+        requestParams.put("redirect_uri", this.redirectUri);
 
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        Map<String, Object> responseBody = new ObjectMapper().readValue(response.body(), Map.class);
+        Map<String, Object> responseBody = apiRequestService.post(
+                this.accessTokenUri, Map.of("Authorization", basicAuthHeader(clientId, clientSecret)), requestParams, null);
+
 
         if (responseBody == null || responseBody.getOrDefault("error", null) != null) {
             return null;
@@ -123,7 +113,6 @@ public class RedditService extends ApiService {
         return this.accessToken;
     }
 
-    @SuppressWarnings("unchecked")
     public String getAccessToken() throws IOException, InterruptedException {
         if (this.refreshToken == null) {
             return null;
@@ -131,17 +120,13 @@ public class RedditService extends ApiService {
         if (this.accessToken != null && !tokenExpired()) {
             return this.accessToken;
         }
-        String authenticationHeader = "Basic " + Base64Util.encode(clientId + ":" + clientSecret);
-        String requestParam = "grant_type=refresh_token" + "&" + "refresh_token=" + this.refreshToken;
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(accessTokenUri))
-                .header("Authorization", authenticationHeader)
-                .POST(HttpRequest.BodyPublishers.ofString(requestParam))
-                .build();
 
-        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-        Map<String, Object> responseBody = new ObjectMapper().readValue(response.body(), Map.class);
+        Map<String, String> requestParams = Maps.newHashMap();
+        requestParams.put("grant_type", "refresh_token");
+        requestParams.put("refresh_token", this.refreshToken);
+
+        Map<String, Object> responseBody = apiRequestService.post(this.accessTokenUri, Map.of("Authorization", basicAuthHeader(clientId, clientSecret)), requestParams, null);
 
         if (responseBody == null || responseBody.getOrDefault("error", null) != null) {
             return null;
