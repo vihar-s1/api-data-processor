@@ -1,6 +1,6 @@
 package com.apiDataProcessor.producer.controller;
 
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.InternalResponse;
 import com.apiDataProcessor.producer.service.api.RedditService;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +25,14 @@ public class RedditController {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<InternalHttpResponse<Map<String, String>>> callback(@RequestParam(value = "code", required = false) String code, @RequestParam(value = "state", required = false) String state, @RequestParam(value = "error", required = false) String error) {
+    public ResponseEntity<InternalResponse<Map<String, String>>> callback(@RequestParam(value = "code", required = false) String code, @RequestParam(value = "state", required = false) String state, @RequestParam(value = "error", required = false) String error) {
         if (error != null) {
             Map<String, String> data = Maps.newHashMap();
             data.put("erorr", error);
             data.put("accessToken", null);
             log.error("Reddit callback error: {}", error);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    new InternalHttpResponse<>(false, data)
+                    InternalResponse.<Map<String, String>>builder().success(false).data(data).build()
             );
         }
         if (!redditService.checkState(state)) {
@@ -41,7 +41,7 @@ public class RedditController {
             data.put("accessToken", null);
             log.error("Reddit callback state changed error.");
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
-                    new InternalHttpResponse<>(false, data)
+                    InternalResponse.<Map<String, String>>builder().success(false).data(data).build()
             );
         }
         try {
@@ -51,27 +51,28 @@ public class RedditController {
                 data.put("accessToken", accessToken);
                 log.info("Reddit callback authentication successful.");
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new InternalHttpResponse<>(true, data)
+                        InternalResponse.<Map<String, String>>builder().success(true).data(data).build()
                 );
             }
             log.error("Reddit callback error: accessToken is null.");
             data.put("accessToken", null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new InternalHttpResponse<>(false, data)
+                    InternalResponse.<Map<String, String>>builder().success(false).data(data).build()
             );
         }
         catch (Exception eX) {
             log.error("Reddit callback error: {}", eX.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new InternalHttpResponse<>(false, Map.of("error", eX.getMessage()))
+                    InternalResponse.<Map<String, String>>builder().success(false).data(Map.of("error", eX.getMessage())).build()
+
             );
         }
     }
 
     @GetMapping("/configs")
-    public ResponseEntity<InternalHttpResponse<Map<String, String>>> configs() {
+    public ResponseEntity<InternalResponse<Map<String, String>>> configs() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new InternalHttpResponse<>(true, redditService.getConfigs())
+                InternalResponse.<Map<String, String>>builder().success(true).data(redditService.getConfigs()).build()
         );
     }
 }

@@ -1,6 +1,6 @@
 package com.apiDataProcessor.consumer.services;
 
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.InternalResponse;
 import com.apiDataProcessor.models.apiResponse.ApiResponseInterface;
 import com.apiDataProcessor.models.apiResponse.joke.JokeApiResponse;
 import com.apiDataProcessor.models.apiResponse.randomUser.RandomUserApiResponse;
@@ -67,7 +67,7 @@ public class KafkaConsumerService {
                     .post()
                     .body(Mono.just(channelPost), GenericChannelPost.class)
                     .retrieve()
-                    .bodyToMono(InternalHttpResponse.class)
+                    .bodyToMono(InternalResponse.class)
                     .toFuture()
                     .whenComplete((httpResponse, throwable) -> {
                         if (throwable == null) {

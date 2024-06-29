@@ -1,6 +1,6 @@
 package com.apiDataProcessor.regexManager.controller;
 
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.InternalResponse;
 import com.apiDataProcessor.regexManager.models.TumblrPattern;
 import com.apiDataProcessor.regexManager.repository.TumblrPatternRepository;
 import org.junit.jupiter.api.Test;
@@ -80,8 +80,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertNotNull(((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertNotNull(((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -95,8 +95,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("Validation failed. Expression cannot be null or empty.", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("Validation failed. Expression cannot be null or empty.", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -110,8 +110,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertNotNull(((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertNotNull(((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -127,8 +127,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("The resource you are trying to create already exists", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("The resource you are trying to create already exists", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -142,8 +142,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("Validation failed. Expression cannot be null or empty.", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("Validation failed. Expression cannot be null or empty.", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -157,8 +157,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("Validation failed. Expression cannot be null or empty.", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("Validation failed. Expression cannot be null or empty.", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -212,8 +212,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("The Resource you are trying to delete does not exist", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("Resource not found", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -228,8 +228,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("The Resource you are trying to delete does not exist", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("Resource not found", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -240,8 +240,8 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("Validation failed. Pattern ID cannot be null or empty.", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("Validation failed. PatternId cannot be null or empty.", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 
     @Test
@@ -252,7 +252,7 @@ class TumblrRegexControllerTests {
         // Assert
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertTrue(responseEntity.hasBody());
-        assertInstanceOf(InternalHttpResponse.class, responseEntity.getBody());
-        assertEquals("Validation failed. Pattern ID cannot be null or empty.", ((InternalHttpResponse<?>) responseEntity.getBody()).getData());
+        assertInstanceOf(InternalResponse.class, responseEntity.getBody());
+        assertEquals("Validation failed. PatternId cannot be null or empty.", ((InternalResponse<?>) responseEntity.getBody()).getData());
     }
 }
