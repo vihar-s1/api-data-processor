@@ -1,6 +1,6 @@
 package com.apiDataProcessor.regexManager.controller;
 
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.InternalResponse;
 import com.apiDataProcessor.regexManager.models.TumblrPattern;
 import com.apiDataProcessor.regexManager.repository.TumblrPatternRepository;
 import org.springframework.http.HttpStatus;
@@ -32,18 +32,18 @@ public class TumblrRegexController {
         // Added validation for an empty or null expression
         if (pattern.getExpression() == null || pattern.getExpression().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new InternalHttpResponse<>(false, "Validation failed. Expression cannot be null or empty.")
+                    InternalResponse.builder().success(false).data("Validation failed. Expression cannot be null or empty.").build()
             );
         }
 
         if (tumblrPatternRepository.findPatternByExpression(pattern.getExpression()) != null) {
             return ResponseEntity.status(409).body(
-                    new InternalHttpResponse<>(false, "The resource you are trying to create already exists")
+                    InternalResponse.builder().success(false).data("The resource you are trying to create already exists").build()
             );
         }
         TumblrPattern savedPattern = tumblrPatternRepository.save(pattern);
         return ResponseEntity.status(200).body(
-                new InternalHttpResponse<>(true, pattern)
+                InternalResponse.builder().success(true).data(pattern).build()
         );
     }
 
@@ -52,7 +52,7 @@ public class TumblrRegexController {
 
         if (patternId == null || patternId.isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new InternalHttpResponse<>(false, "Validation failed. Pattern ID cannot be null or empty.")
+                    InternalResponse.builder().success(false).data("Validation failed. PatternId cannot be null or empty.").build()
             );
         }
 
@@ -60,7 +60,7 @@ public class TumblrRegexController {
 
         if (pattern.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new InternalHttpResponse<>(false, "The Resource you are trying to delete does not exist")
+                    InternalResponse.builder().success(false).data("Resource not found").build()
             );
         }
 

@@ -2,6 +2,7 @@ package com.apiDataProcessor.searchService.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,7 +31,6 @@ public class SecurityConfig {
     @Bean
     public HttpFirewall allowedHttpMethods() {
         List<String> allowedMethods = new ArrayList<>();
-        allowedMethods.add("POST");
         allowedMethods.add("GET");
 
         StrictHttpFirewall strictHttpFirewall = new StrictHttpFirewall();
@@ -57,7 +57,6 @@ public class SecurityConfig {
                 .build();
 
         return new InMemoryUserDetailsManager(user, admin);
-//        return new InMemoryUserDetailsManager(admin);
     }
 
     @Bean
@@ -65,9 +64,9 @@ public class SecurityConfig {
 
          http.authorizeHttpRequests(request ->
                         request
-                                .requestMatchers("/restricted/**").hasRole("ADMIN") // require admin access for restricted endpoints
-                                .requestMatchers("/api/**").permitAll() // permit all requests with /api/**
-                                .anyRequest().authenticated() // require authentication for any other requests
+                                .requestMatchers(HttpMethod.GET, "/restricted/**", "/actuators/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                                .anyRequest().denyAll() // deny any other requests
                 )
                 .httpBasic(Customizer.withDefaults());
 

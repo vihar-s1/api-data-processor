@@ -3,6 +3,7 @@ package com.apiDataProcessor.models.genericChannelPost;
 import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.randomUser.User;
 import com.apiDataProcessor.models.genericChannelPost.enums.Language;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -13,6 +14,7 @@ import java.util.*;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 @Document(indexName = "social-media-posts") // to store in elasticsearch-database
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GenericChannelPost implements Serializable {
     @Id
     private String id;
@@ -32,8 +34,8 @@ public class GenericChannelPost implements Serializable {
     private Long totalLikes;
     private Long totalDislikes;
 
-    private Timestamp createdAt;
-    private Timestamp lastUpdatedAt;
+    private Long createdAt;
+    private Long lastUpdatedAt;
 
     @Setter(AccessLevel.NONE)
     private Map<String, Object> additional;
@@ -46,6 +48,22 @@ public class GenericChannelPost implements Serializable {
 
     // Random User Specific
     private User user;
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt == null ? null : createdAt.getTime();
+    }
+
+    public Timestamp getCreatedAt() {
+        return this.createdAt == null ? null : new Timestamp(this.createdAt);
+    }
+
+    public void setLastUpdatedAt(Timestamp lastUpdatedAt) {
+        this.lastUpdatedAt = lastUpdatedAt == null ? null : lastUpdatedAt.getTime();
+    }
+
+    public Timestamp getLastUpdatedAt() {
+        return this.lastUpdatedAt == null ? null : new Timestamp(this.lastUpdatedAt);
+    }
 
     public void addToAdditional(String key, Object value) {
         if (this.additional == null) {

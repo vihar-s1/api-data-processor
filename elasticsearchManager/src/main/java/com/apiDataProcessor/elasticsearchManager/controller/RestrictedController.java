@@ -1,7 +1,7 @@
 package com.apiDataProcessor.elasticsearchManager.controller;
 
 import com.apiDataProcessor.elasticsearchManager.repository.ChannelPostRepository;
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.InternalResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +21,11 @@ public class RestrictedController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<InternalHttpResponse<?>> getAllMessages() {
+    public ResponseEntity<InternalResponse<?>> getAllMessages() {
         try {
             log.info("[GET /api/all] : Request Received");
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new InternalHttpResponse<>(true, channelPostRepository.findAll())
+                    InternalResponse.builder().success(true).data(channelPostRepository.findAll()).build()
             );
         } catch (Exception exception) {
             log.error(
@@ -34,7 +34,7 @@ public class RestrictedController {
                     exception.getMessage()
             );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new InternalHttpResponse<>(false, "Internal Server Error !")
+                    InternalResponse.builder().success(false).data(null).build()
             );
         }
     }

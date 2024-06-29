@@ -9,7 +9,8 @@ import java.io.Serializable;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RedditPostData implements Serializable {
+public class
+RedditPostData implements Serializable {
     public static final String ID = "id";
     public static final String SUBREDDIT = "subreddit";
     public static final String SUBREDDIT_TYPE = "subreddit_type";

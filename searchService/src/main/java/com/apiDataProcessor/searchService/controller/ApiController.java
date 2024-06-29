@@ -1,43 +1,34 @@
 package com.apiDataProcessor.searchService.controller;
 
 import com.apiDataProcessor.models.ApiType;
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.ExternalResponse;
 import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
 import com.apiDataProcessor.searchService.repositories.CentralRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/api")
-public class ApiController {
-
-    private final CentralRepository centralRepository;
-
-    private static final int MIN_PAGE = 1;
-    private static final int MIN_PAGE_SIZE = 1;
-    private static final int MAX_PAGE_SIZE = 50;
+public class ApiController extends AbstractController {
 
     public ApiController(CentralRepository centralRepository) {
-        this.centralRepository = centralRepository;
+        super(centralRepository);
     }
 
     @GetMapping("/{apiType}/all")
-    public ResponseEntity<InternalHttpResponse<Object>> getAllMessages(
-            @PathVariable String apiType,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestParam(defaultValue = "1") int page
+    public ResponseEntity<ExternalResponse<?>> getAllMessages(
+            @PathVariable(name = "apiType") String apiType,
+            @RequestParam(name = "pageSize", defaultValue = "20") int pageSize,
+            @RequestParam(name = "page", defaultValue = "1") int page
     ) {
         try {
             ApiType apiType_enum = ApiType.valueOf(apiType.toUpperCase().replace("-", "_"));
@@ -46,20 +37,14 @@ public class ApiController {
                 return handleInvalidPageOrPageSize(page, pageSize, "GET /" + apiType + "/all");
             }
             // PageRequest.of takes 0-based page number and pageSize.
-            List<GenericChannelPost> genericChannelPosts = centralRepository.findAllByApiType(apiType_enum, PageRequest.of(page-1, pageSize));
-            Map<String, Object> data = new HashMap<>();
-            data.put("genericChannelPosts", genericChannelPosts);
-            data.put("size", genericChannelPosts.size());
+            Page<GenericChannelPost> genericChannelPosts = centralRepository.findAllByApiType(apiType_enum, PageRequest.of(page-1, pageSize));
 
-            return handleGenericSuccess(data, "[GET /{}/all]: Executed Successfully", apiType);
+            return handleGenericSuccess(genericChannelPosts.toList(), genericChannelPosts.hasNext(), "[GET /{}/all]: Executed Successfully", apiType);
         }
         catch (IllegalArgumentException e) {
             log.error( "Invalid Endpoint : [/api/{}/all] : {} : Invalid ApiType value received", apiType, apiType);
-            Map<String, Object> data = new HashMap<>();
-            data.put("apiType", apiType);
-            data.put("message", "Invalid apiType Value");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new InternalHttpResponse<>(false, data)
+                    ExternalResponse.builder().success(false).error("Invalid Api Type: " + apiType).build()
             );
         }
         catch (Exception e) {
@@ -68,12 +53,12 @@ public class ApiController {
     }
 
     @GetMapping("/message/{messageId}")
-    public ResponseEntity<InternalHttpResponse<Object>> getMessageById(@PathVariable String messageId) {
+    public ResponseEntity<ExternalResponse<?>> getMessageById(@PathVariable(name = "messageId") String messageId) {
         try {
             if (messageId == null || messageId.isBlank()){
                 log.error("[GET /message/{}]: null or blank messageId received", messageId);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                        new InternalHttpResponse<>(false,"Invalid or Missing Message ID")
+                        ExternalResponse.builder().success(false).error("Invalid or Missing Message ID").build()
                 );
             }
             Optional<GenericChannelPost> genericChannelPost = centralRepository.findById(messageId);
@@ -81,10 +66,10 @@ public class ApiController {
             if (genericChannelPost.isEmpty()){
                 log.warn("[GET /message/{}]: No genericChannelPost Object found for given ID", messageId);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                        new InternalHttpResponse<>(false,"No genericChannelPost Object found for given ID")
+                        ExternalResponse.builder().success(false).error("No genericChannelPost Object found for given ID").build()
                 );
             }
-            return handleGenericSuccess(genericChannelPost.get(), "[GET /message/{}]: Executed Successfully", messageId);
+            return handleGenericSuccess(List.of(genericChannelPost.get()), null, "[GET /message/{}]: Executed Successfully", messageId);
         }
         catch (Exception exception) {
             return handleGenericException(exception);
@@ -92,58 +77,53 @@ public class ApiController {
     }
 
     @GetMapping("/tag/{tag}")
-    public ResponseEntity<InternalHttpResponse<Object>> searchMessagesByTag(
-            @PathVariable String tag,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestParam(defaultValue = "1") int page
+    public ResponseEntity<ExternalResponse<?>> searchMessagesByTag(
+            @PathVariable(name = "tag") String tag,
+            @RequestParam(name = "pageSize", defaultValue = "20") int pageSize,
+            @RequestParam(name = "page", defaultValue = "1") int page
     ) {
             try {
                 if (page < MIN_PAGE || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) {
                     return handleInvalidPageOrPageSize(page, pageSize, "GET /searchByTag");
                 }
 
-                List<GenericChannelPost> genericChannelPosts = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page-1, pageSize));
-                Map<String, Object> data = new HashMap<>();
-                data.put("genericChannelPosts", genericChannelPosts);
-                data.put("size", genericChannelPosts.size());
+                Page<GenericChannelPost> genericChannelPosts = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page-1, pageSize));
 
-                return handleGenericSuccess(data, "[GET /searchByTag]: Executed Successfully");
+                return handleGenericSuccess(genericChannelPosts.toList(), genericChannelPosts.hasNext(), "[GET /searchByTag]: Executed Successfully");
             }
             catch (Exception e) {
                 return handleGenericException(e);
             }
         }
 
+    @GetMapping("/recentposts")
+    public ResponseEntity<ExternalResponse<?>> getRecentPosts(
+            @RequestParam(name = "pageSize", defaultValue = "20") int pageSize,
+            @RequestParam(name = "page", defaultValue = "1") int page
+    ) {
+        try {
+            if (page < MIN_PAGE || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) {
+                return handleInvalidPageOrPageSize(page, pageSize, "GET /recentposts");
+            }
 
-    /****************************************** PRIVATE METHODS ******************************************/
+            Page<GenericChannelPost> genericChannelPosts = centralRepository.findAll(PageRequest.of(page-1, pageSize, Sort.by(Sort.Order.desc("createdAt"))));
 
-    private ResponseEntity<InternalHttpResponse<Object>> handleGenericException(Exception exception){
-        log.error(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                new InternalHttpResponse<>(false, exception.getMessage())
-        );
+            return handleGenericSuccess(genericChannelPosts.toList(), genericChannelPosts.hasNext(), "[GET /recentposts]: Executed Successfully");
+        }
+        catch (Exception e) {
+            return handleGenericException(e);
+        }
     }
 
-    private ResponseEntity<InternalHttpResponse<Object>> handleGenericSuccess(Object data, String logMessage, Object... logMessageArguments) {
-        log.info(logMessage, logMessageArguments);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new InternalHttpResponse<>( true, data)
-        );
+
+    @GetMapping("/apiTypes")
+    public ResponseEntity<ExternalResponse<?>> getApiTypes() {
+        try {
+            return handleGenericSuccess(List.of(ApiType.values()), null, "[GET /apiTypes]: Executed Successfully");
+        }
+        catch (Exception e) {
+            return handleGenericException(e);
+        }
     }
 
-    private ResponseEntity<InternalHttpResponse<Object>> handleInvalidPageOrPageSize(int page, int pageSize, String callingEndpoint) throws JsonProcessingException {
-        log.error("[{}]: Invalid Page=[{}] or PageSize=[{}] requested", callingEndpoint, page, pageSize);
-
-        String jsonData = String.format(
-                "{\"page\": {\"expected\": {\"min\": %d}, \"received\": %d}, \"pageSize\": {\"expected\": {\"min\": %d, \"max\": %d}, \"received\": %d}}",
-                MIN_PAGE, page, MIN_PAGE_SIZE, MAX_PAGE_SIZE, pageSize
-        );
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, Object> data = objectMapper.readValue(jsonData, new TypeReference<>() {});
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new InternalHttpResponse<>(false, data)
-        );
-    }
 }

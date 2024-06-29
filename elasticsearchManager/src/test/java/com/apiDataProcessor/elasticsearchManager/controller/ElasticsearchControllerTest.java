@@ -1,7 +1,7 @@
 package com.apiDataProcessor.elasticsearchManager.controller;
 
 import com.apiDataProcessor.elasticsearchManager.repository.ChannelPostRepository;
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.InternalResponse;
 import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +35,7 @@ class ElasticsearchControllerTest {
         when(centralRepository.findById(anyString())).thenReturn(java.util.Optional.empty());
         when(centralRepository.save(any(GenericChannelPost.class))).thenReturn(channelPost);
 
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -52,7 +52,7 @@ class ElasticsearchControllerTest {
         // Given
 
         // When
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(null);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(null);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -68,7 +68,7 @@ class ElasticsearchControllerTest {
 
         // When
         when(channelPost.getId()).thenReturn(null);
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -86,12 +86,12 @@ class ElasticsearchControllerTest {
         when(channelPost.getId()).thenReturn("existingId");
         when(centralRepository.findById(anyString())).thenReturn(Optional.of(channelPost));
 
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("The resource you are trying to create already exists", responseEntity.getBody().getData());
+        assertEquals("Resource Already Exists", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
@@ -105,7 +105,7 @@ class ElasticsearchControllerTest {
         when(channelPost.getId()).thenReturn("someId");
         when(channelPost.getId()).thenReturn("someId");
         when(centralRepository.findById(anyString())).thenThrow(RuntimeException.class); // Simulating an internal error
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
@@ -121,7 +121,7 @@ class ElasticsearchControllerTest {
 
         // When
         when(channelPost.getId()).thenReturn("");
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -137,7 +137,7 @@ class ElasticsearchControllerTest {
         when(channelPost.getId()).thenReturn("   ");
 
         // When
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
@@ -155,12 +155,12 @@ class ElasticsearchControllerTest {
         // When
         when(channelPost.getId()).thenReturn("existingId");
         when(centralRepository.findById(anyString())).thenReturn(Optional.of(channelPost));
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());
-        assertEquals("The resource you are trying to create already exists", responseEntity.getBody().getData());
+        assertEquals("Resource Already Exists", responseEntity.getBody().getData());
         assertFalse(responseEntity.getBody().getSuccess());
     }
 
@@ -174,7 +174,7 @@ class ElasticsearchControllerTest {
         when(centralRepository.save(channelPost)).thenThrow(new RuntimeException("Failed to save"));
 
         // When
-        ResponseEntity<InternalHttpResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
+        ResponseEntity<InternalResponse<?>> responseEntity = elasticsearchController.addMessage(channelPost);
 
         // Then
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());

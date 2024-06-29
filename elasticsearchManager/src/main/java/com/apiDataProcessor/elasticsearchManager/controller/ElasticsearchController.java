@@ -1,12 +1,15 @@
 package com.apiDataProcessor.elasticsearchManager.controller;
 
 import com.apiDataProcessor.elasticsearchManager.repository.ChannelPostRepository;
-import com.apiDataProcessor.models.InternalHttpResponse;
+import com.apiDataProcessor.models.InternalResponse;
 import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -20,7 +23,7 @@ public class ElasticsearchController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<InternalHttpResponse<?>> addMessage(@RequestBody GenericChannelPost channelPost) {
+    public ResponseEntity<InternalResponse<?>> addMessage(@RequestBody GenericChannelPost channelPost) {
         try {
             if (channelPost == null || channelPost.getId() == null || channelPost.getId().isBlank() ) {
                 log.info(
@@ -29,7 +32,7 @@ public class ElasticsearchController {
                         channelPost == null ? "null" : channelPost.getApiType()
                 );
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                        new InternalHttpResponse<>(false,"Validation Failed. Id cannot be empty or null")
+                        InternalResponse.builder().success(false).data("Validation Failed. Id cannot be empty or null").build()
                 );
             }
 
@@ -40,7 +43,7 @@ public class ElasticsearchController {
                         channelPost.getApiType()
                 );
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(
-                        new InternalHttpResponse<>(false, "The resource you are trying to create already exists")
+                        InternalResponse.builder().success(false).data("Resource Already Exists").build()
                 );
             }
 
@@ -51,7 +54,7 @@ public class ElasticsearchController {
                     channelPost.getApiType()
             );
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new InternalHttpResponse<>(true, savedchannelPost)
+                    InternalResponse.builder().success(true).data(savedchannelPost).build()
             );
         } catch (Exception exception) {
             log.error(
@@ -64,26 +67,7 @@ public class ElasticsearchController {
                     "Error Occurred for Object=[{}]", channelPost
             );
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new InternalHttpResponse<>(false, "Internal Server Error !")
-            );
-        }
-    }
-
-    @GetMapping("/all")
-    public ResponseEntity<InternalHttpResponse<?>> getAllMessages() {
-        try {
-            log.info("[GET /api/all] : Request Received");
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new InternalHttpResponse<>(true, channelPostRepository.findAll())
-            );
-        } catch (Exception exception) {
-            log.error(
-                    "Error Processing [GET /api/all] : Exception=[{}] : Message=[{}]",
-                    exception.getClass().getSimpleName(),
-                    exception.getMessage()
-            );
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new InternalHttpResponse<>(false, "Internal Server Error !")
+                    InternalResponse.builder().success(false).data("Internal Server Error !").build()
             );
         }
     }
