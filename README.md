@@ -6,12 +6,12 @@
 
 | Modules              | Version | Description                                                              |
 |----------------------|---------|--------------------------------------------------------------------------|
-| producer             | 2.0.0   | Fetches data from various social media APIs and sends it to Kafka.       |
-| consumer             | 2.0.0   | Reads data from Kafka and processes it.                                  |
+| producer             | 2.3.0   | Fetches data from various social media APIs and sends it to Kafka.       |
+| consumer             | 2.3.0   | Reads data from Kafka and processes it.                                  |
 | elasticsearchManager | 2.0.0   | Manages the elasticsearch database and writes data to it.                |
 | searchService        | 2.0.0   | Provides a REST API to search data in the elasticsearch database.        |
 | regexManager         | 1.0.0   | Manages the regular expressions used in processing the API responses.    |
-| infra                | 2.0.0   | Provides common configurations and utilities to the other microservices. |
+| infra                | 2.1.0   | Provides common configurations and utilities to the other microservices. |
 
 ## Table of Contents
 

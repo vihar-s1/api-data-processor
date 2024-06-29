@@ -36,23 +36,6 @@ public class KafkaConsumerConfig {
         // Important: Configure JsonDeserializer to trust all packages
         configs.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 
-//        /*DYNAMIC TYPE MAPPING BUILDING*/
-//        StringBuilder typeMappings = new StringBuilder();
-//        String apiMessagePackage = "com.VersatileDataProcessor.DataConsumer.models.apiMessages";
-//        Reflections reflections = new Reflections(apiMessagePackage);
-//
-//        Set<Class<? extends ApiMessageInterface>> subTypes = reflections.getSubTypesOf(ApiMessageInterface.class);
-//
-//        typeMappings.append(ApiMessageInterface.class.getSimpleName())
-//                .append(":")
-//                .append(ApiMessageInterface.class.getCanonicalName());
-//
-//        subTypes.forEach(cls -> typeMappings.append(",").append(cls.getSimpleName()).append(":").append(cls.getCanonicalName()));
-//
-//        /*END DYNAMIC TYPE MAPPING BUILDING*/
-//
-//        configs.put(JsonDeserializer.TYPE_MAPPINGS, typeMappings.toString());
-
         return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(ApiResponseInterface.class));
     }
 
