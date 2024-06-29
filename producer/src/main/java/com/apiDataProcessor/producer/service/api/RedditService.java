@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer.service.api;
 
+import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.reddit.RedditApiResponse;
 import com.apiDataProcessor.producer.service.ApiRequestService;
 import com.google.common.collect.Maps;
@@ -71,6 +72,10 @@ public class RedditService extends ApiService {
     @Override
     public boolean isAuthorized() {
         return !isEmpty(accessToken) && !isEmpty(refreshToken);
+    }
+
+    public ApiType getApiType() {
+        return ApiType.REDDIT;
     }
 
     public boolean checkState(String state) {

@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer.service.api;
 
+import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.twitter.TwitterApiResponse;
 import com.apiDataProcessor.producer.service.ApiRequestService;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,11 @@ public class TwitterService extends ApiService {
     @Override
     public boolean isAuthorized() {
         return !isEmpty(twitterBearerToken);
+    }
+
+    @Override
+    public ApiType getApiType() {
+        return ApiType.TWITTER;
     }
 
     public String getAccessToken() {

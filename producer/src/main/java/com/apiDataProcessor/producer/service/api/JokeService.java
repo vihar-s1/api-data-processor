@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer.service.api;
 
+import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.joke.JokeApiResponse;
 import com.apiDataProcessor.producer.service.ApiRequestService;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,10 @@ public class JokeService extends ApiService {
     @Override
     public boolean isAuthorized() {
         return true;
+    }
+
+    @Override
+    public ApiType getApiType() {
+        return ApiType.JOKE;
     }
 }

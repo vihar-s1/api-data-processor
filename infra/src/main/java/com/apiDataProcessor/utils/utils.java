@@ -21,6 +21,13 @@ public class utils {
         return "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
     }
 
+    public static boolean validateBasicAuth(String token, String username, String password) {
+        if (isEmpty(token) || isEmpty(username) || isEmpty(password)) {
+            return false;
+        }
+        return token.equals(basicAuthHeader(username, password));
+    }
+
     public static boolean isEmpty(String str) {
         return str == null || str.isBlank();
     }

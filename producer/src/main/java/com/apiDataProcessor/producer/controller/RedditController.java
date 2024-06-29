@@ -68,11 +68,4 @@ public class RedditController {
             );
         }
     }
-
-    @GetMapping("/configs")
-    public ResponseEntity<InternalResponse<Map<String, String>>> configs() {
-        return ResponseEntity.status(HttpStatus.OK).body(
-                InternalResponse.<Map<String, String>>builder().success(true).data(redditService.getConfigs()).build()
-        );
-    }
 }

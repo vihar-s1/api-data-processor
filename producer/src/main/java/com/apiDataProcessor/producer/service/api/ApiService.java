@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer.service.api;
 
+import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.producer.service.ApiRequestService;
 
 public abstract class ApiService {
@@ -27,4 +28,10 @@ public abstract class ApiService {
      * @return true if the service is authorized
      */
     public abstract boolean isAuthorized();
+
+    /**
+     * Get the name of the API
+     * @return the name of the API
+     */
+    public abstract ApiType getApiType();
 }

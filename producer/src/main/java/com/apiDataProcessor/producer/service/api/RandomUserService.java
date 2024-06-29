@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer.service.api;
 
+import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.apiResponse.randomUser.RandomUserApiResponse;
 import com.apiDataProcessor.producer.service.ApiRequestService;
 import org.springframework.stereotype.Service;
@@ -27,5 +28,10 @@ public class RandomUserService extends ApiService {
     @Override
     public boolean isAuthorized() {
         return true;
+    }
+
+    @Override
+    public ApiType getApiType() {
+        return ApiType.RANDOM_USER;
     }
 }
