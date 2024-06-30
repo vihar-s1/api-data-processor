@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -21,6 +22,11 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value(value = "${admin.username}")
+    private String adminUsername;
+    @Value(value = "${admin.password}")
+    private String adminPassword;
     /*
      The Web-Security configurations are evaluated first in the filter chain, so
      they take precedence over the Http-Security configurations.
@@ -46,8 +52,8 @@ public class SecurityConfig {
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
 
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder.encode("admin"))
+        UserDetails admin = User.withUsername(adminUsername)
+                .password(passwordEncoder.encode(adminPassword))
                 .roles("ADMIN")
                 .build();
 

@@ -6,8 +6,6 @@ dependencies {
 	implementation("com.fasterxml.jackson.core:jackson-databind").version { require(jacksonVersion) }
 	implementation("org.apache.kafka:kafka-streams").version {require(apacheKafkaVersion) }
 	implementation("org.springframework.kafka:spring-kafka").version { require(springKafkaVersion) }
-	implementation("org.springframework.boot:spring-boot-starter-security").version { require(springBootVersion) }
-	implementation("org.springframework.security:spring-security-core").version { require(springSecurityVersion) }
 
 	testImplementation("org.springframework.kafka:spring-kafka-test").version { require(springKafkaVersion)}
 }
