@@ -2,8 +2,11 @@ package com.apiDataProcessor.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class InternalResponse<T> {
     private Boolean success;
     private T data;

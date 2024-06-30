@@ -109,7 +109,7 @@ public class RedditService extends ApiService {
     }
 
     public String getDataUri() {
-        return "https://oauth.reddit.com/new";
+        return "https://oauth.reddit.com/new?limit=5";
     }
 
     public String getAccessToken(String code) throws IOException, InterruptedException {

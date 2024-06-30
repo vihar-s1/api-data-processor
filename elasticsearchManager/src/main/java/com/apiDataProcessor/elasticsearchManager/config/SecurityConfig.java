@@ -1,5 +1,6 @@
 package com.apiDataProcessor.elasticsearchManager.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,17 @@ public class SecurityConfig {
      they take precedence over the Http-Security configurations.
     */
 
+    @Value(value = "${spring.security.admin.username}")
+    private String adminUsername;
+    @Value(value = "${spring.security.admin.password}")
+    private String adminPassword;
+    @Value(value = "${spring.security.user.username}")
+    private String userUsername;
+    @Value(value = "${spring.security.user.password}")
+    private String userPassword;
+    @Value(value = "${consumer.addr}")
+    private String consumerAddr;
+
     /* WEB-SECURITY BEANS HERE --> HIGHER PRECEDENCE THAN HTTP SECURITY */
     @Bean
     public HttpFirewall allowedHttpMethods() {
@@ -47,31 +59,30 @@ public class SecurityConfig {
     /* HTTP-SECURITY BEANS HERE --> LOWER PRECEDENCE THAN WEB SECURITY */
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("password"))
+        UserDetails user = User.withUsername(userUsername)
+                .password(passwordEncoder.encode(userPassword))
                 .roles("USER")
                 .build();
 
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder.encode("admin"))
-                .roles("USER", "ADMIN")
+        UserDetails admin = User.withUsername(adminUsername)
+                .password(passwordEncoder.encode(adminPassword))
+                .roles("ADMIN")
                 .build();
 
-        return new InMemoryUserDetailsManager(user, admin);
-//        return new InMemoryUserDetailsManager(admin);
+        return new InMemoryUserDetailsManager(List.of(user, admin));
     }
 
     @Bean
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception {
 
          http.authorizeHttpRequests(
-                 request -> request
-                         .requestMatchers(HttpMethod.GET, "/restricted/**").hasRole("ADMIN") // require admin access for restricted endpoints
-                         .requestMatchers(HttpMethod.POST, "/api/**").hasRole("USER") // permit all requests with /api/**
-                         .anyRequest().authenticated() // require authentication for any other requests
-                )
-                .httpBasic(Customizer.withDefaults());
-
+                         request -> request
+                                 .requestMatchers(HttpMethod.GET, "/admin/**", "/actuator/**").hasRole("ADMIN") // require admin access for restricted endpoints
+                                 .requestMatchers(HttpMethod.POST, "/api/**").hasRole("USER") // permit all requests with /api/**
+                                 .anyRequest().denyAll() // require authentication for any other requests
+                 )
+                 .csrf(csrfCOnfigurer -> csrfCOnfigurer.requireCsrfProtectionMatcher(httpServletRequest -> !httpServletRequest.getRemoteAddr().startsWith(consumerAddr)))
+                 .httpBasic(Customizer.withDefaults());
          return http.build();
     }
 
