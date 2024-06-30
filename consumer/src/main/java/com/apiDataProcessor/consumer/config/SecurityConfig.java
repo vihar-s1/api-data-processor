@@ -1,4 +1,4 @@
-package com.apiDataProcessor.producer.config;
+package com.apiDataProcessor.consumer.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,15 +22,15 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-    @Value(value = "${admin.username}")
-    private String adminUsername;
-    @Value(value = "${admin.password}")
-    private String adminPassword;
     /*
      The Web-Security configurations are evaluated first in the filter chain, so
      they take precedence over the Http-Security configurations.
     */
+
+    @Value("${spring.security.admin.username}")
+    private String adminUsername;
+    @Value("${spring.security.admin.password}")
+    private String adminPassword;
 
     /* WEB-SECURITY BEANS HERE --> HIGHER PRECEDENCE THAN HTTP SECURITY */
     @Bean
@@ -51,7 +51,8 @@ public class SecurityConfig {
     /* HTTP-SECURITY BEANS HERE --> LOWER PRECEDENCE THAN WEB SECURITY */
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-
+        System.out.println("Admin Username: " + adminUsername);
+        System.out.println("Admin Password: " + adminPassword);
         UserDetails admin = User.withUsername(adminUsername)
                 .password(passwordEncoder.encode(adminPassword))
                 .roles("ADMIN")
@@ -64,10 +65,9 @@ public class SecurityConfig {
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(
-                request -> request
-                        .requestMatchers("/admin/**", "/actuator/**").hasAnyRole("ADMIN")
-                        .requestMatchers("/reddit/**").permitAll()
-                        .anyRequest().denyAll()
+                        request -> request
+                                .requestMatchers("/admin/**", "/actuator/**").hasAnyRole("ADMIN")
+                                .anyRequest().denyAll()
                 )
                 .httpBasic(Customizer.withDefaults());
 

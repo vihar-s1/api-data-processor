@@ -1,5 +1,6 @@
 package com.apiDataProcessor.consumer.services;
 
+import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.models.InternalResponse;
 import com.apiDataProcessor.models.apiResponse.ApiResponseInterface;
 import com.apiDataProcessor.models.apiResponse.joke.JokeApiResponse;
@@ -8,6 +9,8 @@ import com.apiDataProcessor.models.apiResponse.reddit.RedditApiResponse;
 import com.apiDataProcessor.models.apiResponse.twitter.TwitterApiResponse;
 import com.apiDataProcessor.models.genericChannelPost.Adapter;
 import com.apiDataProcessor.models.genericChannelPost.GenericChannelPost;
+import com.google.common.collect.Sets;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -17,19 +20,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-
-@Service
+import java.util.Set;
 
 @Slf4j
+@Service
 public class KafkaConsumerService {
 
     private final WebClient.Builder webClientBuilder;
+    @Getter
+    private final Set<ApiType> ignoredApiTypes = Sets.newConcurrentHashSet();
 
     public KafkaConsumerService(WebClient.Builder webClientBuilder) {
         this.webClientBuilder = webClientBuilder;
     }
 
     @KafkaListener(
+            id = "${spring.kafka.consumer.listener-id}",
             topics = "${spring.kafka.topic.name}",
             groupId = "${spring.kafka.consumer.group-id}",
             containerFactory = "getStandardContainerFactory"
@@ -44,6 +50,14 @@ public class KafkaConsumerService {
                 "Received Response at Partition=[{}], Offset=[{}] : apiType=[{}]",
                 partitionId, offset, apiResponse.getApiType()
         );
+
+        if (ignoredApiTypes.contains(apiResponse.getApiType())) {
+            log.warn(
+                    "Ignoring API Response at Partition=[{}], Offset=[{}]: apiType=[{}]",
+                    partitionId, offset, apiResponse.getApiType()
+            );
+            return;
+        }
 
         if (apiResponse.size() == 0) {
             log.warn(
@@ -60,6 +74,19 @@ public class KafkaConsumerService {
         }
     } // method genericApiResponseListener() ends
 
+    public boolean disableApiType(ApiType apiType) {
+        if (apiType == null) {
+            return false;
+        }
+        return ignoredApiTypes.add(apiType);
+    }
+
+    public boolean enableApiType(ApiType apiType) {
+        if (apiType == null) {
+            return false;
+        }
+        return ignoredApiTypes.remove(apiType);
+    }
 
     private void sendDBWriteRequest(GenericChannelPost channelPost){
         try {

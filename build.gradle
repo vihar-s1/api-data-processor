@@ -68,6 +68,8 @@ subprojects {
 
         implementation("org.springframework.boot:spring-boot-starter-web").version { require(springBootVersion) }
         implementation("org.springframework.boot:spring-boot-starter-webflux").version { require(springBootVersion) }
+        implementation("org.springframework.boot:spring-boot-starter-security").version { require(springBootVersion) }
+        implementation("org.springframework.security:spring-security-core").version { require(springSecurityVersion) }
 
         implementation("org.slf4j:slf4j-api:2.0.12")
         implementation("org.springframework.boot:spring-boot-starter-actuator").version { require(springBootVersion) }

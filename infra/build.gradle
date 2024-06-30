@@ -13,6 +13,7 @@ dependencies {
 configurations {
     configureEach {
         exclude(group: "org.springframework.boot") // no spring-boot application
+        exclude(group: "org.springframework.security") // no security since not spring-boot application
         exclude(group: "org.junit") // nothing to be tested
         exclude(group: "org.mockito") // no mocks to be created since no testing
     }
