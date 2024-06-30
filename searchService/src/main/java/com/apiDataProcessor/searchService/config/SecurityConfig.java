@@ -1,5 +1,6 @@
 package com.apiDataProcessor.searchService.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,11 @@ public class SecurityConfig {
      they take precedence over the Http-Security configurations.
     */
 
+    @Value(value = "${spring.security.admin.username}")
+    private String adminUsername;
+    @Value(value = "${spring.security.admin.password}")
+    private String adminPassword;
+
     /* WEB-SECURITY BEANS HERE --> HIGHER PRECEDENCE THAN HTTP SECURITY */
     @Bean
     public HttpFirewall allowedHttpMethods() {
@@ -46,30 +52,24 @@ public class SecurityConfig {
     /* HTTP-SECURITY BEANS HERE --> LOWER PRECEDENCE THAN WEB SECURITY */
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("user")
-                .password(passwordEncoder.encode("password"))
-                .roles("USER")
+
+        UserDetails admin = User.withUsername(adminUsername)
+                .password(passwordEncoder.encode(adminPassword))
+                .roles("ADMIN")
                 .build();
 
-        UserDetails admin = User.withUsername("admin")
-                .password(passwordEncoder.encode("admin"))
-                .roles("USER", "ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        return new InMemoryUserDetailsManager(admin);
     }
 
     @Bean
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception {
-
-         http.authorizeHttpRequests(request ->
-                        request
-                                .requestMatchers(HttpMethod.GET, "/restricted/**", "/actuators/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-                                .anyRequest().denyAll() // deny any other requests
+         http.authorizeHttpRequests(
+                 request -> request
+                         .requestMatchers(HttpMethod.GET, "/admin/**", "/actuators/**").hasRole("ADMIN")
+                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                         .anyRequest().denyAll() // deny any other requests
                 )
                 .httpBasic(Customizer.withDefaults());
-
          return http.build();
     }
 

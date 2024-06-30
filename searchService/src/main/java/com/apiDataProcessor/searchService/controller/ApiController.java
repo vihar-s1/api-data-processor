@@ -20,8 +20,12 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class ApiController extends AbstractController {
 
+    private boolean controllerDisabled = false;
+
+    private final CentralRepository centralRepository;
+
     public ApiController(CentralRepository centralRepository) {
-        super(centralRepository);
+        this.centralRepository = centralRepository;
     }
 
     @GetMapping("/{apiType}/all")
@@ -30,6 +34,9 @@ public class ApiController extends AbstractController {
             @RequestParam(name = "pageSize", defaultValue = "20") int pageSize,
             @RequestParam(name = "page", defaultValue = "1") int page
     ) {
+        if (controllerDisabled) {
+            return handleDisabledController();
+        }
         try {
             ApiType apiType_enum = ApiType.valueOf(apiType.toUpperCase().replace("-", "_"));
 
@@ -54,6 +61,9 @@ public class ApiController extends AbstractController {
 
     @GetMapping("/message/{messageId}")
     public ResponseEntity<ExternalResponse<?>> getMessageById(@PathVariable(name = "messageId") String messageId) {
+        if (controllerDisabled) {
+            return handleDisabledController();
+        }
         try {
             if (messageId == null || messageId.isBlank()){
                 log.error("[GET /message/{}]: null or blank messageId received", messageId);
@@ -82,25 +92,31 @@ public class ApiController extends AbstractController {
             @RequestParam(name = "pageSize", defaultValue = "20") int pageSize,
             @RequestParam(name = "page", defaultValue = "1") int page
     ) {
-            try {
-                if (page < MIN_PAGE || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) {
+        if (controllerDisabled) {
+            return handleDisabledController();
+        }
+        try {
+            if (page < MIN_PAGE || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) {
                     return handleInvalidPageOrPageSize(page, pageSize, "GET /searchByTag");
                 }
 
-                Page<GenericChannelPost> genericChannelPosts = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page-1, pageSize));
+            Page<GenericChannelPost> genericChannelPosts = centralRepository.findAllByTagsContainingIgnoreCase(tag, PageRequest.of(page-1, pageSize));
 
-                return handleGenericSuccess(genericChannelPosts.toList(), genericChannelPosts.hasNext(), "[GET /searchByTag]: Executed Successfully");
-            }
-            catch (Exception e) {
-                return handleGenericException(e);
-            }
+            return handleGenericSuccess(genericChannelPosts.toList(), genericChannelPosts.hasNext(), "[GET /searchByTag]: Executed Successfully");
         }
+        catch (Exception e) {
+            return handleGenericException(e);
+        }
+    }
 
     @GetMapping("/recentposts")
     public ResponseEntity<ExternalResponse<?>> getRecentPosts(
             @RequestParam(name = "pageSize", defaultValue = "20") int pageSize,
             @RequestParam(name = "page", defaultValue = "1") int page
     ) {
+        if (controllerDisabled) {
+            return handleDisabledController();
+        }
         try {
             if (page < MIN_PAGE || pageSize < MIN_PAGE_SIZE || pageSize > MAX_PAGE_SIZE) {
                 return handleInvalidPageOrPageSize(page, pageSize, "GET /recentposts");
@@ -118,6 +134,9 @@ public class ApiController extends AbstractController {
 
     @GetMapping("/apiTypes")
     public ResponseEntity<ExternalResponse<?>> getApiTypes() {
+        if (controllerDisabled) {
+            return handleDisabledController();
+        }
         try {
             return handleGenericSuccess(List.of(ApiType.values()), null, "[GET /apiTypes]: Executed Successfully");
         }
@@ -126,4 +145,20 @@ public class ApiController extends AbstractController {
         }
     }
 
+    protected void disableController() {
+        log.warn("Disabling ApiController");
+        this.controllerDisabled = true;
+    }
+
+    protected void enableController() {
+        log.warn("Enabling ApiController");
+        this.controllerDisabled = false;
+    }
+
+    private ResponseEntity<ExternalResponse<?>> handleDisabledController() {
+        log.warn("ApiController is disabled");
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
+                ExternalResponse.builder().success(false).error("service is temporarily disabled").build()
+        );
+    }
 }

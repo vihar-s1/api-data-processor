@@ -1,7 +1,6 @@
 package com.apiDataProcessor.searchService.controller;
 
 import com.apiDataProcessor.models.ExternalResponse;
-import com.apiDataProcessor.searchService.repositories.CentralRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +13,6 @@ public abstract class AbstractController {
     protected static final int MIN_PAGE = 1;
     protected static final int MIN_PAGE_SIZE = 1;
     protected static final int MAX_PAGE_SIZE = 50;
-
-    protected final CentralRepository centralRepository;
-
-    public AbstractController(CentralRepository centralRepository) {
-        this.centralRepository = centralRepository;
-    }
 
     /****************************************** PROTECTED METHODS ******************************************/
 
