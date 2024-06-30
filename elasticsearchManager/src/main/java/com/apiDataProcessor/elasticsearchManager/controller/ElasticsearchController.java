@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ElasticsearchController {
 
     private final ChannelPostRepository channelPostRepository;
+    private boolean isDisabled = false;
 
     public ElasticsearchController(ChannelPostRepository channelPostRepository) {
         this.channelPostRepository = channelPostRepository;
@@ -25,6 +26,16 @@ public class ElasticsearchController {
     @PostMapping("/add")
     public ResponseEntity<InternalResponse<?>> addMessage(@RequestBody GenericChannelPost channelPost) {
         try {
+            if (isDisabled) {
+                log.info(
+                        "[POST /api/add] failed with error-code=[{}] : Application is disabled : apiType=[{}]",
+                        HttpStatus.SERVICE_UNAVAILABLE,
+                        channelPost == null ? "null" : channelPost.getApiType()
+                );
+                return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(
+                        InternalResponse.builder().success(false).data("Application is Disabled").build()
+                );
+            }
             if (channelPost == null || channelPost.getId() == null || channelPost.getId().isBlank() ) {
                 log.info(
                         "[POST /api/add] failed with error-code=[{}] : id was either empty or null : apiType=[{}]",
@@ -70,5 +81,15 @@ public class ElasticsearchController {
                     InternalResponse.builder().success(false).data("Internal Server Error !").build()
             );
         }
+    }
+
+    protected void disable() {
+        isDisabled = true;
+    }
+    protected void enable() {
+        isDisabled = false;
+    }
+    protected boolean isDisabled() {
+        return isDisabled;
     }
 }
