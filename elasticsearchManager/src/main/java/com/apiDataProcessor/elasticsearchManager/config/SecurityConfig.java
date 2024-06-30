@@ -2,6 +2,7 @@ package com.apiDataProcessor.elasticsearchManager.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -63,11 +64,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception {
 
-         http.authorizeHttpRequests(request ->
-                        request
-                                .requestMatchers("/restricted/**").hasRole("ADMIN") // require admin access for restricted endpoints
-                                .requestMatchers("/api/**").hasRole("USER") // permit all requests with /api/**
-                                .anyRequest().authenticated() // require authentication for any other requests
+         http.authorizeHttpRequests(
+                 request -> request
+                         .requestMatchers(HttpMethod.GET, "/restricted/**").hasRole("ADMIN") // require admin access for restricted endpoints
+                         .requestMatchers(HttpMethod.POST, "/api/**").hasRole("USER") // permit all requests with /api/**
+                         .anyRequest().authenticated() // require authentication for any other requests
                 )
                 .httpBasic(Customizer.withDefaults());
 

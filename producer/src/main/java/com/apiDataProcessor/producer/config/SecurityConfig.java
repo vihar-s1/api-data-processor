@@ -3,6 +3,7 @@ package com.apiDataProcessor.producer.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -65,8 +66,8 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(
                 request -> request
-                        .requestMatchers("/admin/**", "/actuator/**").hasAnyRole("ADMIN")
-                        .requestMatchers("/reddit/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/admin/**", "/actuator/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/reddit/**").permitAll()
                         .anyRequest().denyAll()
                 )
                 .httpBasic(Customizer.withDefaults());

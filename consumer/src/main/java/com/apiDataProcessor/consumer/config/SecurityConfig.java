@@ -51,8 +51,6 @@ public class SecurityConfig {
     /* HTTP-SECURITY BEANS HERE --> LOWER PRECEDENCE THAN WEB SECURITY */
     @Bean
     public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        System.out.println("Admin Username: " + adminUsername);
-        System.out.println("Admin Password: " + adminPassword);
         UserDetails admin = User.withUsername(adminUsername)
                 .password(passwordEncoder.encode(adminPassword))
                 .roles("ADMIN")
