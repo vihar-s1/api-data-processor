@@ -1,5 +1,6 @@
 package com.apiDataProcessor.producer;
 
+import com.apiDataProcessor.models.ApiType;
 import com.apiDataProcessor.producer.service.api.ApiService;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +28,17 @@ public final class ApiServiceScheduler {
     ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 0L, TimeUnit.MILLISECONDS, workerQueue);
     Boolean isExecutorActive = true;
 
-    @Scheduled(fixedRate = 60_000) // Run every 1 minute
+    @Scheduled(fixedRate = 120_000) // Run every 1 minute
     public void fetchData() {
         if (!isExecutorActive) {
             log.warn("Executor is not active. Please turn on the executor to fetch data.");
             return;
         }
         apiServices.forEach(apiService -> {
+            if (apiService.isDisabled()) {
+                log.warn("Service {} is disabled. Skipping.", apiService.getApiType());
+                return;
+            }
             if (apiService.isExecutable()) {
                 threadPoolExecutor.execute(apiService::fetchData);
             }
@@ -58,5 +63,13 @@ public final class ApiServiceScheduler {
 
     public Boolean isExecutorActive() {
         return isExecutorActive;
+    }
+
+    public void disableService(ApiType apiType) {
+        this.apiServices.stream().filter(apiService -> apiService.getApiType().equals(apiType)).findFirst().ifPresent(ApiService::disable);
+    }
+
+    public void enableService(ApiType apiType) {
+        this.apiServices.stream().filter(apiService -> apiService.getApiType().equals(apiType)).findFirst().ifPresent(ApiService::enable);
     }
 }

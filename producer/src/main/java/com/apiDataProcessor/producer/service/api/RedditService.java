@@ -32,6 +32,7 @@ public class RedditService extends ApiService {
     private String refreshToken = null;
     private String accessToken = null;
     private Timestamp accessTokenExpiryTimeStamp;
+    private boolean disabled = false;
 
     public RedditService(ApiRequestService apiRequestService) {
         super(apiRequestService);
@@ -44,7 +45,7 @@ public class RedditService extends ApiService {
             log.warn("Reddit service not yet Authenticated. Please provide Client ID, Client Secret and Redirect URI.");
             return;
         }
-        else if (!isAuthorized()) {
+        else if (isUnauthorized()) {
             log.warn("Reddit service not yet Authenticated. Please authenticate via: {}", getAuthUrl());
             return;
         }
@@ -70,8 +71,23 @@ public class RedditService extends ApiService {
     }
 
     @Override
-    public boolean isAuthorized() {
-        return !isEmpty(accessToken) && !isEmpty(refreshToken);
+    public boolean isUnauthorized() {
+        return isEmpty(accessToken) || isEmpty(refreshToken);
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return this.disabled;
+    }
+
+    @Override
+    public void disable() {
+        this.disabled = true;
+    }
+
+    @Override
+    public void enable() {
+        this.disabled = false;
     }
 
     public ApiType getApiType() {

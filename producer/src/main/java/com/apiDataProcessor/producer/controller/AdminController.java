@@ -7,12 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import static com.apiDataProcessor.utils.utils.validateBasicAuth;
@@ -78,12 +76,58 @@ public class AdminController {
         log.info("Fetching unauthorized channels.");
         final Set<ApiService> apiServices = apiServiceScheduler.getApiServices();
 
-        List<ApiType> unauthorizedChannels = apiServices.stream().filter(apiService -> !apiService.isAuthorized()).map(ApiService::getApiType).toList();
+        List<ApiType> unauthorizedChannels = apiServices.stream().filter(apiService -> apiService.isUnauthorized()).map(ApiService::getApiType).toList();
 
         return ResponseEntity.status(HttpStatus.OK).body(unauthorizedChannels);
     }
 
+    @GetMapping("/disable/{apiType}")
+    public ResponseEntity<?> disableService(
+            @RequestHeader(value = "Authorization") String authHeader,
+            @PathVariable(name = "apiType") String apiType
+    ) {
+        if (isInvalidAuthHeader(authHeader)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        ApiType apiTypeEnum = getApiType(apiType);
+        if (apiTypeEnum != null) {
+            log.info("Disabling service: {}", apiTypeEnum);
+            apiServiceScheduler.disableService(apiTypeEnum);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/enable/{apiType}")
+    public ResponseEntity<?> enableService(
+            @RequestHeader(value = "Authorization") String authHeader,
+            @PathVariable(name = "apiType") String apiType
+    ) {
+        if (isInvalidAuthHeader(authHeader)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        ApiType apiTypeEnum = getApiType(apiType);
+
+        if (apiTypeEnum != null) {
+            log.info("Enabling service: {}", apiTypeEnum);
+            apiServiceScheduler.enableService(apiTypeEnum);
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
     private boolean isInvalidAuthHeader(String authHeader) {
         return !validateBasicAuth(authHeader, adminUsername, adminPassword);
+    }
+
+    private ApiType getApiType(String apiTypeStr) {
+        try {
+            return ApiType.valueOf(apiTypeStr.toUpperCase(Locale.ROOT).replace("-", "_"));
+        }
+        catch (IllegalArgumentException e) {
+            log.error("Invalid API type: {}", apiTypeStr);
+            return null;
+        }
     }
 }

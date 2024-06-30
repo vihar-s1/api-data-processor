@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class JokeService extends ApiService {
 
+    private boolean disabled = false;
+
     public JokeService(ApiRequestService apiRequestService) {
         super(apiRequestService);
     }
@@ -25,12 +27,27 @@ public class JokeService extends ApiService {
     }
 
     @Override
-    public boolean isAuthorized() {
-        return true;
+    public boolean isUnauthorized() {
+        return false;
     }
 
     @Override
     public ApiType getApiType() {
         return ApiType.JOKE;
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return this.disabled;
+    }
+
+    @Override
+    public void disable() {
+        this.disabled = true;
+    }
+
+    @Override
+    public void enable() {
+        this.disabled = false;
     }
 }

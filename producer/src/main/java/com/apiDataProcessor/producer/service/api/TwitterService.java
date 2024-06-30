@@ -23,6 +23,7 @@ public class TwitterService extends ApiService {
     private String apiSecret;
 
     private String twitterBearerToken = null;
+    private boolean disabled = false;
 
     public TwitterService(ApiRequestService apiRequestService) {
         super(apiRequestService);
@@ -36,7 +37,7 @@ public class TwitterService extends ApiService {
             log.warn("Twitter service not yet Authenticated. Please provide a Bearer Token.");
             return;
         }
-        else if (!isAuthorized()) {
+        else if (isUnauthorized()) {
             if (isEmpty(getAccessToken())) {
                 return;
             }
@@ -56,13 +57,28 @@ public class TwitterService extends ApiService {
     }
 
     @Override
-    public boolean isAuthorized() {
-        return !isEmpty(twitterBearerToken);
+    public boolean isUnauthorized() {
+        return isEmpty(twitterBearerToken);
     }
 
     @Override
     public ApiType getApiType() {
         return ApiType.TWITTER;
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return this.disabled;
+    }
+
+    @Override
+    public void disable() {
+        this.disabled = true;
+    }
+
+    @Override
+    public void enable() {
+        this.disabled = false;
     }
 
     public String getAccessToken() {
