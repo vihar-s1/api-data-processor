@@ -1,8 +1,20 @@
 rootProject.name = "apiDataProcessor"
 
-include ":producer"
-include ":regexManager"
-include ":consumer"
-include ":elasticsearchManager"
-include ":searchService"
-include ":infra"
+
+include(":producer")
+project(":producer").projectDir = file("producer")
+
+include(":consumer")
+project(":consumer").projectDir = file("consumer")
+
+include(":elasticsearchManager")
+project(":elasticsearchManager") = file("elasticsearchManager")
+
+include(":searchService")
+project(":searchService") = file("searchService")
+
+include(":regexManager")
+project(":regexManager").projectDir = file("regexManager")
+
+include(":infra")
+project(":infra") = file("infra")
