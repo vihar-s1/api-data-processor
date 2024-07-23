@@ -8,13 +8,13 @@ include(":consumer")
 project(":consumer").projectDir = file("consumer")
 
 include(":elasticsearchManager")
-project(":elasticsearchManager") = file("elasticsearchManager")
+project(":elasticsearchManager").projectDir = file("elasticsearchManager")
 
 include(":searchService")
-project(":searchService") = file("searchService")
+project(":searchService").projectDir = file("searchService")
 
 include(":regexManager")
 project(":regexManager").projectDir = file("regexManager")
 
 include(":infra")
-project(":infra") = file("infra")
+project(":infra").projectDir = file("infra")
